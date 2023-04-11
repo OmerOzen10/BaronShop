@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_spacing">-100dp</dimen>
+    <dimen name="text_size">16sp</dimen>
+    <!-- Add more dimension resources here -->
+</resources>
