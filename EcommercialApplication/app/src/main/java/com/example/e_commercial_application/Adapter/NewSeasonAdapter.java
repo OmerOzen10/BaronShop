@@ -1,7 +1,6 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.HomeFragment;
 import com.example.e_commercial_application.Model.NewSeason;
 import com.example.e_commercial_application.R;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewSeasonViewHolder> {
 
     private List<NewSeason> newSeasonList;
     Context context;
-
-    public boolean isFavClicked;
 
 
     public NewSeasonAdapter(List<NewSeason> newSeasonList, Context context) {
@@ -36,13 +30,12 @@ public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewS
     @NonNull
     @Override
     public NewSeasonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_season_layout,parent,false);
-        return new NewSeasonViewHolder(view);
+        View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_season_layout,parent,false);
+        return new NewSeasonViewHolder(view1);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewSeasonViewHolder holder, int position) {
-
 
 
         NewSeason newSeason = newSeasonList.get(position);
@@ -55,7 +48,6 @@ public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewS
         }else {
             holder.favProduct.setBackgroundResource(R.drawable.baseline_fav);
         }
-
         holder.favProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

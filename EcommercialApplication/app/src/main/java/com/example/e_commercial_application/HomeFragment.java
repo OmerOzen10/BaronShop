@@ -1,11 +1,15 @@
 package com.example.e_commercial_application;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Model.NewSeason;
@@ -23,11 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.remote.WatchChange;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class HomeFragment extends Fragment {
 
@@ -36,9 +39,7 @@ public class HomeFragment extends Fragment {
     NewSeasonAdapter newSeasonAdapter;
     FirebaseFirestore firebaseFirestore;
     ArrayList<NewSeason> newSeasonArrayList;
-    ProgressDialog progressDialog;
-
-    ImageButton favProduct;
+    TextView txtNewSeasonAllProducts;
 
 
     private RecyclerView newSeasonRecyclerView;
@@ -61,12 +62,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Fetching Data...");
-        progressDialog.show();
 
-
+        txtNewSeasonAllProducts = view.findViewById(R.id.newSeasonAllProducts);
 
         newSeasonRecyclerView = view.findViewById(R.id.newSeasonRecyclerView);
         newSeasonRecyclerView.setHasFixedSize(true);
@@ -82,6 +79,25 @@ public class HomeFragment extends Fragment {
         EventChangeListener();
 
 
+        txtNewSeasonAllProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AllProducts.class);
+                startActivity(intent);
+
+//                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.containerFrame,new BasketFragment()).commit();
+
+
+            }
+        });
+
+
+
+
+
+
 
 
     }
@@ -92,17 +108,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                if (error != null){
-
-                    if (progressDialog.isShowing()){
-                        progressDialog.dismiss();
-                    }
-
-                    Log.e( "Firestore error ", error.getMessage());
-                    return;
-
-                }
-
                 for (DocumentChange documentChange : value.getDocumentChanges()){
 
                     if (documentChange.getType() == DocumentChange.Type.ADDED){
@@ -112,9 +117,6 @@ public class HomeFragment extends Fragment {
                     }
 
                     newSeasonAdapter.notifyDataSetChanged();
-                    if (progressDialog.isShowing()){
-                        progressDialog.dismiss();
-                    }
 
                 }
 

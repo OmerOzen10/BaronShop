@@ -16,7 +16,7 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame2, new HomeFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, new HomeFragment()).addToBackStack(null).commit();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnItemSelectedListener(navListener);
@@ -40,7 +40,7 @@ public class HomePage extends AppCompatActivity {
 
                     }
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frame2, selectedFragment)
+                            .replace(R.id.containerFrame, selectedFragment)
                             .addToBackStack(null)
                             .commit();
                     return true;

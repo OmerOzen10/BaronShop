@@ -3,14 +3,14 @@ package com.example.e_commercial_application.Model;
 public class NewSeason {
 
     private String ProductName;
-    private String ProductPrice;
+    private double ProductPrice;
     private String ProductImg;
 
     // no-argument constructor required by Firebase Firestore SDK
     public NewSeason() {
     }
 
-    public NewSeason(String productName, String productPrice,String productImg) {
+    public NewSeason(String productName, double productPrice,String productImg) {
         ProductName = productName;
         ProductPrice = productPrice;
         ProductImg = productImg;
@@ -21,7 +21,7 @@ public class NewSeason {
         return ProductName;
     }
 
-    public String getProductPrice() {
+    public double getProductPrice() {
         return ProductPrice;
     }
 
