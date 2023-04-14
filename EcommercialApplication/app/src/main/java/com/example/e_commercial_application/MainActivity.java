@@ -7,32 +7,49 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                Intent intent = new Intent(MainActivity.this,HomePage.class);
+//                startActivity(intent);
+//                finish();
+//
+//            }
+//        },500);
 
-                Intent intent = new Intent(MainActivity.this,HomePage.class);
-                startActivity(intent);
-                finish();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//                HomeFragment homeFragment = new HomeFragment();
-//
-//                fragmentTransaction.replace(R.id.frame,homeFragment);
-//
-//                fragmentTransaction.commit();
+        Timer timer = new Timer();
 
-            }
-        },3000);
+        try {
+
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this,HomePage.class);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            timer.schedule(timerTask,1000);
+
+        }catch (Exception e){
+            Log.d(TAG , "onCreate: error" + e.getMessage());
+        }
+
     }
 }

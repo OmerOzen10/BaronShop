@@ -35,7 +35,7 @@
                 app:layout_constraintStart_toEndOf="@+id/ProductImg"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/fav_Product"
                     android:layout_width="18dp"
                     android:layout_height="18dp"

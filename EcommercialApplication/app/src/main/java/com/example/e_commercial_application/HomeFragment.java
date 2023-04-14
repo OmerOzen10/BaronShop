@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Model.NewSeason;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +46,8 @@ public class HomeFragment extends Fragment {
     TextView txtNewSeasonAllProducts;
 
     FrameLayout frameLayout;
+
+
 
 
     private RecyclerView newSeasonRecyclerView;
@@ -85,10 +89,18 @@ public class HomeFragment extends Fragment {
 
         txtNewSeasonAllProducts.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                AllProductsFragment allProductsFragment = new AllProductsFragment();
-                FragmentTransaction transaction =((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.containerFrame, allProductsFragment);
-                transaction.commit();
+                HomePage homePage = (HomePage) getActivity();
+
+
+                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+
+                bottomNavigationView.setVisibility(View.GONE);
+
+                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).commit();
+
+
             }
         });
     }

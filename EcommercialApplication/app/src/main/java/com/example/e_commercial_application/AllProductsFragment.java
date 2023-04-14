@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -59,17 +60,11 @@ public class AllProductsFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                AllProductsFragment allProductsFragment = new AllProductsFragment();
-//                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.frameLayout,allProductsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
 
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction transaction =((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.containerFrame, homeFragment);
-                transaction.commit();
+                Intent intent = new Intent(getContext(),HomePage.class);
+                startActivity(intent);
+
+
 
 
             }
