@@ -7,10 +7,8 @@
     tools:context=".HomeFragment"
     android:background="#D9D8DA"
     >
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerHome"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,6 +135,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

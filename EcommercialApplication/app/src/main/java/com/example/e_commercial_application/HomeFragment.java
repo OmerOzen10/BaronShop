@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
@@ -40,6 +42,8 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore firebaseFirestore;
     ArrayList<NewSeason> newSeasonArrayList;
     TextView txtNewSeasonAllProducts;
+
+    FrameLayout frameLayout;
 
 
     private RecyclerView newSeasonRecyclerView;
@@ -80,26 +84,13 @@ public class HomeFragment extends Fragment {
 
 
         txtNewSeasonAllProducts.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AllProducts.class);
-                startActivity(intent);
-
-//                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.containerFrame,new BasketFragment()).commit();
-
-
+                AllProductsFragment allProductsFragment = new AllProductsFragment();
+                FragmentTransaction transaction =((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.containerFrame, allProductsFragment);
+                transaction.commit();
             }
         });
-
-
-
-
-
-
-
-
     }
 
     private void EventChangeListener() {

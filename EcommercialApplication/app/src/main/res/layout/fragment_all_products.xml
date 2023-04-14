@@ -12,7 +12,7 @@
         android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar.Primary">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -39,14 +39,14 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/newSeasonAllProductsRec"
+                android:id="@+id/AllProductsRec"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-               />
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

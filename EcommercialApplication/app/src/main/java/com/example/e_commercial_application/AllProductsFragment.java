@@ -1,16 +1,20 @@
 package com.example.e_commercial_application;
 
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Model.NewSeason;
@@ -24,43 +28,52 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class AllProducts extends AppCompatActivity {
+public class AllProductsFragment extends Fragment {
 
     RecyclerView AllProductsRec;
     NewSeasonAdapter adapter;
     FirebaseFirestore firebaseFirestore;
     ArrayList<NewSeason> list;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_season_all_products);
 
-        AllProductsRec = findViewById(R.id.newSeasonAllProductsRec);
+
+    public AllProductsFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        AllProductsRec = view.findViewById(R.id.AllProductsRec);
         AllProductsRec.setHasFixedSize(true);
-        AllProductsRec.setLayoutManager(new GridLayoutManager(this,2));
+        AllProductsRec.setLayoutManager(new GridLayoutManager(getContext(),2));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         list = new ArrayList<NewSeason>();
-        adapter = new NewSeasonAdapter(list,this);
+        adapter = new NewSeasonAdapter(list,getContext());
         AllProductsRec.setAdapter(adapter);
 
         EventChangeListener();
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar =view.findViewById(R.id.toolbar1);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                AllProductsFragment allProductsFragment = new AllProductsFragment();
+//                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.frameLayout,allProductsFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+
                 HomeFragment homeFragment = new HomeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.topScreen,homeFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                finish();
+                FragmentTransaction transaction =((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.containerFrame, homeFragment);
+                transaction.commit();
+
+
             }
         });
-
     }
 
     private void EventChangeListener() {
@@ -78,5 +91,16 @@ public class AllProducts extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_all_products, container, false);
     }
 }
