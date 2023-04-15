@@ -6,18 +6,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.example.e_commercial_application.Adapter.AllProductsAdapter;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.DocumentChange;
@@ -32,9 +36,13 @@ import java.util.ArrayList;
 public class AllProductsFragment extends Fragment {
 
     RecyclerView AllProductsRec;
-    NewSeasonAdapter adapter;
+    AllProductsAdapter allProductsAdapter;
     FirebaseFirestore firebaseFirestore;
-    ArrayList<NewSeason> list;
+    ArrayList<AllProducts> allProductsArrayList;
+
+    CardView AllProducts;
+
+    private static final String TAG = "AllProductsFragment";
 
 
 
@@ -50,9 +58,13 @@ public class AllProductsFragment extends Fragment {
         AllProductsRec.setLayoutManager(new GridLayoutManager(getContext(),2));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        list = new ArrayList<NewSeason>();
-        adapter = new NewSeasonAdapter(list,getContext());
-        AllProductsRec.setAdapter(adapter);
+        allProductsArrayList = new ArrayList<AllProducts>();
+        allProductsAdapter = new AllProductsAdapter(allProductsArrayList,getContext());
+        AllProductsRec.setAdapter(allProductsAdapter);
+
+        AllProducts = view.findViewById(R.id.AllProductsCard);
+
+        Log.d(TAG, "onViewCreated: " + allProductsArrayList.size());
 
         EventChangeListener();
 
@@ -72,21 +84,26 @@ public class AllProductsFragment extends Fragment {
     }
 
     private void EventChangeListener() {
-
-        firebaseFirestore.collection("NewSeason").orderBy("ProductPrice", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                for (DocumentChange documentChange : value.getDocumentChanges()){
-                    if (documentChange.getType() == DocumentChange.Type.ADDED){
-                        list.add(documentChange.getDocument().toObject(NewSeason.class));
+        firebaseFirestore.collection("AllProducts")
+                .orderBy("ProductPrice", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e(TAG, "onEvent: Error fetching all products.", error);
+                            return;
+                        }
+                        for (DocumentChange documentChange : value.getDocumentChanges()){
+                            if (documentChange.getType() == DocumentChange.Type.ADDED){
+                                allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
+                            }
+                        }
+                        allProductsAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "EventChangeListener: " + allProductsArrayList.size() + " items");
                     }
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
-
+                });
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

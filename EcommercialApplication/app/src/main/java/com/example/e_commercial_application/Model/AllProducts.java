@@ -2,28 +2,28 @@ package com.example.e_commercial_application.Model;
 
 public class AllProducts {
 
-    private String ProductNameAll,ProductImgAll;
-    private double ProductPriceAll;
+    private String ProductName,ProductImg;
+    private double ProductPrice;
 
     public AllProducts(){
 
     }
 
-    public AllProducts(String productNameAll, String productImgAll, double productPriceAll) {
-        ProductNameAll = productNameAll;
-        ProductImgAll = productImgAll;
-        ProductPriceAll = productPriceAll;
+    public AllProducts(String productName, String productImg, double productPrice) {
+        ProductName = productName;
+        ProductImg = productImg;
+        ProductPrice = productPrice;
     }
 
-    public String getProductNameAll() {
-        return ProductNameAll;
+    public String getProductName() {
+        return ProductName;
     }
 
-    public String getProductImgAll() {
-        return ProductImgAll;
+    public String getProductImg() {
+        return ProductImg;
     }
 
-    public double getProductPriceAll() {
-        return ProductPriceAll;
+    public double getProductPrice() {
+        return ProductPrice;
     }
 }

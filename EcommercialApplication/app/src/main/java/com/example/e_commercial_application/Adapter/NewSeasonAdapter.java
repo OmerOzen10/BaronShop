@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.NewSeason;
 import com.example.e_commercial_application.R;
 
@@ -26,39 +27,26 @@ public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewS
     Context context;
 
 
+
     public NewSeasonAdapter(List<NewSeason> newSeasonList, Context context) {
         this.newSeasonList = newSeasonList;
         this.context = context;
     }
+
     @NonNull
     @Override
     public NewSeasonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_season_layout,parent,false);
         return new NewSeasonViewHolder(view1);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewSeasonViewHolder holder, int position) {
-
-
-        NewSeason newSeason = newSeasonList.get(position);
-        holder.ProductPrice.setText(newSeason.getProductPrice() + " $");
-        holder.ProductName.setText(newSeason.getProductName());
-        Glide.with(context).load(newSeason.getProductImg()).into(holder.ProductImg);
-
-
-
-
-        holder.favProduct.setOnClickListener(view -> {
-
-//            if (!holder.isClicked){
-//                holder.favProduct.setBackgroundResource(R.drawable.ic_fav_red);
-//
-//            }else {
-//                holder.favProduct.setBackgroundResource(R.drawable.baseline_fav);
-//            }
-//            notifyDataSetChanged();
-        });
+            NewSeason newSeason = newSeasonList.get(position);
+            holder.ProductPriceNewSeason.setText(newSeason.getProductPrice() + " $");
+            holder.ProductNameNewSeason.setText(newSeason.getProductName());
+            Glide.with(context).load(newSeason.getProductImg()).into(holder.ProductImgNewSeason);
 
     }
 
@@ -70,10 +58,10 @@ public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewS
     public class NewSeasonViewHolder extends RecyclerView.ViewHolder{
 
 
-        ImageView ProductImg;
-        TextView ProductName, ProductPrice;
+        ImageView ProductImgNewSeason;
+        TextView ProductNameNewSeason, ProductPriceNewSeason;
 
-        ImageView favProduct;
+        ImageView favProductNewSeason;
 
         boolean isClicked = false;
 
@@ -82,10 +70,10 @@ public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewS
         public NewSeasonViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ProductImg = itemView.findViewById(R.id.ProductImg);
-            ProductName = itemView.findViewById(R.id.txtProductName);
-            ProductPrice = itemView.findViewById(R.id.ProductPrice);
-            favProduct = itemView.findViewById(R.id.fav_Product);
+            ProductImgNewSeason = itemView.findViewById(R.id.ProductImg);
+            ProductNameNewSeason = itemView.findViewById(R.id.txtProductName);
+            ProductPriceNewSeason = itemView.findViewById(R.id.ProductPrice);
+            favProductNewSeason = itemView.findViewById(R.id.fav_Product);
         }
     }
 }

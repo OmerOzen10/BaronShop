@@ -7,10 +7,11 @@
     android:background="#D9D8DA">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="250dp"
+        android:id="@+id/AllProductsCard"
+        android:layout_width="175dp"
         android:layout_height="300dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/cardview_new_season"
@@ -25,20 +26,20 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginEnd="5dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="22.5dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ProductImgNewSeasonAllProduct"
+                app:layout_constraintStart_toEndOf="@+id/ProductImgAll"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
-                    android:id="@+id/fav_Product_AllProducts"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:id="@+id/favProductAll"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="1dp"
@@ -52,7 +53,7 @@
 
 
             <ImageView
-                android:id="@+id/ProductImgNewSeasonAllProduct"
+                android:id="@+id/ProductImgAll"
                 android:layout_width="120dp"
                 android:layout_height="170dp"
                 android:layout_gravity="center_horizontal"
@@ -63,21 +64,21 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtProductNameNewSeasonAllProduct"
-                android:layout_width="wrap_content"
+                android:id="@+id/ProductNameAll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-black"
-                android:text="ProductName"
+                android:text="ProductNamesssssssssssssssssssssssss"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:textColor="#555454"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ProductImgNewSeasonAllProduct" />
+                app:layout_constraintTop_toBottomOf="@+id/ProductImgAll" />
 
 
             <TextView
-                android:id="@+id/ProductPriceNewSeasonAllProduct"
+                android:id="@+id/ProductPriceAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -85,8 +86,8 @@
                 android:fontFamily="sans-serif-black"
                 android:text="300 $"
                 android:textColor="#FF9100"
-                app:layout_constraintStart_toStartOf="@+id/txtProductNameNewSeasonAllProduct"
-                app:layout_constraintTop_toBottomOf="@+id/txtProductNameNewSeasonAllProduct" />
+                app:layout_constraintStart_toStartOf="@+id/ProductNameAll"
+                app:layout_constraintTop_toBottomOf="@+id/ProductNameAll" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
@@ -94,29 +95,30 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:backgroundTint="#3B75FF00"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ProductPriceNewSeasonAllProduct">
+                app:layout_constraintTop_toBottomOf="@+id/ProductPriceAll">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center|top"
+                    android:layout_marginTop="2dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/delivery"
-                    android:layout_marginTop="2dp"/>
+                    android:src="@drawable/delivery" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
+                    android:layout_marginBottom="2dp"
                     android:fontFamily="@font/regular1"
                     android:gravity="center"
                     android:text="Fast Delivery"
                     android:textColor="@color/black"
                     android:textSize="8sp"
-                    android:layout_marginBottom="2dp"
                     tools:ignore="SmallSp" />
 
 
