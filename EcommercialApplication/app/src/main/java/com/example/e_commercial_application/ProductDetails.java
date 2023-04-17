@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Objects;
 
@@ -66,6 +68,17 @@ public class ProductDetails extends Fragment {
             detailedProductPrice.setText(allProducts.getProductPrice() + "$");
 
         }
+
+        MaterialToolbar toolbar =view.findViewById(R.id.toolbar2);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(),HomePage.class);
+                startActivity(intent);
+
+            }
+        });
 
 
     }

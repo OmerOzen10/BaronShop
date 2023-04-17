@@ -65,7 +65,8 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
 
         holder.ProductPriceAll.setText(allProducts.getProductPrice() + "$" );
-        Glide.with(context).load(allProducts.getProductImg()).into(holder.ProductImgAll);
+        Glide.with(context).load(allProducts.getProductImg()).centerInside().into(holder.ProductImgAll);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
