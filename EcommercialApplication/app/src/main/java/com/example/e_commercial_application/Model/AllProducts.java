@@ -1,6 +1,8 @@
 package com.example.e_commercial_application.Model;
 
-public class AllProducts {
+import java.io.Serializable;
+
+public class AllProducts implements Serializable {
 
     private String ProductName,ProductImg;
     private double ProductPrice;

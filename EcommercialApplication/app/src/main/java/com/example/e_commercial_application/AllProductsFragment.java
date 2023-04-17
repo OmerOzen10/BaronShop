@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toolbar;
 
 import com.example.e_commercial_application.Adapter.AllProductsAdapter;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
@@ -76,9 +77,6 @@ public class AllProductsFragment extends Fragment {
                 Intent intent = new Intent(getContext(),HomePage.class);
                 startActivity(intent);
 
-
-
-
             }
         });
     }
@@ -103,6 +101,7 @@ public class AllProductsFragment extends Fragment {
                     }
                 });
     }
+
 
 
     @Override

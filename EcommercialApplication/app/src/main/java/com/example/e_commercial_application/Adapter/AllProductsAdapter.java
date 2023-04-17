@@ -1,7 +1,7 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,9 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.AllProductsFragment;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -35,12 +37,12 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
         this.context = context;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_season_all_products_layout,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
 
 
 
@@ -65,14 +67,28 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
         holder.ProductPriceAll.setText(allProducts.getProductPrice() + "$" );
         Glide.with(context).load(allProducts.getProductImg()).into(holder.ProductImgAll);
 
-        holder.AllProducts.setOnClickListener(view -> {
-            Intent intent = new Intent(context,HomePage.class);
-            context.startActivity(intent);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                HomePage homePage = (HomePage) getActivity();
+//                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+//                bottomNavigationView.setVisibility(View.GONE);
 
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("productName",allProductsList.get(holder.getAdapterPosition()));
+                ProductDetails productDetails = new ProductDetails();
+                productDetails.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerFrame, productDetails).commit();
+            }
         });
 
 
     }
+
+
+
 
     @Override
     public int getItemCount() {
