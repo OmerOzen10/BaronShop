@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class HomePage extends AppCompatActivity {
 
-    ArrayList<AllProducts> basketList = new ArrayList<>();
+    public static ArrayList <AllProducts> basketList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

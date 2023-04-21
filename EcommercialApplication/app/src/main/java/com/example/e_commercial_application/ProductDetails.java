@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.Adapter.BasketAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -90,15 +91,24 @@ public class ProductDetails extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ((HomePage) requireActivity()).basketList.add(allProducts);
-                Toast.makeText(requireContext(), "Product added to basket!", Toast.LENGTH_SHORT).show();
+                int match = 0;
 
+                for (AllProducts product : HomePage.basketList) {
+                    if (allProducts.getProductName().equals(product.getProductName())) {
+                        int currentNumber = product.getNumber();
+                        product.setNumber(++currentNumber);
+
+                        match++;
+                    }
+                }
+
+                if (match == 0) {
+                    HomePage.basketList.add(allProducts);
+                }
+                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerFrame, new BasketFragment()).addToBackStack(null).commit();
                 Log.d(TAG, "onClick: basket" + " " + ((HomePage) requireActivity()).basketList.size());
-
-//                BasketFragment basketFragment = new BasketFragment();
-//                FragmentManager fragmentManager = getParentFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.containerFrame,basketFragment).commit();
 
             }
         });

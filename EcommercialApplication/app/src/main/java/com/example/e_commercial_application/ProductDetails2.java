@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +25,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import org.checkerframework.checker.units.qual.A;
 
 public class ProductDetails2 extends Fragment {
-
-//    public NewSeason newSeason;
     public AllProducts allProducts;
     private static final String TAG = "ProductDetails2";
     private ImageView detailedProductImg;
@@ -49,7 +48,6 @@ public class ProductDetails2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null){
-//            newSeason = (NewSeason) bundle.getSerializable("productName2");
             allProducts = (AllProducts) bundle.getSerializable("productName2");
         }else {
             Log.d(TAG, "onViewCreated: bundle is null");
@@ -57,14 +55,6 @@ public class ProductDetails2 extends Fragment {
         detailedProductImg = view.findViewById(R.id.detailImg);
         detailedProductName = view.findViewById(R.id.detailedName);
         detailedProductPrice = view.findViewById(R.id.detailedPrice);
-
-//        if (newSeason == null){
-//            Log.d(TAG, "onViewCreated: null");
-//        }else {
-//            Glide.with(requireContext()).load(newSeason.getProductImg()).into(detailedProductImg);
-//            detailedProductName.setText(newSeason.getProductName());
-//            detailedProductPrice.setText(newSeason.getProductPrice() + "$");
-//        }
 
         if (allProducts == null){
             Log.d(TAG, "onViewCreated: null");
@@ -78,10 +68,8 @@ public class ProductDetails2 extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
+                Intent intent = new Intent(getContext(),HomePage.class);
+                startActivity(intent);
 
             }
         });

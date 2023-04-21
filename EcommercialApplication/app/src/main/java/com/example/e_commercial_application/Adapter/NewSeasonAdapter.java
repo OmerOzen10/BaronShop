@@ -63,7 +63,7 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
             bundle.putSerializable("productName2",allProductsList.get(holder.getAdapterPosition()));
             ProductDetails2 productDetails2 = new ProductDetails2();
             productDetails2.setArguments(bundle);
-            fragmentTransaction.replace(R.id.containerFrame, productDetails2).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.containerFrame, productDetails2).commit();
         });
 
     }

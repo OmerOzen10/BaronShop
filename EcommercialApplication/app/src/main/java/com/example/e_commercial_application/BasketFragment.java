@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class BasketFragment extends Fragment {
 
-    private ArrayList<AllProducts> basketList;
+
     private RecyclerView basketRecyclerView;
     private BasketAdapter adapter;
 
@@ -31,21 +31,15 @@ public class BasketFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        HomePage homePage = (HomePage) requireActivity();
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        basketList = ((HomePage)getActivity()).getBasketArrayList();
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        // Create a new BasketAdapter and set it as the adapter for the RecyclerView
-        adapter = new BasketAdapter(basketList,getContext());
+        adapter = new BasketAdapter(HomePage.basketList,getContext());
         basketRecyclerView.setAdapter(adapter);
-        Bundle bundle = new Bundle();
 
     }
 

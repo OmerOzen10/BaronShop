@@ -8,6 +8,8 @@ public class AllProducts implements Serializable {
     private double ProductPrice;
     private float ProductRate;
 
+    private int number = 1;
+
     public AllProducts(){
 
     }
@@ -33,5 +35,13 @@ public class AllProducts implements Serializable {
 
     public double getProductPrice() {
         return ProductPrice;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
