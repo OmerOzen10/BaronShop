@@ -6,15 +6,21 @@ public class AllProducts implements Serializable {
 
     private String ProductName,ProductImg;
     private double ProductPrice;
+    private float ProductRate;
 
     public AllProducts(){
 
     }
 
-    public AllProducts(String productName, String productImg, double productPrice) {
+    public AllProducts(String productName, String productImg, double productPrice, float productRate) {
         ProductName = productName;
         ProductImg = productImg;
         ProductPrice = productPrice;
+        ProductRate = productRate;
+    }
+
+    public float getProductRate() {
+        return ProductRate;
     }
 
     public String getProductName() {

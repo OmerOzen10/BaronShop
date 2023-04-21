@@ -12,10 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 public class HomePage extends AppCompatActivity {
+
+    ArrayList<AllProducts> basketList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,10 @@ public class HomePage extends AppCompatActivity {
 
 
     }
+    public ArrayList<AllProducts> getBasketArrayList() {
+        return basketList;
+    }
+
 
     private NavigationBarView.OnItemSelectedListener navListener =
             new NavigationBarView.OnItemSelectedListener() {

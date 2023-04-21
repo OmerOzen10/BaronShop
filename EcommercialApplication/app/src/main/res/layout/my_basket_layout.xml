@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D9D8DA">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/basketImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/puma"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/basketProductName"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="110dp"
+            android:fontFamily="@font/regular1"
+            android:text="ProductName"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/basketImg"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/basketDelivery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/regular1"
+            android:text="Delivery to estimated cargo: "
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@+id/basketImg"
+            app:layout_constraintTop_toBottomOf="@+id/basketProductName" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-30dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/regular1"
+            android:text="Within 3 Days"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/basketDelivery"
+            app:layout_constraintTop_toBottomOf="@+id/basketProductName" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView5"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:elevation="50dp"
+            android:outlineSpotShadowColor="@color/black"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintStart_toEndOf="@+id/basketImg"
+            app:layout_constraintTop_toBottomOf="@+id/basketDelivery">
+
+            <ImageView
+                android:id="@+id/decreaseItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_remove"
+                tools:ignore="RtlHardcoded" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#FDF8D19C"
+                app:cardCornerRadius="12.5dp">
+
+                <TextView
+                    android:id="@+id/itemPiece"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-black"
+                    android:text="1"
+                    android:textColor="#FF9100" />
+
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/increaseItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_add"
+                tools:ignore="RtlHardcoded" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/basketProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="300 $"
+            android:textColor="#FF9100"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView5"
+            app:layout_constraintEnd_toEndOf="@+id/basketProductName"
+            app:layout_constraintStart_toEndOf="@+id/cardView5"
+            app:layout_constraintTop_toTopOf="@+id/cardView5" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

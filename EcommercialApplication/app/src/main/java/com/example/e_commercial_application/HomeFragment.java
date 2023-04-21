@@ -21,8 +21,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.e_commercial_application.Adapter.AllProductsAdapter;
+//import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
-import com.example.e_commercial_application.Model.NewSeason;
+import com.example.e_commercial_application.Model.AllProducts;
+//import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -38,11 +41,10 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
-
-    FirebaseStorage mStorage;
     NewSeasonAdapter newSeasonAdapter;
     FirebaseFirestore firebaseFirestore;
-    ArrayList<NewSeason> newSeasonArrayList;
+
+    ArrayList<AllProducts> allProductsArrayList;
     TextView txtNewSeasonAllProducts;
 
     FrameLayout frameLayout;
@@ -78,9 +80,9 @@ public class HomeFragment extends Fragment {
         newSeasonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        newSeasonArrayList = new ArrayList<NewSeason>();
 
-        newSeasonAdapter = new NewSeasonAdapter(newSeasonArrayList, getContext());
+        allProductsArrayList = new ArrayList<AllProducts>();
+        newSeasonAdapter = new NewSeasonAdapter(allProductsArrayList,getContext());
 
         newSeasonRecyclerView.setAdapter(newSeasonAdapter);
         
@@ -101,6 +103,13 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+        newSeasonRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void EventChangeListener() {
@@ -112,11 +121,9 @@ public class HomeFragment extends Fragment {
                 for (DocumentChange documentChange : value.getDocumentChanges()){
 
                     if (documentChange.getType() == DocumentChange.Type.ADDED){
-
-                        newSeasonArrayList.add(documentChange.getDocument().toObject(NewSeason.class));
+                        allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
 
                     }
-
                     newSeasonAdapter.notifyDataSetChanged();
 
                 }

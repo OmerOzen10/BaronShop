@@ -21,9 +21,9 @@ import android.widget.FrameLayout;
 import android.widget.Toolbar;
 
 import com.example.e_commercial_application.Adapter.AllProductsAdapter;
-import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
+
 import com.example.e_commercial_application.Model.AllProducts;
-import com.example.e_commercial_application.Model.NewSeason;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;

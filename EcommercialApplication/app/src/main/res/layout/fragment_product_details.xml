@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7A7A7A"
+    android:background="#B6B5B5"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -27,7 +27,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -37,7 +37,10 @@
             android:id="@+id/topScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#C8C7C7">
+            android:background="#C8C7C7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/detailImg"
@@ -282,7 +285,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -291,7 +294,7 @@
         android:layout_gravity="bottom">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnBasket"
             android:layout_width="250dp"
             android:layout_height="60dp"
             android:layout_marginTop="-20dp"
@@ -314,9 +317,9 @@
             android:layout_marginTop="7dp"
             android:textColor="#FF9100"
             android:textSize="17sp"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/btnBasket"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button" />
+            app:layout_constraintTop_toTopOf="@+id/btnBasket" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -325,7 +328,7 @@
             android:text="Free Shipping"
             android:textColor="#01BC09"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@+id/button"
+            app:layout_constraintBottom_toBottomOf="@+id/btnBasket"
             app:layout_constraintStart_toStartOf="@+id/detailedPrice"
             app:layout_constraintTop_toBottomOf="@+id/detailedPrice" />
 
