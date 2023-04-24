@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-black"
-                    android:text="1"
+                    android:text=" 1 "
                     android:textColor="#FF9100" />
 
             </androidx.cardview.widget.CardView>
@@ -124,14 +124,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
             android:fontFamily="sans-serif-black"
-            android:text=""
+            android:text="300"
             android:textColor="#FF9100"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@+id/cardView5"
             app:layout_constraintEnd_toEndOf="@+id/basketProductName"
             app:layout_constraintStart_toEndOf="@+id/cardView5"
             app:layout_constraintTop_toTopOf="@+id/cardView5" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

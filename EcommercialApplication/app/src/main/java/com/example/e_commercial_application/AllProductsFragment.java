@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toolbar;
 
 import com.example.e_commercial_application.Adapter.AllProductsAdapter;
@@ -42,6 +43,7 @@ public class AllProductsFragment extends Fragment {
     ArrayList<AllProducts> allProductsArrayList;
 
     CardView AllProducts;
+    ImageView backButton;
 
     private static final String TAG = "AllProductsFragment";
 
@@ -56,6 +58,7 @@ public class AllProductsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         AllProductsRec = view.findViewById(R.id.AllProductsRec);
         AllProductsRec.setHasFixedSize(true);
+        AllProductsRec.setVerticalScrollBarEnabled(true);
         AllProductsRec.setLayoutManager(new GridLayoutManager(getContext(),2));
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -69,16 +72,27 @@ public class AllProductsFragment extends Fragment {
 
         EventChangeListener();
 
-        MaterialToolbar toolbar =view.findViewById(R.id.toolbar1);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
                 Intent intent = new Intent(getContext(),HomePage.class);
                 startActivity(intent);
-
             }
         });
+
+//        MaterialToolbar toolbar =view.findViewById(R.id.toolbar1);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(getContext(),HomePage.class);
+//                startActivity(intent);
+//
+//            }
+//        });
+
+
     }
 
     private void EventChangeListener() {

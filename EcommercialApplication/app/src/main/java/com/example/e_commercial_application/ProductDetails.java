@@ -1,6 +1,8 @@
 package com.example.e_commercial_application;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -26,7 +28,9 @@ import com.example.e_commercial_application.Adapter.BasketAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.common.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -59,9 +63,6 @@ public class ProductDetails extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
         Bundle bundle = getArguments();
         if (bundle != null){
             allProducts = (AllProducts) bundle.getSerializable("productName");
@@ -99,6 +100,8 @@ public class ProductDetails extends Fragment {
                         product.setNumber(++currentNumber);
 
                         match++;
+
+
                     }
                 }
 
@@ -131,7 +134,8 @@ public class ProductDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_product_details, container, false);
+
+
     }
 }

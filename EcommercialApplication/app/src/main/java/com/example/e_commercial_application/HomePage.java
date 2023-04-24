@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +34,13 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(navListener);
 
 
+
+
+
     }
+
+
+
     public ArrayList<AllProducts> getBasketArrayList() {
         return basketList;
     }

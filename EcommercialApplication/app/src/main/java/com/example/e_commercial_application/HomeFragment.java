@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
 
                 FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).commit();
+                fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).addToBackStack(null).commit();
 
 
             }
