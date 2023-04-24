@@ -81,6 +81,7 @@ public class BasketFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                
                 FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.containerFrame, new HomeFragment()).commit();

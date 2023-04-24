@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment {
         txtNewSeasonAllProducts.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
+
                 HomePage homePage = (HomePage) getActivity();
                 BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
                 bottomNavigationView.setVisibility(View.GONE);
