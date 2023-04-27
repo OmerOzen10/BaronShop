@@ -43,7 +43,7 @@ public class ProductDetails extends Fragment {
     private TextView detailedProductName, detailedProductPrice;
 
     private RatingBar ratingBar;
-    private TextView rate;
+    private TextView rate,totalPrice;
     Button addToBasket;
     
     public ProductDetails() {
@@ -75,6 +75,7 @@ public class ProductDetails extends Fragment {
         detailedProductPrice = view.findViewById(R.id.detailedPrice);
         ratingBar = view.findViewById(R.id.ratingBar2);
         rate = view.findViewById(R.id.detailedRating);
+        totalPrice = view.findViewById(R.id.totalPrice);
 
         if (allProducts == null){
             Log.d(TAG, "onViewCreated: null" );
@@ -108,6 +109,11 @@ public class ProductDetails extends Fragment {
                 if (match == 0) {
                     HomePage.basketList.add(allProducts);
                 }
+
+
+
+
+
                 FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.containerFrame, new BasketFragment()).addToBackStack(null).commit();

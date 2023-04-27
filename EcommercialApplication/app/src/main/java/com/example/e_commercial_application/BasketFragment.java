@@ -25,14 +25,14 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
-public class BasketFragment extends Fragment {
+public class BasketFragment extends Fragment{
 
     AllProducts allProducts;
 
     private RecyclerView basketRecyclerView;
     private BasketAdapter adapter;
     private ConstraintLayout buyConstraint, emptyConstraint;
-    TextView itemPiece, itemPrice, totalPrice,detailedPrice;
+    TextView totalPrice,priceBasket;
     Button btnContinue;
     private static final String TAG = "BasketFragment";
 
@@ -50,24 +50,23 @@ public class BasketFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         allProducts = new AllProducts();
+        totalPrice = view.findViewById(R.id.totalPrice);
         emptyConstraint = view.findViewById(R.id.emptyConstraint);
         buyConstraint = view.findViewById(R.id.buyConstraint);
         btnContinue = view.findViewById(R.id.btnContinue);
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BasketAdapter(HomePage.basketList,getContext());
+        adapter = new BasketAdapter(HomePage.basketList,getContext(), totalPrice);
         basketRecyclerView.setAdapter(adapter);
+        priceBasket = view.findViewById(R.id.priceBasket);
 
         MaterialToolbar toolbar =view.findViewById(R.id.toolbar3);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        toolbar.setNavigationOnClickListener(v -> {
 
-                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
+            FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
 
-            }
         });
 
         if (adapter.getItemCount() == 0){
@@ -76,26 +75,18 @@ public class BasketFragment extends Fragment {
             basketRecyclerView.setVisibility(View.GONE);
         }else {
             buyConstraint.setVisibility(View.VISIBLE);
+            BasketAdapter adapter1 = new BasketAdapter();
+            double total  = adapter1.getTotalPrice();
+            totalPrice.setText(String.valueOf(total));
         }
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnContinue.setOnClickListener(view1 -> {
 
-                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame, new HomeFragment()).commit();
-            }
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.containerFrame, new HomeFragment()).commit();
         });
-//        itemPrice = view.findViewById(R.id.priceBasket);
-//        totalPrice  = view.findViewById(R.id.totalPrice);
-//        detailedPrice = view.findViewById(R.id.detailedPrice);
-//        itemPrice = view.findViewById(R.id.itemPiece);
-//
-//        int quantity = allProducts.getNumber();
-//        int amount = (int) allProducts.getProductPrice();
-//        int price = quantity * amount;
-//        itemPrice.setText(String.valueOf(price));
+
     }
 
     @Override
@@ -103,4 +94,5 @@ public class BasketFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_basket, container, false);
     }
+
 }
