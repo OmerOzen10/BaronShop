@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class HomePage extends AppCompatActivity {
 
     public static ArrayList <AllProducts> basketList = new ArrayList<>();
+    public static ArrayList <AllProducts> favList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,9 @@ public class HomePage extends AppCompatActivity {
                             break;
                         case R.id.nav_basket:
                             selectedFragment = new BasketFragment();
+                            break;
+                        case R.id.nav_fav:
+                            selectedFragment = new FavFragment();
                             break;
                         case R.id.nav_user:
                             selectedFragment = new UserFragment();

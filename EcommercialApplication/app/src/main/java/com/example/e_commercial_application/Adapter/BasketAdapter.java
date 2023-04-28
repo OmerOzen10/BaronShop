@@ -54,6 +54,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         allProducts = new AllProducts();
         AllProducts basketItem = basketArrayList.get(position);
 
+
+
         holder.basketProductName.setText(basketItem.getProductName());
         holder.basketProductPrice.setText(basketItem.getProductPrice() + "$");
         holder.itemPiece.setText(basketItem.getNumber() + "");
@@ -80,7 +82,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
                 holder.basketProductPrice.setText(String.format("%.2f $", total1));
             }
-            totalPrice.setText(getTotalPrice()+ " $");
+            totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
         });
 
         holder.increaseItem.setOnClickListener(view -> {
@@ -92,7 +94,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             double total12 = Double.parseDouble(df12.format(quantity1* amount12));
             holder.basketProductPrice.setText((total12 + " $"));
 
-            totalPrice.setText(getTotalPrice()+ " $");
+            totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
         });
 
 

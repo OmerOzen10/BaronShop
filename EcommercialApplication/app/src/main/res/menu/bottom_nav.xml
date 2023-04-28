@@ -8,8 +8,14 @@
         android:id="@+id/nav_basket"
         android:icon="@drawable/basket"
         android:title="Basket"/>
+
+    <item
+        android:id="@+id/nav_fav"
+        android:icon="@drawable/fav"
+        android:title="Favorites"/>
     <item
         android:id="@+id/nav_user"
         android:icon="@drawable/ic_account"
         android:title="My Account"/>
+
 </menu>

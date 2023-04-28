@@ -1,7 +1,9 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.ProductDetails2;
 import com.example.e_commercial_application.R;
+//import com.example.e_commercial_application.SQL.MyDatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.Serializable;
@@ -30,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewSeasonViewHolder> {
     private List<AllProducts> allProductsList;
+    private static final String TAG = "NewSeasonAdapter";
     Context context;
 public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
     this.allProductsList = newSeasonList;
@@ -42,14 +46,40 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
         View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_season_layout,parent,false);
         return new NewSeasonViewHolder(view1);
 
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewSeasonViewHolder holder, int position) {
+
+        SharedPreferences prefs = context.getSharedPreferences("FavProducts", Context.MODE_PRIVATE);
+        boolean isFav = prefs.getBoolean(String.valueOf(position), false);
         AllProducts allProducts = allProductsList.get(position);
         holder.ProductPriceNewSeason.setText(allProducts.getProductPrice() + " $");
         holder.ProductNameNewSeason.setText(allProducts.getProductName());
         Glide.with(context).load(allProducts.getProductImg()).into(holder.ProductImgNewSeason);
+
+        holder.favProductNewSeason.setBackgroundResource(allProducts.isLiked() ? R.drawable.ic_fav_red : R.drawable.baseline_fav);
+
+        holder.favProductNewSeason.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                allProducts.setLiked(!allProducts.isLiked());
+                holder.favProductNewSeason.setBackgroundResource(allProducts.isLiked() ? R.drawable.ic_fav_red : R.drawable.baseline_fav);
+
+                int adapterPosition = holder.getAdapterPosition();
+                SharedPreferences.Editor editor = context.getSharedPreferences("FavProducts", Context.MODE_PRIVATE).edit();
+                editor.putBoolean(String.valueOf(adapterPosition), allProducts.isLiked());
+                editor.apply();
+
+                HomePage.favList.add(allProducts);
+                Log.d(TAG, "onClick: favList " + HomePage.favList.size());
+            }
+        });
+
+
+
+
 
 
         holder.itemView.setOnClickListener(view -> {

@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Adapter.BasketAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
+//import com.example.e_commercial_application.SQL.MyDatabaseHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.common.reflect.TypeToken;
 
@@ -92,6 +93,7 @@ public class ProductDetails extends Fragment {
         addToBasket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 int match = 0;
 

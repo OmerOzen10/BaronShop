@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.example.e_commercial_application.Adapter.BasketAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -63,6 +65,10 @@ public class BasketFragment extends Fragment{
         MaterialToolbar toolbar =view.findViewById(R.id.toolbar3);
         toolbar.setNavigationOnClickListener(v -> {
 
+            HomePage homePage = (HomePage) getActivity();
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+
             FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
@@ -77,10 +83,12 @@ public class BasketFragment extends Fragment{
             buyConstraint.setVisibility(View.VISIBLE);
             BasketAdapter adapter1 = new BasketAdapter();
             double total  = adapter1.getTotalPrice();
-            totalPrice.setText(String.valueOf(total));
+            totalPrice.setText((total + " $"));
         }
 
         btnContinue.setOnClickListener(view1 -> {
+
+
 
             FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

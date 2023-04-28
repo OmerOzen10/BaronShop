@@ -10,6 +10,8 @@ public class AllProducts implements Serializable {
 
     private int number = 1;
 
+    private boolean isLiked = false;
+
     public AllProducts(){
 
     }
@@ -19,6 +21,14 @@ public class AllProducts implements Serializable {
         ProductImg = productImg;
         ProductPrice = productPrice;
         ProductRate = productRate;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 
     public float getProductRate() {
