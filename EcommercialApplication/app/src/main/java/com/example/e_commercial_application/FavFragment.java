@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.e_commercial_application.Adapter.FavAdapter;
+import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 
 public class FavFragment extends Fragment {
@@ -38,6 +39,8 @@ public class FavFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         allProducts = new AllProducts();
         favRecyclerView = view.findViewById(R.id.favRecyclerView);
         emptyFavConstraint = view.findViewById(R.id.emptyFav);

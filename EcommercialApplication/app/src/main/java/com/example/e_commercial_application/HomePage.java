@@ -19,11 +19,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomePage extends AppCompatActivity {
 
     public static ArrayList <AllProducts> basketList = new ArrayList<>();
     public static ArrayList <AllProducts> favList = new ArrayList<>();
+    private FavDB favDB;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +38,19 @@ public class HomePage extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnItemSelectedListener(navListener);
 
+        favDB = new FavDB(this);
+        HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
 
 
 
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+    }
 
     public ArrayList<AllProducts> getBasketArrayList() {
         return basketList;

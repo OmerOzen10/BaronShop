@@ -43,6 +43,7 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
+
     NewSeasonAdapter newSeasonAdapter;
     FirebaseFirestore firebaseFirestore;
 
@@ -68,6 +69,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
+
+
     }
 
     @Override

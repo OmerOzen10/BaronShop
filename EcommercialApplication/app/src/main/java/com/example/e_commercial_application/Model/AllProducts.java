@@ -10,26 +10,62 @@ public class AllProducts implements Serializable {
 
     private int number = 1;
 
-    private boolean isLiked = false;
+    private String id;
+
+//    private boolean isLiked = false;
+    private String favStatus;
 
     public AllProducts(){
 
     }
 
-    public AllProducts(String productName, String productImg, double productPrice, float productRate) {
+    public void setProductName(String productName) {
+        ProductName = productName;
+    }
+
+    public void setProductImg(String productImg) {
+        ProductImg = productImg;
+    }
+
+    public void setProductPrice(double productPrice) {
+        ProductPrice = productPrice;
+    }
+
+    public void setProductRate(float productRate) {
+        ProductRate = productRate;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public AllProducts(String productName, String productImg, double productPrice, float productRate, String id) {
         ProductName = productName;
         ProductImg = productImg;
         ProductPrice = productPrice;
         ProductRate = productRate;
+        this.id = id;
     }
 
-    public boolean isLiked() {
-        return isLiked;
+    public void setFavStatus(String favStatus) {
+        this.favStatus = favStatus;
     }
 
-    public void setLiked(boolean liked) {
-        isLiked = liked;
+    public String getFavStatus() {
+        return favStatus;
     }
+
+    public String getId() {
+        return id;
+    }
+
+//    public boolean isLiked() {
+//        return isLiked;
+//    }
+
+//    public void setLiked(boolean liked) {
+//        isLiked = liked;
+//    }
 
     public float getProductRate() {
         return ProductRate;

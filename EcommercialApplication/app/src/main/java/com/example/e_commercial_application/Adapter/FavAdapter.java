@@ -1,6 +1,7 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.FavDB;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.R;
 
@@ -24,6 +26,7 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
 
     private ArrayList<AllProducts> favArrayList;
     Context context;
+
     private static final String TAG = "FavAdapter";
 
     public FavAdapter(ArrayList<AllProducts> favArrayList, Context context) {
@@ -34,9 +37,12 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_fav_product_layout,parent,false);
         return new ViewHolder(view);
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
