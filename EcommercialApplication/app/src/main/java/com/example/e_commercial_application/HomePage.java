@@ -58,31 +58,28 @@ public class HomePage extends AppCompatActivity {
 
 
     private NavigationBarView.OnItemSelectedListener navListener =
-            new NavigationBarView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
-                    switch (item.getItemId()) {
-                        case R.id.nav_home:
-                            selectedFragment = new HomeFragment();
-                            break;
-                        case R.id.nav_basket:
-                            selectedFragment = new BasketFragment();
-                            break;
-                        case R.id.nav_fav:
-                            selectedFragment = new FavFragment();
-                            break;
-                        case R.id.nav_user:
-                            selectedFragment = new UserFragment();
-                            break;
+            item -> {
+                Fragment selectedFragment = null;
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        selectedFragment = new HomeFragment();
+                        break;
+                    case R.id.nav_basket:
+                        selectedFragment = new BasketFragment();
+                        break;
+                    case R.id.nav_fav:
+                        selectedFragment = new FavFragment();
+                        break;
+                    case R.id.nav_user:
+                        selectedFragment = new UserFragment();
+                        break;
 
-                    }
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.containerFrame, selectedFragment)
-                            .addToBackStack(null)
-                            .commit();
-                    return true;
                 }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.containerFrame, selectedFragment)
+                        .addToBackStack(null)
+                        .commit();
+                return true;
             };
 
 }

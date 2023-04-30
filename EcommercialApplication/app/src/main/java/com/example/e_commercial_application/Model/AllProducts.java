@@ -7,16 +7,14 @@ public class AllProducts implements Serializable {
     private String ProductName,ProductImg;
     private double ProductPrice;
     private float ProductRate;
-
     private int number = 1;
-
     private String id;
 
 //    private boolean isLiked = false;
     private String favStatus;
 
     public AllProducts(){
-
+        // Empty no-arg constructor
     }
 
     public void setProductName(String productName) {

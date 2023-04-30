@@ -94,21 +94,14 @@ public class HomeFragment extends Fragment {
         EventChangeListener();
 
 
-        txtNewSeasonAllProducts.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        txtNewSeasonAllProducts.setOnClickListener(view1 -> {
+            HomePage homePage = (HomePage) getActivity();
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
 
-
-
-                HomePage homePage = (HomePage) getActivity();
-                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-                bottomNavigationView.setVisibility(View.GONE);
-
-                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).addToBackStack(null).commit();
-
-
-            }
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).addToBackStack(null).commit();
         });
 
         newSeasonRecyclerView.setOnClickListener(new View.OnClickListener() {
@@ -122,19 +115,15 @@ public class HomeFragment extends Fragment {
 
     private void EventChangeListener() {
 
-        firebaseFirestore.collection("NewSeason").orderBy("ProductPrice", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+        firebaseFirestore.collection("NewSeason").orderBy("ProductPrice", Query.Direction.ASCENDING).addSnapshotListener((value, error) -> {
 
-                for (DocumentChange documentChange : value.getDocumentChanges()){
+            for (DocumentChange documentChange : value.getDocumentChanges()){
 
-                    if (documentChange.getType() == DocumentChange.Type.ADDED){
-                        allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
-
-                    }
-                    newSeasonAdapter.notifyDataSetChanged();
+                if (documentChange.getType() == DocumentChange.Type.ADDED){
+                    allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
 
                 }
+                newSeasonAdapter.notifyDataSetChanged();
 
             }
 
