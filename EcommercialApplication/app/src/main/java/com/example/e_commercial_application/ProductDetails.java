@@ -46,6 +46,7 @@ public class ProductDetails extends Fragment {
     private RatingBar ratingBar;
     private TextView rate,totalPrice;
     Button addToBasket;
+    BasketDB basketDB;
     
     public ProductDetails() {
 
@@ -77,6 +78,7 @@ public class ProductDetails extends Fragment {
         ratingBar = view.findViewById(R.id.ratingBar2);
         rate = view.findViewById(R.id.detailedRating);
         totalPrice = view.findViewById(R.id.totalPrice);
+        basketDB = new BasketDB(getContext());
 
         if (allProducts == null){
             Log.d(TAG, "onViewCreated: null" );
@@ -95,6 +97,7 @@ public class ProductDetails extends Fragment {
             public void onClick(View view) {
 
 
+
                 int match = 0;
 
                 for (AllProducts product : HomePage.basketList) {
@@ -104,13 +107,19 @@ public class ProductDetails extends Fragment {
 
                         match++;
 
+                        basketDB.updateQuantity(allProducts.getId(),currentNumber);
+
 
                     }
                 }
 
                 if (match == 0) {
                     HomePage.basketList.add(allProducts);
+                    Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
+                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()));
                 }
+
+
 
 
 

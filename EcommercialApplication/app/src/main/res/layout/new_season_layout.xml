@@ -25,6 +25,7 @@
             android:layout_height="250dp">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/favProductContainer"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:cardCornerRadius="20dp"

@@ -27,9 +27,11 @@ public class FavDB extends SQLiteOpenHelper {
     public static String ITEM_IMAGE = "itemImage";
     public static String ITEM_PRICE = "itemPrice";
     public static String FAVORITE_STATUS = "fStatus";
+
+    public static String ITEM_RATE = "itemRate";
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " TEXT," +
             ITEM_TITLE + " TEXT,"
-            +ITEM_IMAGE + " TEXT," + FAVORITE_STATUS + " TEXT," + ITEM_PRICE + " TEXT)";
+            +ITEM_IMAGE + " TEXT," + FAVORITE_STATUS + " TEXT," + ITEM_RATE + " TEXT,"+ ITEM_PRICE + " TEXT)";
 
     public FavDB(Context context){super(context,DATABASE_NAME,null,DB_VERSION);}
 
@@ -56,6 +58,7 @@ public class FavDB extends SQLiteOpenHelper {
                 allProducts.setProductImg(cursor.getString(cursor.getColumnIndex(ITEM_IMAGE)));
                 allProducts.setProductPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ITEM_PRICE))));
                 allProducts.setFavStatus(cursor.getString(cursor.getColumnIndex(FAVORITE_STATUS)));
+                allProducts.setProductRate(Float.parseFloat(cursor.getString(cursor.getColumnIndex(ITEM_RATE))));
                 allProductsList.add(allProducts);
             } while (cursor.moveToNext());
         }
@@ -80,7 +83,7 @@ public class FavDB extends SQLiteOpenHelper {
         }
     }
 
-    public void insertIntoTheDatabase(String item_title, String item_image, String id, String fav_status, String item_price){
+    public void insertIntoTheDatabase(String item_title, String item_image, String id, String fav_status, String item_rate, String item_price){
         SQLiteDatabase db;
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -89,6 +92,7 @@ public class FavDB extends SQLiteOpenHelper {
         cv.put(KEY_ID, id);
         cv.put(FAVORITE_STATUS, fav_status);
         cv.put(ITEM_PRICE, item_price);
+        cv.put(ITEM_RATE, item_rate);
 
         db.insert(TABLE_NAME,null,cv);
         Log.d("FavDB Status",item_title + ", favstatus - "+fav_status+" - . " + cv);

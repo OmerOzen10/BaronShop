@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -158,6 +159,7 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
         TextView ProductNameNewSeason, ProductPriceNewSeason;
 
         ImageView favProductNewSeason;
+        CardView favProductContainer;
 
 
         public NewSeasonViewHolder(@NonNull View itemView) {
@@ -167,39 +169,37 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
             ProductNameNewSeason = itemView.findViewById(R.id.txtProductName);
             ProductPriceNewSeason = itemView.findViewById(R.id.ProductPrice);
             favProductNewSeason = itemView.findViewById(R.id.fav_Product);
+            favProductContainer = itemView.findViewById(R.id.favProductContainer);
 
-            favProductNewSeason.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    AllProducts allProducts = allProductsList.get(position);
+            favProductContainer.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                AllProducts allProducts = allProductsList.get(position);
 
-                    if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
-                        allProducts.setFavStatus("1");
-                        favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(), allProducts.getFavStatus(),String.valueOf(allProducts.getProductPrice()));
-                        favProductNewSeason.setBackgroundResource(R.drawable.ic_fav_red);
+                if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
+                    allProducts.setFavStatus("1");
+                    favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(), allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
+                    favProductNewSeason.setBackgroundResource(R.drawable.ic_fav_red);
 
-                        HomePage.favList.add(allProducts);
-                        Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+                    HomePage.favList.add(allProducts);
+                    Log.d(TAG, "onClick: favList" + HomePage.favList.size());
 
-                    } else {
-                        allProducts.setFavStatus("0");
-                        favDB.remove_fav(allProducts.getId());
-                        favProductNewSeason.setBackgroundResource(R.drawable.baseline_fav);
-                        for (int i = 0; i < HomePage.favList.size(); i++) {
-                            AllProducts favProduct = HomePage.favList.get(i);
-                            if (favProduct.getId().equals(allProducts.getId())) {
-                                HomePage.favList.remove(i);
-                                break;
-                            }
+                } else {
+                    allProducts.setFavStatus("0");
+                    favDB.remove_fav(allProducts.getId());
+                    favProductNewSeason.setBackgroundResource(R.drawable.baseline_fav);
+                    for (int i = 0; i < HomePage.favList.size(); i++) {
+                        AllProducts favProduct = HomePage.favList.get(i);
+                        if (favProduct.getId().equals(allProducts.getId())) {
+                            HomePage.favList.remove(i);
+                            break;
                         }
-
-//                        HomePage.favList.remove(allProducts);
-                        Log.d(TAG, "onClick: favList" + HomePage.favList.size());
-
                     }
 
+//                        HomePage.favList.remove(allProducts);
+                    Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+
                 }
+
             });
         }
 

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.e_commercial_application.Adapter.BasketAdapter;
@@ -35,6 +36,7 @@ public class BasketFragment extends Fragment{
     private BasketAdapter adapter;
     private ConstraintLayout buyConstraint, emptyConstraint;
     TextView totalPrice,priceBasket;
+    ImageView backBasket;
     Button btnContinue;
     private static final String TAG = "BasketFragment";
 
@@ -61,19 +63,31 @@ public class BasketFragment extends Fragment{
         adapter = new BasketAdapter(HomePage.basketList,getContext(), totalPrice);
         basketRecyclerView.setAdapter(adapter);
         priceBasket = view.findViewById(R.id.priceBasket);
+        backBasket = view.findViewById(R.id.backBasket);
 
-        MaterialToolbar toolbar =view.findViewById(R.id.toolbar3);
-        toolbar.setNavigationOnClickListener(v -> {
-
-            HomePage homePage = (HomePage) getActivity();
-            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-            bottomNavigationView.setVisibility(View.VISIBLE);
-
-            FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
-
+        backBasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
+            }
         });
+
+//        MaterialToolbar toolbar =view.findViewById(R.id.toolbar3);
+//        toolbar.setNavigationOnClickListener(v -> {
+//
+//            HomePage homePage = (HomePage) getActivity();
+//            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+//            bottomNavigationView.setVisibility(View.VISIBLE);
+//
+//            FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
+//
+//        });
+
+
 
         if (adapter.getItemCount() == 0){
             buyConstraint.setVisibility(View.GONE);

@@ -26,6 +26,7 @@ public class HomePage extends AppCompatActivity {
     public static ArrayList <AllProducts> basketList = new ArrayList<>();
     public static ArrayList <AllProducts> favList = new ArrayList<>();
     private FavDB favDB;
+    private BasketDB basketDB;
 
 
 
@@ -39,7 +40,9 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(navListener);
 
         favDB = new FavDB(this);
+        basketDB = new BasketDB(this);
         HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
+        HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
 
 
 

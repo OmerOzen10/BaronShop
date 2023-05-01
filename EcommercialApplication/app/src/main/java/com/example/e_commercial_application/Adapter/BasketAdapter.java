@@ -2,6 +2,9 @@ package com.example.e_commercial_application.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.BasketDB;
 import com.example.e_commercial_application.BasketFragment;
+import com.example.e_commercial_application.FavDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.R;
@@ -32,6 +37,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     Context context;
     private static final String TAG = "BasketAdapter";
     TextView totalPrice;
+    BasketDB basketDB;
 
 
 
@@ -45,8 +51,21 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        basketDB = new BasketDB(context);
+        SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("firstStart",true);
+        if (firstStart){
+            createTableOnFirstStart();
+        }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout, parent, false);
         return new ViewHolder(view);
+    }
+    private void createTableOnFirstStart() {
+        basketDB.insertEmpty();
+        SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("firstStart", false);
+        editor.apply();
     }
     @SuppressLint("SetTextI18n")
     @Override
@@ -54,10 +73,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         allProducts = new AllProducts();
         AllProducts basketItem = basketArrayList.get(position);
 
-
-
+        readCursorData(allProducts,holder);
         holder.basketProductName.setText(basketItem.getProductName());
-        holder.basketProductPrice.setText(basketItem.getProductPrice() + "$");
+        holder.basketProductPrice.setText(basketItem.getProductPrice() + " $");
         holder.itemPiece.setText(basketItem.getNumber() + "");
         Glide.with(context).load(basketItem.getProductImg()).into(holder.basketImg);
 
@@ -70,7 +88,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         holder.basketProductPrice.setText((total + " $"));
 
         holder.decreaseItem.setOnClickListener(view -> {
-
             if (allProducts.getNumber() > 1) {
                 int quantity1 = allProducts.getNumber() - 1;
                 allProducts.setNumber(quantity1);
@@ -78,11 +95,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 double amount1 = allProducts.getProductPrice();
                 DecimalFormat df1 = new DecimalFormat("#.##");
                 double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", ""));
-
                 double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
                 holder.basketProductPrice.setText(String.format("%.2f $", total1));
+                totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
+                basketDB.updateQuantity(allProducts.getId(), quantity1);
             }
-            totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
         });
 
         holder.increaseItem.setOnClickListener(view -> {
@@ -93,12 +110,24 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             DecimalFormat df12 = new DecimalFormat("#.##");
             double total12 = Double.parseDouble(df12.format(quantity1* amount12));
             holder.basketProductPrice.setText((total12 + " $"));
-
             totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
+            basketDB.updateQuantity(allProducts.getId(), quantity1);
         });
 
 
 
+
+
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private void readCursorData(AllProducts allProducts, BasketAdapter.ViewHolder viewHolder) {
+
+        Cursor cursor = basketDB.read_all_data(allProducts.getId());
+        SQLiteDatabase db = basketDB.getReadableDatabase();
+            if (cursor!=null && cursor.isClosed())
+                cursor.close();
+            db.close();
 
     }
 
