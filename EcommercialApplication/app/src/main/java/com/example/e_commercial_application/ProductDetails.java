@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,6 +48,9 @@ public class ProductDetails extends Fragment {
     private TextView rate,totalPrice;
     Button addToBasket;
     BasketDB basketDB;
+    ImageView favIcon;
+    CardView favProduct;
+    FavDB favDB;
     
     public ProductDetails() {
 
@@ -79,6 +83,10 @@ public class ProductDetails extends Fragment {
         rate = view.findViewById(R.id.detailedRating);
         totalPrice = view.findViewById(R.id.totalPrice);
         basketDB = new BasketDB(getContext());
+        favIcon = view.findViewById(R.id.favIcon);
+        favProduct = view.findViewById(R.id.favProductDetail);
+        favDB = new FavDB(getContext());
+
 
         if (allProducts == null){
             Log.d(TAG, "onViewCreated: null" );
@@ -141,6 +149,37 @@ public class ProductDetails extends Fragment {
                 FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
+
+            }
+        });
+
+        if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
+            favIcon.setBackgroundResource(R.drawable.baseline_fav);
+        } else if (allProducts.getFavStatus() !=null && allProducts.getFavStatus().equals("1")){
+            favIcon.setBackgroundResource(R.drawable.ic_fav_red);
+        }
+
+        favProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
+                    allProducts.setFavStatus("1");
+                    favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
+                    favIcon.setBackgroundResource(R.drawable.ic_fav_red);
+                    HomePage.favList.add(allProducts);
+                } else if (allProducts.getFavStatus() !=null && allProducts.getFavStatus().equals("1")){
+                    allProducts.setFavStatus("0");
+                    favDB.remove_fav(allProducts.getId());
+                    for (int i = 0; i<HomePage.favList.size(); i++){
+                        AllProducts favProduct = HomePage.favList.get(i);
+                        if (favProduct.getId().equals(allProducts.getId())){
+                            HomePage.favList.remove(i);
+                            break;
+                        }
+                    }
+                    favIcon.setBackgroundResource(R.drawable.baseline_fav);
+                }
 
             }
         });

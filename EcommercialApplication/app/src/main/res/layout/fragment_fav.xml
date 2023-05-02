@@ -7,14 +7,37 @@
     tools:context=".FavFragment"
     android:background="#D9D8DA">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+    <Toolbar
+        android:id="@+id/toolbarFavList"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/regular1"
+            android:text="Favorites"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+
+    </Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarFavList">
 
     </androidx.recyclerview.widget.RecyclerView>
 

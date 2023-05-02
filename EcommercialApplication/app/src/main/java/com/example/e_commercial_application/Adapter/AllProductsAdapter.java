@@ -1,7 +1,11 @@
 package com.example.e_commercial_application.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.AllProductsFragment;
+import com.example.e_commercial_application.FavDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.ProductDetails;
@@ -30,6 +35,7 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
     private final List<AllProducts> allProductsList;
     Context context;
+    FavDB favDB;
 
 
     public AllProductsAdapter(List<AllProducts> allProductsList, Context context) {
@@ -53,6 +59,8 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
 
         AllProducts allProducts = allProductsList.get(position);
+        favDB = new FavDB(context);
+        readCursorData(allProducts,holder);
         String productName = allProducts.getProductName();
 
         if (productName.length()>35){
@@ -87,6 +95,28 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
 
     }
+    private void readCursorData(AllProducts allProducts, ViewHolder viewHolder) {
+
+        Cursor cursor = favDB.read_all_data(allProducts.getId());
+        SQLiteDatabase db = favDB.getReadableDatabase();
+        try {
+            while (cursor.moveToNext()){
+                @SuppressLint("Range") String item_fav_status = cursor.getString(cursor.getColumnIndex(FavDB.FAVORITE_STATUS));
+                allProducts.setFavStatus(item_fav_status);
+
+                if (item_fav_status != null && item_fav_status.equals("1")){
+                    viewHolder.favIcon.setBackgroundResource(R.drawable.ic_fav_red);
+                } else if (item_fav_status !=null && item_fav_status.equals("0")) {
+                    viewHolder.favIcon.setBackgroundResource(R.drawable.baseline_fav);
+                }
+            }
+        }finally {
+            if (cursor!=null && cursor.isClosed())
+                cursor.close();
+            db.close();
+        }
+
+    }
 
 
 
@@ -100,8 +130,8 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
 
         ImageView ProductImgAll;
         TextView ProductNameAll,ProductPriceAll;
-        ImageButton ProductFavAll;
-        CardView AllProducts;
+        ImageView favIcon;
+        CardView AllProducts, ProductFavAll;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -110,6 +140,33 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
             ProductPriceAll = itemView.findViewById(R.id.ProductPriceAll);;
             ProductFavAll = itemView.findViewById(R.id.favProductAll);
             AllProducts = itemView.findViewById(R.id.AllProductsCard);
+            favIcon = itemView.findViewById(R.id.favIcon);
+
+            ProductFavAll.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                AllProducts allProducts = allProductsList.get(position);
+
+                if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
+                    allProducts.setFavStatus("1");
+                    favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(), allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
+                    favIcon.setBackgroundResource(R.drawable.ic_fav_red);
+
+                    HomePage.favList.add(allProducts);
+
+                } else {
+                    allProducts.setFavStatus("0");
+                    favDB.remove_fav(allProducts.getId());
+                    favIcon.setBackgroundResource(R.drawable.baseline_fav);
+                    for (int i = 0; i < HomePage.favList.size(); i++) {
+                        AllProducts favProduct = HomePage.favList.get(i);
+                        if (favProduct.getId().equals(allProducts.getId())) {
+                            HomePage.favList.remove(i);
+                            break;
+                        }
+                    }
+                }
+
+            });
 
         }
     }

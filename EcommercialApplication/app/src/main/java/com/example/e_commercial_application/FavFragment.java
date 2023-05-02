@@ -1,18 +1,24 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.e_commercial_application.Adapter.FavAdapter;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
@@ -24,7 +30,9 @@ public class FavFragment extends Fragment {
     private RecyclerView favRecyclerView;
     private FavAdapter adapter;
     private ConstraintLayout emptyFavConstraint;
-    Button favContinue;
+    Button favAddBasket;
+    BasketDB basketDB;
+
 
 
     public FavFragment() {
@@ -44,11 +52,13 @@ public class FavFragment extends Fragment {
         allProducts = new AllProducts();
         favRecyclerView = view.findViewById(R.id.favRecyclerView);
         emptyFavConstraint = view.findViewById(R.id.emptyFav);
-        favContinue = view.findViewById(R.id.favContinue);
+        favAddBasket = view.findViewById(R.id.favAddBasket);
+        basketDB = new BasketDB(getContext());
 
         favRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new FavAdapter(HomePage.favList,getContext());
         favRecyclerView.setAdapter(adapter);
+
 
         if (adapter.getItemCount() == 0){
             emptyFavConstraint.setVisibility(View.VISIBLE);

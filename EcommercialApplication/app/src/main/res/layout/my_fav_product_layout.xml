@@ -7,22 +7,26 @@
     android:background="#D9D8DA">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:layout_margin="5dp"
+        android:background="@color/white"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_margin="2dp"
             android:id="@+id/favImg"
             android:layout_width="125dp"
-            android:layout_height="180dp"
+            android:layout_height="175dp"
+            android:layout_marginStart="5dp"
             android:scaleType="centerCrop"
             android:src="@drawable/box"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/favProductName"
@@ -39,11 +43,11 @@
             app:layout_constraintTop_toTopOf="@+id/favImg" />
 
         <TextView
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
             android:id="@+id/faveRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/regular1"
             android:text="3.5"
             android:textColor="@color/black"
@@ -52,11 +56,11 @@
             app:layout_constraintTop_toBottomOf="@+id/favProductName" />
 
         <RatingBar
-            android:layout_marginStart="-80dp"
-            android:layout_marginTop="-15dp"
             android:id="@+id/favRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-80dp"
+            android:layout_marginTop="-15dp"
             android:isIndicator="true"
             android:numStars="5"
             android:progressBackgroundTint="#C8C7C7"
@@ -117,20 +121,20 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center|top"
+                android:layout_marginTop="2dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/box"
-                android:layout_marginTop="2dp"/>
+                android:src="@drawable/box" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
+                android:layout_marginBottom="2sp"
                 android:fontFamily="@font/regular1"
                 android:gravity="center"
                 android:text="Free Shipping"
                 android:textColor="@color/black"
                 android:textSize="8sp"
-                android:layout_marginBottom="2sp"
                 tools:ignore="SmallSp" />
 
 
@@ -140,22 +144,22 @@
             android:id="@+id/favProductPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/regular1"
             android:text="300 $"
             android:textColor="#FF9100"
             android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@+id/favImg"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
         <Button
-            android:id="@+id/favContinue"
+            android:id="@+id/favAddBasket"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="#FFAD40"
             android:text="Add To Basket"
-            android:layout_marginBottom="10dp"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

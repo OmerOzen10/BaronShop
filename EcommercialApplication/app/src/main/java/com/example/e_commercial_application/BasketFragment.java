@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -68,25 +69,21 @@ public class BasketFragment extends Fragment{
         backBasket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                if (fragmentManager.getBackStackEntryCount() > 0){
+                    fragmentManager.popBackStack();
+                    Fragment lastFragment = fragmentManager.findFragmentById(R.id.containerFrame);
+
+                    if (lastFragment != null){
+                        fragmentManager.beginTransaction().replace(R.id.containerFrame,lastFragment).commit();
+                    }
+                }else {
+                    Intent intent = new Intent(getContext(),HomePage.class);
+                    startActivity(intent);
+                }
             }
         });
-
-//        MaterialToolbar toolbar =view.findViewById(R.id.toolbar3);
-//        toolbar.setNavigationOnClickListener(v -> {
-//
-//            HomePage homePage = (HomePage) getActivity();
-//            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-//            bottomNavigationView.setVisibility(View.VISIBLE);
-//
-//            FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.containerFrame,new HomeFragment()).commit();
-//
-//        });
-
 
 
         if (adapter.getItemCount() == 0){

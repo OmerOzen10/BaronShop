@@ -39,10 +39,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewSeasonViewHolder> {
-    private List<AllProducts> allProductsList;
+    private static List<AllProducts> allProductsList;
     private static final String TAG = "NewSeasonAdapter";
     Context context;
-    private FavDB favDB;
+    private static FavDB favDB;
 public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
     this.allProductsList = newSeasonList;
     this.context = context;
@@ -152,7 +152,7 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
         return allProductsList.size();
     }
 
-    public class NewSeasonViewHolder extends RecyclerView.ViewHolder {
+    public static class NewSeasonViewHolder extends RecyclerView.ViewHolder {
 
 
         ImageView ProductImgNewSeason;

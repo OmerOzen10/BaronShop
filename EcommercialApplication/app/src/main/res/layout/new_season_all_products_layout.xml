@@ -26,6 +26,7 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/favProductAll"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 app:cardCornerRadius="22.5dp"
@@ -34,8 +35,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageButton
-                    android:id="@+id/favProductAll"
+                <ImageView
+                    android:id="@+id/favIcon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"

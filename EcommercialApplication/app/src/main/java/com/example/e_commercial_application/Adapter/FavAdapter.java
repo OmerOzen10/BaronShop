@@ -1,7 +1,7 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.BasketDB;
+import com.example.e_commercial_application.BasketFragment;
 import com.example.e_commercial_application.FavDB;
+import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.R;
 
@@ -26,6 +32,7 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
 
     private ArrayList<AllProducts> favArrayList;
     Context context;
+    BasketDB basketDB;
 
     private static final String TAG = "FavAdapter";
 
@@ -55,6 +62,10 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
         holder.favRate.setText(String.valueOf(favItem.getProductRate()));
         holder.favRatingBar.setRating(favItem.getProductRate());
         Glide.with(context).load(favItem.getProductImg()).into(holder.favProductImg);
+        basketDB = new BasketDB(context);
+
+
+
 
     }
 
@@ -68,7 +79,7 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
         ImageView favProductImg;
         TextView favProductName, favRate, favProductPrice;
         RatingBar favRatingBar;
-        Button favContinue;
+        Button favAddBasket;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             favProductImg = itemView.findViewById(R.id.favImg);
@@ -76,7 +87,7 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
             favProductPrice = itemView.findViewById(R.id.favProductPrice);
             favRate = itemView.findViewById(R.id.faveRating);
             favRatingBar = itemView.findViewById(R.id.favRatingBar);
-            favContinue = itemView.findViewById(R.id.favContinue);
+            favAddBasket = itemView.findViewById(R.id.favAddBasket);
         }
     }
 }
