@@ -37,7 +37,7 @@ public class ProductDetails2 extends Fragment {
     private static List<AllProducts> allProductsList;
     private static final String TAG = "ProductDetails2";
     private ImageView detailedProductImg,favIcon;
-    private TextView detailedProductName, detailedProductPrice;
+    private TextView detailedProductName, detailedProductPrice,rate;
 
     private RatingBar ratingBar;
     private Button btnBasket;
@@ -73,6 +73,8 @@ public class ProductDetails2 extends Fragment {
         favProduct = view.findViewById(R.id.favProductDetail);
         favDB = new FavDB(requireActivity());
         favIcon = view.findViewById(R.id.favIcon);
+        ratingBar = view.findViewById(R.id.ratingBar2);
+        rate = view.findViewById(R.id.detailedRating);
 
         if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
             favIcon.setBackgroundResource(R.drawable.baseline_fav);
@@ -151,6 +153,8 @@ public class ProductDetails2 extends Fragment {
             Glide.with(requireContext()).load(allProducts.getProductImg()).into(detailedProductImg);
             detailedProductName.setText(allProducts.getProductName());
             detailedProductPrice.setText(allProducts.getProductPrice() + "$");
+            ratingBar.setRating(allProducts.getProductRate());
+            rate.setText(allProducts.getProductRate()+ "");
         }
 
         MaterialToolbar toolbar =view.findViewById(R.id.toolbar2);

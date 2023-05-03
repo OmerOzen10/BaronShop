@@ -104,13 +104,6 @@ public class HomeFragment extends Fragment {
             fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).addToBackStack(null).commit();
         });
 
-        newSeasonRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
     }
 
     private void EventChangeListener() {

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.BasketDB;
-import com.example.e_commercial_application.BasketFragment;
-import com.example.e_commercial_application.FavDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.R;
+import com.example.e_commercial_application.productDetails3;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     private static final String TAG = "BasketAdapter";
     TextView totalPrice;
     BasketDB basketDB;
+
 
 
 
@@ -72,7 +74,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         allProducts = new AllProducts();
         AllProducts basketItem = basketArrayList.get(position);
-
         readCursorData(allProducts,holder);
         holder.basketProductName.setText(basketItem.getProductName());
         holder.basketProductPrice.setText(basketItem.getProductPrice() + " $");
@@ -114,6 +115,27 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             basketDB.updateQuantity(allProducts.getId(), quantity1);
         });
 
+        holder.itemView.setOnClickListener(view -> {
+
+            HomePage homePage = (HomePage) context;
+            NewSeasonAdapter adapter = new NewSeasonAdapter(basketArrayList,homePage);
+
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("productBasket",basketArrayList.get(holder.getAdapterPosition()));
+            productDetails3 productDetails3 = new productDetails3();
+            productDetails3.setArguments(bundle);
+            fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
+
+
+
+
+        });
+
 
 
 
@@ -152,6 +174,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         ConstraintLayout buyConstraint, emptyConstraint, constraintLayout2;
         Button btnContinue;
         public TextView itemPiece;
+        RecyclerView SelectedProducts;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -168,6 +191,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             btnContinue = itemView.findViewById(R.id.btnContinue);
             totalPrice = itemView.findViewById(R.id.totalPrice);
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
+            SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
+
 
 
         }

@@ -32,6 +32,8 @@ import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.common.reflect.TypeToken;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -96,7 +98,7 @@ public class ProductDetails extends Fragment {
             detailedProductPrice.setText(allProducts.getProductPrice() + "$");
             ratingBar.setRating(allProducts.getProductRate());
             rate.setText(allProducts.getProductRate() + "");
-
+            Log.d(TAG, "onViewCreated: ratingbar" + ratingBar.getRating() + rate.getText().toString());
         }
 
         addToBasket = view.findViewById(R.id.btnBasket);
@@ -153,6 +155,7 @@ public class ProductDetails extends Fragment {
             }
         });
 
+
         if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
             favIcon.setBackgroundResource(R.drawable.baseline_fav);
         } else if (allProducts.getFavStatus() !=null && allProducts.getFavStatus().equals("1")){
@@ -183,7 +186,6 @@ public class ProductDetails extends Fragment {
 
             }
         });
-
 
     }
 

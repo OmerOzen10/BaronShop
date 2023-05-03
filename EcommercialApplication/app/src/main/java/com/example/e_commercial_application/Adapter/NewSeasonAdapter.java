@@ -80,28 +80,6 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
      holder.ProductPriceNewSeason.setText(allProducts.getProductPrice() + " $");
      Glide.with(context).load(allProducts.getProductImg()).into(holder.ProductImgNewSeason);
 
-//        AllProducts allProducts = allProductsList.get(position);
-//        holder.ProductPriceNewSeason.setText(allProducts.getProductPrice() + " $");
-//        holder.ProductNameNewSeason.setText(allProducts.getProductName());
-//        Glide.with(context).load(allProducts.getProductImg()).into(holder.ProductImgNewSeason);
-
-//        holder.favProductNewSeason.setBackgroundResource(allProducts.isLiked() ? R.drawable.ic_fav_red : R.drawable.baseline_fav);
-//
-//        holder.favProductNewSeason.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                allProducts.setLiked(!allProducts.isLiked());
-//                holder.favProductNewSeason.setBackgroundResource(allProducts.isLiked() ? R.drawable.ic_fav_red : R.drawable.baseline_fav);
-//
-//                int adapterPosition = holder.getAdapterPosition();
-//                SharedPreferences.Editor editor = context.getSharedPreferences("FavProducts", Context.MODE_PRIVATE).edit();
-//                editor.putBoolean(String.valueOf(adapterPosition), allProducts.isLiked());
-//                editor.apply();
-//
-//                HomePage.favList.add(allProducts);
-//                Log.d(TAG, "onClick: favList " + HomePage.favList.size());
-////            }
-//        });
 
 
 
