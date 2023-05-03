@@ -52,6 +52,9 @@ public class HomeFragment extends Fragment {
 
     FrameLayout frameLayout;
 
+    private static final String TAG = "HomeFragment";
+
+
 
 
 
@@ -107,19 +110,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void EventChangeListener() {
-
-        firebaseFirestore.collection("NewSeason").orderBy("ProductPrice", Query.Direction.ASCENDING).addSnapshotListener((value, error) -> {
-
-            for (DocumentChange documentChange : value.getDocumentChanges()){
-
-                if (documentChange.getType() == DocumentChange.Type.ADDED){
-                    allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
-
-                }
-                newSeasonAdapter.notifyDataSetChanged();
-
-            }
-
-        });
+        firebaseFirestore.collection("AllProducts")
+                .orderBy("ProductPrice", Query.Direction.ASCENDING)
+                .limit(4) // add this line to limit the number of documents retrieved
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.w(TAG, "Listen failed.", error);
+                        return;
+                    }
+                    for (DocumentChange documentChange : value.getDocumentChanges()){
+                        if (documentChange.getType() == DocumentChange.Type.ADDED){
+                            allProductsArrayList.add(documentChange.getDocument().toObject(AllProducts.class));
+                        }
+                        newSeasonAdapter.notifyDataSetChanged();
+                    }
+                });
     }
+
 }
