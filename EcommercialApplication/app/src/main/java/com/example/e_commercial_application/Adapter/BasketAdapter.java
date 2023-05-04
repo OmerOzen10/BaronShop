@@ -29,7 +29,9 @@ import com.example.e_commercial_application.productDetails3;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
 
@@ -72,6 +74,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         allProducts = new AllProducts();
         AllProducts basketItem = basketArrayList.get(position);
         readCursorData(allProducts,holder);
@@ -84,8 +87,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
         int quantity = allProducts.getNumber();
         double amount = allProducts.getProductPrice();
-        DecimalFormat df = new DecimalFormat("#.##");
-        double total = Double.parseDouble(df.format(quantity*amount));
+        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.getDefault(Locale.Category.FORMAT)));
+
+        double total = Double.parseDouble(df.format(quantity*amount).replace(",", "."));
         holder.basketProductPrice.setText((total + " $"));
 
         holder.decreaseItem.setOnClickListener(view -> {
@@ -94,8 +98,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 allProducts.setNumber(quantity1);
                 holder.itemPiece.setText(String.valueOf(allProducts.getNumber()));
                 double amount1 = allProducts.getProductPrice();
-                DecimalFormat df1 = new DecimalFormat("#.##");
-                double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", ""));
+                DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
+                double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
                 double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
                 holder.basketProductPrice.setText(String.format("%.2f $", total1));
                 totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
@@ -108,10 +112,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             allProducts.setNumber(quantity1);
             holder.itemPiece.setText(String.valueOf(quantity1));
             double amount12 = allProducts.getProductPrice();
-            DecimalFormat df12 = new DecimalFormat("#.##");
-            double total12 = Double.parseDouble(df12.format(quantity1* amount12));
-            holder.basketProductPrice.setText((total12 + " $"));
-            totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
+            DecimalFormat df12 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
+            double total12 = Double.parseDouble(df12.format(quantity1 * amount12));
+
+            holder.basketProductPrice.setText(String.format("%.2f $", total12));
+            totalPrice.setText(String.format("%.2f $", getTotalPrice()));
             basketDB.updateQuantity(allProducts.getId(), quantity1);
         });
 

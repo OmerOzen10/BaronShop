@@ -126,7 +126,7 @@ public class ProductDetails extends Fragment {
                 if (match == 0) {
                     HomePage.basketList.add(allProducts);
                     Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
-                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()));
+                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()));
                 }
 
 

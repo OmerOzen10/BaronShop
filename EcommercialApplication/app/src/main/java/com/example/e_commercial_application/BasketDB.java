@@ -25,9 +25,11 @@ public class BasketDB extends SQLiteOpenHelper {
     public static String ITEM_PRICE = "basketPrice";
     public static String ITEM_PIECE = "basketPiece";
 
+    public static String ITEM_RATE = "itemRate";
+
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " TEXT," +
             ITEM_TITLE + " TEXT,"
-            +ITEM_IMAGE + " TEXT," + ITEM_PIECE + " TEXT," + ITEM_PRICE + " TEXT)";
+            +ITEM_IMAGE + " TEXT," + ITEM_PIECE + " TEXT," + ITEM_RATE + " TEXT," +  ITEM_PRICE + " TEXT)";
 
     public BasketDB(Context context){super(context,DATABASE_NAME,null,DB_VERSION);}
 
@@ -58,7 +60,7 @@ public class BasketDB extends SQLiteOpenHelper {
         }
     }
 
-    public void insertIntoTheDatabase(String item_title, String item_image, String id, String item_price, String item_piece){
+    public void insertIntoTheDatabase(String item_title, String item_image, String id, String item_price, String item_piece,String item_rate){
         SQLiteDatabase db;
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -67,6 +69,7 @@ public class BasketDB extends SQLiteOpenHelper {
         cv.put(KEY_ID, id);
         cv.put(ITEM_PRICE, item_price);
         cv.put(ITEM_PIECE, item_piece);
+        cv.put(ITEM_RATE, item_rate);
 
         db.insert(TABLE_NAME,null,cv);
         Log.d("BasketDb status",item_title+ cv);
@@ -91,6 +94,7 @@ public class BasketDB extends SQLiteOpenHelper {
                 allProducts.setProductImg(cursor.getString(cursor.getColumnIndex(ITEM_IMAGE)));
                 allProducts.setProductPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(ITEM_PRICE))));
                 allProducts.setNumber(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ITEM_PIECE))));
+                allProducts.setProductRate(Float.parseFloat(cursor.getString(cursor.getColumnIndex(ITEM_RATE))));
                 allProductsList.add(allProducts);
             } while (cursor.moveToNext());
         }
