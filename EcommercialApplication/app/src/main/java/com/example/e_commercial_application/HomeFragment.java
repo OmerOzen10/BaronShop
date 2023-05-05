@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
             bottomNavigationView.setVisibility(View.GONE);
 
             FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             fragmentTransaction.replace(R.id.containerFrame, new AllProductsFragment()).addToBackStack(null).commit();
         });
 

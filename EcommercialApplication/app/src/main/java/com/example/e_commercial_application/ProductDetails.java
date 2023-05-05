@@ -126,7 +126,7 @@ public class ProductDetails extends Fragment {
                 if (match == 0) {
                     HomePage.basketList.add(allProducts);
                     Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
-                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()));
+                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()),allProducts.getFavStatus());
                 }
 
 
@@ -149,7 +149,7 @@ public class ProductDetails extends Fragment {
             public void onClick(View v) {
 
                 FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
                 fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
 
             }

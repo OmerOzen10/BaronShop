@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.e_commercial_application.Model.AllProducts;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Timer;

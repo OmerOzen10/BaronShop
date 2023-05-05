@@ -79,12 +79,9 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                HomePage homePage = (HomePage) getActivity();
-//                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-//                bottomNavigationView.setVisibility(View.GONE);
 
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("productName",allProductsList.get(holder.getAdapterPosition()));
                 ProductDetails productDetails = new ProductDetails();

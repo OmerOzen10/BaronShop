@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,12 +56,21 @@ public class HomePage extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        // make the bottom navigation visible
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        super.onBackPressed();
+    }
+
+
     public ArrayList<AllProducts> getBasketArrayList() {
         return basketList;
     }
 
 
-    private NavigationBarView.OnItemSelectedListener navListener =
+    private final NavigationBarView.OnItemSelectedListener navListener =
             item -> {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
@@ -84,5 +94,21 @@ public class HomePage extends AppCompatActivity {
                         .commit();
                 return true;
             };
+
+    private int getSelectedItem(Fragment fragment) {
+        if (fragment instanceof HomeFragment) {
+            return R.id.nav_home;
+        } else if (fragment instanceof BasketFragment) {
+            return R.id.nav_basket;
+        } else if (fragment instanceof FavFragment) {
+            return R.id.nav_fav;
+        } else if (fragment instanceof UserFragment) {
+            return R.id.nav_user;
+        }
+        return 0;
+    }
+
+
+
 
 }

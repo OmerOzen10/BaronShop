@@ -76,7 +76,7 @@ public class BasketFragment extends Fragment{
                     Fragment lastFragment = fragmentManager.findFragmentById(R.id.containerFrame);
 
                     if (lastFragment != null){
-                        fragmentManager.beginTransaction().replace(R.id.containerFrame,lastFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.containerFrame,lastFragment).addToBackStack(null).commit();
                     }
                 }else {
                     Intent intent = new Intent(getContext(),HomePage.class);
@@ -102,7 +102,7 @@ public class BasketFragment extends Fragment{
 
 
             FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             fragmentTransaction.replace(R.id.containerFrame, new HomeFragment()).commit();
         });
 

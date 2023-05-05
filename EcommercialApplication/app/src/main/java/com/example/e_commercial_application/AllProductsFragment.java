@@ -81,17 +81,6 @@ public class AllProductsFragment extends Fragment {
             }
         });
 
-//        MaterialToolbar toolbar =view.findViewById(R.id.toolbar1);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent(getContext(),HomePage.class);
-//                startActivity(intent);
-//
-//            }
-//        });
-
 
     }
 

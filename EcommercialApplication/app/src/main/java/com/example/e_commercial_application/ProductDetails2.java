@@ -27,6 +27,7 @@ import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -130,7 +131,7 @@ public class ProductDetails2 extends Fragment {
                 if (match == 0) {
                     HomePage.basketList.add(allProducts);
                     Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
-                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()));
+                    basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()),allProducts.getFavStatus());
                 }
 
 
@@ -161,19 +162,27 @@ public class ProductDetails2 extends Fragment {
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
-                if (fragmentManager.getBackStackEntryCount() > 0){
-                    fragmentManager.popBackStack();
-                    Fragment lastFragment = fragmentManager.findFragmentById(R.id.containerFrame);
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//
+//                if (fragmentManager.getBackStackEntryCount() > 0){
+//                    fragmentManager.popBackStack();
+//                    Fragment lastFragment = fragmentManager.findFragmentById(R.id.containerFrame);
+//
+//                    if (lastFragment != null){
+//                        fragmentManager.beginTransaction().replace(R.id.containerFrame,lastFragment).addToBackStack(null).commit();
+//                    }
+//                }else {
+//                    Intent intent = new Intent(getContext(),HomePage.class);
+//                    startActivity(intent);
+//                }
+//                HomePage homePage = (HomePage) getContext();
+//                NewSeasonAdapter adapter = new NewSeasonAdapter(allProductsList, homePage);
+//                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+//                bottomNavigationView.setVisibility(View.VISIBLE);
 
-                    if (lastFragment != null){
-                        fragmentManager.beginTransaction().replace(R.id.containerFrame,lastFragment).commit();
-                    }
-                }else {
-                    Intent intent = new Intent(getContext(),HomePage.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getContext(),HomePage.class);
+                startActivity(intent);
             }
         });
 

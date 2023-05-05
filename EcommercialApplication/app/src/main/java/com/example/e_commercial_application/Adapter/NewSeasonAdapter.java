@@ -87,17 +87,18 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
 
 
         holder.itemView.setOnClickListener(view -> {
-            HomePage homePage = (HomePage) context;
-            NewSeasonAdapter adapter = new NewSeasonAdapter(allProductsList, homePage);
-            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-            bottomNavigationView.setVisibility(View.GONE);
+
             FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             Bundle bundle = new Bundle();
             bundle.putSerializable("productName2",allProductsList.get(holder.getAdapterPosition()));
             ProductDetails2 productDetails2 = new ProductDetails2();
             productDetails2.setArguments(bundle);
-            fragmentTransaction.replace(R.id.containerFrame, productDetails2).commit();
+            fragmentTransaction.replace(R.id.containerFrame, productDetails2).addToBackStack(null).commit();
+            HomePage homePage = (HomePage) context;
+            NewSeasonAdapter adapter = new NewSeasonAdapter(allProductsList, homePage);
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
         });
 
     }
