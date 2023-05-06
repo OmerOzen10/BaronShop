@@ -1,6 +1,7 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,10 @@ import com.example.e_commercial_application.BasketFragment;
 import com.example.e_commercial_application.FavDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.example.e_commercial_application.ProductDetailsFav;
 import com.example.e_commercial_application.R;
+import com.example.e_commercial_application.productDetails3;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
@@ -64,6 +68,27 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
         Glide.with(context).load(favItem.getProductImg()).into(holder.favProductImg);
         basketDB = new BasketDB(context);
 
+        holder.itemView.setOnClickListener(view -> {
+
+            HomePage homePage = (HomePage) context;
+            NewSeasonAdapter adapter = new NewSeasonAdapter(favArrayList,homePage);
+
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("productFav",favArrayList.get(holder.getAdapterPosition()));
+            ProductDetailsFav productDetailsFav = new ProductDetailsFav();
+            productDetailsFav.setArguments(bundle);
+            fragmentTransaction.replace(R.id.containerFrame,productDetailsFav).commit();
+
+
+
+
+        });
+
 
 
 
@@ -79,7 +104,6 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
         ImageView favProductImg;
         TextView favProductName, favRate, favProductPrice;
         RatingBar favRatingBar;
-        Button favAddBasket;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             favProductImg = itemView.findViewById(R.id.favImg);
@@ -87,7 +111,6 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
             favProductPrice = itemView.findViewById(R.id.favProductPrice);
             favRate = itemView.findViewById(R.id.faveRating);
             favRatingBar = itemView.findViewById(R.id.favRatingBar);
-            favAddBasket = itemView.findViewById(R.id.favAddBasket);
         }
     }
 }

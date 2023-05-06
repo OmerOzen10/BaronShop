@@ -30,6 +30,7 @@ public class FavFragment extends Fragment {
     private RecyclerView favRecyclerView;
     private FavAdapter adapter;
     private ConstraintLayout emptyFavConstraint;
+    private static final String TAG = "FavFragment";
     Button favAddBasket;
     BasketDB basketDB;
 
@@ -52,7 +53,6 @@ public class FavFragment extends Fragment {
         allProducts = new AllProducts();
         favRecyclerView = view.findViewById(R.id.favRecyclerView);
         emptyFavConstraint = view.findViewById(R.id.emptyFav);
-        favAddBasket = view.findViewById(R.id.favAddBasket);
         basketDB = new BasketDB(getContext());
 
         favRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -65,6 +65,7 @@ public class FavFragment extends Fragment {
         }else {
             emptyFavConstraint.setVisibility(View.GONE);
         }
+
     }
 
     @Override
