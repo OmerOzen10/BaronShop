@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.e_commercial_application.Adapter.BasketAdapter;
 import com.example.e_commercial_application.Model.AllProducts;
 
 import java.util.ArrayList;
@@ -145,6 +146,16 @@ public class BasketDB extends SQLiteOpenHelper {
         db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{productId});
         db.close();
     }
+
+    public void deleteAllBasketItems() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+        db.close();
+
+        BasketAdapter adapter = new BasketAdapter();
+        adapter.notifyDataSetChanged();
+    }
+
 
 
 

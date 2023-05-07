@@ -35,7 +35,8 @@ import java.util.Locale;
 
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
 
-    private ArrayList<AllProducts>basketArrayList;
+    public ArrayList<AllProducts>basketArrayList;
+    private ArrayList<AllProducts>empty;
     private AllProducts allProducts;
     Context context;
     private static final String TAG = "BasketAdapter";
@@ -43,7 +44,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     BasketDB basketDB;
 
 
-
+    public BasketAdapter(ArrayList<AllProducts> empty){
+        this.empty = empty;
+    }
 
     public BasketAdapter(ArrayList<AllProducts> basketArrayList, Context context, TextView totalPrice) {
         this.basketArrayList = basketArrayList;
@@ -99,11 +102,16 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 allProducts.setNumber(quantity1);
                 holder.itemPiece.setText(String.valueOf(allProducts.getNumber()));
                 double amount1 = allProducts.getProductPrice();
-//                DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
                 double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
                 double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
                 holder.basketProductPrice.setText(String.format("%.2f $", total1));
-                totalPrice.setText(String.format( "%.2f $",getTotalPrice()));
+
+
+                DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+
+                String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
                 basketDB.updateQuantity(allProducts.getId(), quantity1);
             }
         });
@@ -113,11 +121,15 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             allProducts.setNumber(quantity1);
             holder.itemPiece.setText(String.valueOf(quantity1));
             double amount12 = allProducts.getProductPrice();
-//            DecimalFormat df12 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
             double total12 = Double.parseDouble(df1.format(quantity1 * amount12));
 
             holder.basketProductPrice.setText(String.format("%.2f $", total12));
-            totalPrice.setText(String.format("%.2f $", getTotalPrice()));
+
+            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+
+            String formattedTotalPrice = dfTotal.format(getTotalPrice());
+            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
             basketDB.updateQuantity(allProducts.getId(), quantity1);
         });
 
@@ -164,8 +176,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         for (AllProducts product : HomePage.basketList) {
             totalPrice += product.getNumber() * product.getProductPrice();
         }
-        return totalPrice;
+        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+        String formattedPrice = df.format(totalPrice);
+        return Double.parseDouble(formattedPrice);
     }
+
 
 
     @Override

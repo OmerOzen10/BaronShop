@@ -133,13 +133,6 @@ public class ProductDetails2 extends Fragment {
                     Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
                     basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()),allProducts.getFavStatus());
                 }
-
-
-
-
-
-
-
                 FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.containerFrame, new BasketFragment()).addToBackStack(null).commit();
