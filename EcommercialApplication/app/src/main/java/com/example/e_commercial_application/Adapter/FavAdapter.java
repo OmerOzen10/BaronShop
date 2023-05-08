@@ -2,11 +2,9 @@ package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -18,17 +16,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.BasketDB;
-import com.example.e_commercial_application.BasketFragment;
-import com.example.e_commercial_application.FavDB;
+import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.ProductDetailsFav;
 import com.example.e_commercial_application.R;
-import com.example.e_commercial_application.productDetails3;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,6 @@
 package com.example.e_commercial_application;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +20,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
+import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
 

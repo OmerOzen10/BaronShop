@@ -1,4 +1,4 @@
-package com.example.e_commercial_application;
+package com.example.e_commercial_application.Databases;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

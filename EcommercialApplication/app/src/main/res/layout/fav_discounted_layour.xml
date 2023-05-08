@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#D9D8DA">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_margin="5dp"
+        android:background="@color/white"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/favImg"
+            android:layout_width="125dp"
+            android:layout_height="175dp"
+            android:layout_marginStart="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/box"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/favProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="135dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/regular1"
+            android:text="ProductName"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintTop_toTopOf="@+id/favImg" />
+
+        <TextView
+            android:id="@+id/faveRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/regular1"
+            android:text="3.5"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintTop_toBottomOf="@+id/favProductName" />
+
+        <RatingBar
+            android:id="@+id/favRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-80dp"
+            android:layout_marginTop="-15dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressBackgroundTint="#C8C7C7"
+            android:progressTint="#FF9100"
+            android:rating="3.5"
+            android:scaleX="0.3"
+            android:scaleY="0.3"
+            android:stepSize="0.5"
+            android:visibility="visible"
+            app:layout_constraintStart_toEndOf="@+id/faveRating"
+            app:layout_constraintTop_toBottomOf="@+id/favProductName" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-80dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#DFFBC7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintTop_toBottomOf="@+id/favRatingBar">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/delivery" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="2dp"
+                android:fontFamily="@font/regular1"
+                android:gravity="center"
+                android:text="Fast Delivery"
+                android:textColor="@color/black"
+                android:textSize="8sp"
+                tools:ignore="SmallSp" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#DCD9D9"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+            app:layout_constraintStart_toEndOf="@+id/cardView2"
+            app:layout_constraintTop_toTopOf="@+id/cardView2">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/box" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="2sp"
+                android:fontFamily="@font/regular1"
+                android:gravity="center"
+                android:text="Free Shipping"
+                android:textColor="@color/black"
+                android:textSize="8sp"
+                tools:ignore="SmallSp" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/OldPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/regular1"
+            android:text="300 $"
+            android:textColor="#979490"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+        <View
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="55dp"
+            android:layout_height="2dp"
+            android:background="#F64242"
+            app:layout_constraintBottom_toBottomOf="@+id/OldPrice"
+            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+        <TextView
+            android:id="@+id/favProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/regular1"
+            android:text="400 $"
+            android:textColor="#FF9100"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@+id/OldPrice"
+            app:layout_constraintTop_toBottomOf="@+id/OldPrice" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

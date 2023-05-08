@@ -21,22 +21,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.FavDB;
+import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
-import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.ProductDetails2;
 import com.example.e_commercial_application.R;
 //import com.example.e_commercial_application.SQL.MyDatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NewSeasonAdapter extends RecyclerView.Adapter<NewSeasonAdapter.NewSeasonViewHolder> {
     private static List<AllProducts> allProductsList;
@@ -174,7 +168,6 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
                         }
                     }
 
-//                        HomePage.favList.remove(allProducts);
                     Log.d(TAG, "onClick: favList" + HomePage.favList.size());
 
                 }

@@ -1,32 +1,28 @@
 package com.example.e_commercial_application;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
+import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.FavDB;
+import com.example.e_commercial_application.Databases.FavDB2;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomePage extends AppCompatActivity {
 
     public static ArrayList <AllProducts> basketList = new ArrayList<>();
     public static ArrayList <AllProducts> favList = new ArrayList<>();
+    public static ArrayList<DiscountedProducts> favList2 = new ArrayList<>();
     private FavDB favDB;
+    private FavDB2 favDB2;
     private BasketDB basketDB;
 
 
@@ -41,8 +37,10 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(navListener);
 
         favDB = new FavDB(this);
+        favDB2 = new FavDB2(this);
         basketDB = new BasketDB(this);
         HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
+        HomePage.favList2 = (ArrayList<DiscountedProducts>) favDB2.getAllFavProducts();
         HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
 
 

@@ -183,216 +183,237 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/orderDetails"
         android:visibility="gone"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
         android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbarThumbVertical="@android:color/transparent"
+            android:fillViewport="true"
+            >
 
-            <ImageView
-                android:id="@+id/backCard"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/backCard"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
 
 
-            <TextView
-                android:id="@+id/txtDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/regular1"
-                android:text="Order Details"
-                android:textColor="#FF9100"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:hint="Full Name"
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:counterEnabled="true"
-                app:counterMaxLength="27"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtDetails">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtName"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/txtDetails"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLength="27"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:textColor="#FF9100" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
-                android:layout_height="80dp"
-                android:hint="Email"
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutName">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:textColor="#FF9100" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutCity"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:hint="City"
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintStart_toStartOf="@+id/layoutEmail"
-                app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:outlineAmbientShadowColor="@color/black"
+                    android:fontFamily="@font/regular1"
+                    android:text="Order Details"
                     android:textColor="#FF9100"
-                    android:textSize="13sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="20dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutTown"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="6dp"
-                android:hint="Town"
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintEnd_toEndOf="@+id/layoutEmail"
-                app:layout_constraintStart_toEndOf="@+id/layoutCity"
-                app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="250dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="Full Name"
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="27"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDetails">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtTown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:textColor="#FF9100"
-                    android:textSize="13sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="27"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutAddress"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
-                android:layout_height="80dp"
-                android:hint="Full Address"
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutCity">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="250dp"
+                    android:layout_height="80dp"
+                    android:hint="Email"
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    android:layout_marginTop="10dp"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutName">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:textColor="#FF9100" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutMobile"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
-                android:layout_height="80dp"
-                android:hint="Phone No."
-                android:textColorHint="#F1BA71"
-                app:boxStrokeColor="@color/black"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:errorEnabled="true"
-                app:errorTextColor="#FF0000"
-                app:hintTextColor="#E6B461"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutAddress">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCity"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:hint="City"
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:endIconMode="clear_text"
+                    android:layout_marginTop="10dp"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintStart_toStartOf="@+id/layoutEmail"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtMobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:textColor="#FF9100" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100"
+                        android:textSize="13sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/btnConfirm"
-                android:layout_width="120dp"
-                android:layout_marginTop="10dp"
-                android:layout_height="50dp"
-                android:backgroundTint="#FF9100"
-                android:fontFamily="@font/regular1"
-                android:text="Confirm"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutMobile" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutTown"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="6dp"
+                    android:hint="Town"
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    android:layout_marginTop="10dp"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintEnd_toEndOf="@+id/layoutEmail"
+                    app:layout_constraintStart_toEndOf="@+id/layoutCity"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100"
+                        android:textSize="13sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="250dp"
+                    android:layout_height="80dp"
+                    android:hint="Full Address"
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:endIconMode="clear_text"
+                    android:layout_marginTop="10dp"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="40"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutCity">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="40"
+                        android:inputType="textMultiLine"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutMobile"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="250dp"
+                    android:layout_height="80dp"
+                    android:hint="Phone No."
+                    android:textColorHint="#F1BA71"
+                    app:boxStrokeColor="@color/black"
+                    app:endIconMode="clear_text"
+                    android:layout_marginTop="10dp"
+                    app:endIconTint="@color/black"
+                    app:errorEnabled="true"
+                    app:errorTextColor="#FF0000"
+                    app:hintTextColor="#E6B461"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutAddress">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:outlineAmbientShadowColor="@color/black"
+                        android:textColor="#FF9100" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnConfirm"
+                    android:layout_width="120dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#FF9100"
+                    android:fontFamily="@font/regular1"
+                    android:text="Confirm"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutMobile" />
 
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
 
 
     </androidx.cardview.widget.CardView>

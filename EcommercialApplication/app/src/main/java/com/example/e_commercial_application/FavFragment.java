@@ -1,34 +1,32 @@
 package com.example.e_commercial_application;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.example.e_commercial_application.Adapter.FavAdapter;
-import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
+import com.example.e_commercial_application.Adapter.FavAdapter2;
+import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Model.AllProducts;
 
 public class FavFragment extends Fragment {
 
     AllProducts allProducts;
     private RecyclerView favRecyclerView;
+    private RecyclerView favDiscRecyclerView;
     private FavAdapter adapter;
+
+    private FavAdapter2 adapter2;
     private ConstraintLayout emptyFavConstraint;
     private static final String TAG = "FavFragment";
     Button favAddBasket;
@@ -59,8 +57,13 @@ public class FavFragment extends Fragment {
         adapter = new FavAdapter(HomePage.favList,getContext());
         favRecyclerView.setAdapter(adapter);
 
+        favDiscRecyclerView = view.findViewById(R.id.favDiscRecyclerView);
+        favDiscRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter2 = new FavAdapter2(HomePage.favList2,getContext());
+        favDiscRecyclerView.setAdapter(adapter2);
 
-        if (adapter.getItemCount() == 0){
+
+        if (adapter.getItemCount() == 0 && adapter2.getItemCount() == 0){
             emptyFavConstraint.setVisibility(View.VISIBLE);
         }else {
             emptyFavConstraint.setVisibility(View.GONE);

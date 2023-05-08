@@ -1,9 +1,5 @@
 package com.example.e_commercial_application;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,21 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.Adapter.BasketAdapter;
+import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 //import com.example.e_commercial_application.SQL.MyDatabaseHelper;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.common.reflect.TypeToken;
-
-import org.checkerframework.checker.units.qual.A;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class ProductDetails extends Fragment {
 

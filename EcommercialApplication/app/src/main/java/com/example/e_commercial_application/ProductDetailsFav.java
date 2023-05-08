@@ -21,6 +21,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
+import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

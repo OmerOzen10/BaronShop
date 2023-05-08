@@ -1,36 +1,32 @@
 package com.example.e_commercial_application;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.e_commercial_application.Adapter.BasketAdapter;
+import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Model.AllProducts;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
-
-import java.util.ArrayList;
-import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 
@@ -49,6 +45,8 @@ public class BasketFragment extends Fragment{
     BasketDB basketDB;
 
     CardView orderDetails;
+    TextInputLayout layoutName, layoutEmail, layoutCity, layoutTown, layoutAddress, layoutMobile;
+    TextInputEditText edtName, edtEmail, edtCity, edtTown, edtAddress, edtMobile;
 
     private static final String TAG = "BasketFragment";
 
@@ -84,6 +82,20 @@ public class BasketFragment extends Fragment{
         btnConfirm = view.findViewById(R.id.btnConfirm);
         basketDB = new BasketDB(getContext());
 
+        layoutName = view.findViewById(R.id.layoutName);
+        layoutEmail = view.findViewById(R.id.layoutEmail);
+        layoutCity = view.findViewById(R.id.layoutCity);
+        layoutTown = view.findViewById(R.id.layoutTown);
+        layoutAddress = view.findViewById(R.id.layoutAddress);
+        layoutMobile = view.findViewById(R.id.layoutMobile);
+
+        edtName = view.findViewById(R.id.edtName);
+        edtEmail = view.findViewById(R.id.edtEmail);
+        edtCity = view.findViewById(R.id.edtCity);
+        edtTown = view.findViewById(R.id.edtTown);
+        edtAddress = view.findViewById(R.id.edtAddress);
+        edtMobile = view.findViewById(R.id.edtMobile);
+
         btnConfirmBasket.setOnClickListener(view1 -> {
             orderDetails.setVisibility(View.VISIBLE);
             overlay.setVisibility(View.VISIBLE);
@@ -109,21 +121,30 @@ public class BasketFragment extends Fragment{
 
             });
 
-            btnConfirm.setOnClickListener(view2 -> {
-                orderDetails.setVisibility(View.GONE);
-                overlay.setVisibility(View.GONE);
-                basketRecyclerView.setVisibility(View.VISIBLE);
-                basketRecyclerView.setEnabled(true);
-                btnConfirmBasket.setEnabled(true);
-                Blurry.delete((ViewGroup) rootView);
+                btnConfirm.setOnClickListener(view2 -> {
 
-                basketDB.deleteAllBasketItems();
-                HomePage.basketList.clear();
-                emptyConstraint.setVisibility(View.VISIBLE);
-                backBasket.setEnabled(true);
-                buyConstraint.setVisibility(View.GONE);
+                    if (Correction()){
 
-            });
+                        orderDetails.setVisibility(View.GONE);
+                        overlay.setVisibility(View.GONE);
+                        basketRecyclerView.setVisibility(View.VISIBLE);
+                        basketRecyclerView.setEnabled(true);
+                        btnConfirmBasket.setEnabled(true);
+                        Blurry.delete((ViewGroup) rootView);
+
+                        basketDB.deleteAllBasketItems();
+                        HomePage.basketList.clear();
+                        emptyConstraint.setVisibility(View.VISIBLE);
+                        backBasket.setEnabled(true);
+                        buyConstraint.setVisibility(View.GONE);
+                    }else {
+                        Toast.makeText(getContext(), "Something Went Wrong!!", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                });
+
+
 
 
 
@@ -166,6 +187,47 @@ public class BasketFragment extends Fragment{
             startActivity(intent);
         });
 
+
+    }
+
+    private boolean Correction(){
+
+        if (edtName.getText().toString().isEmpty()){
+            layoutName.setError("Required");
+            edtName.requestFocus();
+            return false;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches()){
+            layoutEmail.setError("Invalid Email Address");
+            edtEmail.requestFocus();
+            return false;
+        }
+        if (edtEmail.getText().toString().isEmpty()){
+            layoutEmail.setError("Required");
+            edtEmail.requestFocus();
+            return false;
+        }
+        if (edtCity.getText().toString().isEmpty()){
+            layoutCity.setError("Required");
+            edtCity.requestFocus();
+            return false;
+        }
+        if (edtTown.getText().toString().isEmpty()){
+            layoutTown.setError("Required");
+            edtTown.requestFocus();
+            return false;
+        }
+        if (edtAddress.getText().toString().isEmpty()){
+            layoutAddress.setError("Required");
+            edtAddress.requestFocus();
+            return false;
+        }
+        if (edtMobile.getText().toString().isEmpty()){
+            layoutMobile.setError("Required");
+            edtMobile.requestFocus();
+            return false;
+        }
+        return true;
 
     }
 
