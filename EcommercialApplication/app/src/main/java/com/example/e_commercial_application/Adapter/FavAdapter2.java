@@ -1,6 +1,7 @@
 package com.example.e_commercial_application.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.DiscountedProducts;
+import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.R;
-
-import org.checkerframework.checker.units.qual.C;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -47,6 +52,27 @@ public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
         holder.favRate.setText(String.valueOf(favItem.getProductRate()));
         holder.favRatingBar.setRating(favItem.getProductRate());
         Glide.with(context).load(favItem.getProductImg()).into(holder.favProductImg);
+
+        holder.itemView.setOnClickListener(view -> {
+
+            HomePage homePage = (HomePage) context;
+            DiscountedAdapter adapter  = new DiscountedAdapter(favArrayList,homePage);
+
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("productName",favArrayList.get(holder.getAdapterPosition()));
+            ProductDetails productDetailsFav = new ProductDetails();
+            productDetailsFav.setArguments(bundle);
+            fragmentTransaction.replace(R.id.containerFrame,productDetailsFav).commit();
+
+
+
+
+        });
     }
 
     @Override

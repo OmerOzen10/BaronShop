@@ -24,8 +24,8 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.R;
-import com.example.e_commercial_application.productDetails3;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DecimalFormat;
@@ -36,17 +36,12 @@ import java.util.Locale;
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
 
     public ArrayList<AllProducts>basketArrayList;
-    private ArrayList<AllProducts>empty;
     private AllProducts allProducts;
     Context context;
     private static final String TAG = "BasketAdapter";
     TextView totalPrice;
     BasketDB basketDB;
 
-
-    public BasketAdapter(ArrayList<AllProducts> empty){
-        this.empty = empty;
-    }
 
     public BasketAdapter(ArrayList<AllProducts> basketArrayList, Context context, TextView totalPrice) {
         this.basketArrayList = basketArrayList;
@@ -144,8 +139,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("productBasket",basketArrayList.get(holder.getAdapterPosition()));
-            productDetails3 productDetails3 = new productDetails3();
+            bundle.putSerializable("productName",basketArrayList.get(holder.getAdapterPosition()));
+            ProductDetails productDetails3 = new ProductDetails();
             productDetails3.setArguments(bundle);
             fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
 

@@ -63,6 +63,7 @@ public class ProductDetails extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null){
             allProducts = (AllProducts) bundle.getSerializable("productName");
+
         }else {
             Log.d(TAG, "onViewCreated: bundle is null" );
         }

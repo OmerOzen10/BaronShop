@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
-import com.example.e_commercial_application.ProductDetailsFav;
+import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -72,8 +72,8 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
             FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("productFav",favArrayList.get(holder.getAdapterPosition()));
-            ProductDetailsFav productDetailsFav = new ProductDetailsFav();
+            bundle.putSerializable("productName",favArrayList.get(holder.getAdapterPosition()));
+            ProductDetails productDetailsFav = new ProductDetails();
             productDetailsFav.setArguments(bundle);
             fragmentTransaction.replace(R.id.containerFrame,productDetailsFav).commit();
 
