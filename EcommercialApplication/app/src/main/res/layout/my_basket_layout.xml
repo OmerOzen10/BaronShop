@@ -94,7 +94,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:backgroundTint="#FDF8D19C"
+                android:backgroundTint="#FDF8E0BE"
                 app:cardCornerRadius="12.5dp">
 
                 <TextView

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.FavDB;
-import com.example.e_commercial_application.Databases.FavDB2;
+import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.HomePage;
-import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
+import com.example.e_commercial_application.ProductDetailsDiscounted;
 import com.example.e_commercial_application.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -31,7 +36,7 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
     private static List<DiscountedProducts> discountedProductsList;
     private static final String TAG = "DiscountedAdapter";
     Context context;
-    private static FavDB2 favDB2;
+    private static FavDBDiscounted favDBDiscounted;
 
     public DiscountedAdapter(List<DiscountedProducts> discountedProductsList, Context context){
         this.discountedProductsList = discountedProductsList;
@@ -43,7 +48,7 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        favDB2 = new FavDB2(context);
+        favDBDiscounted = new FavDBDiscounted(context);
         SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
         boolean firstStart = prefs.getBoolean("firstStart",true);
         if (firstStart){
@@ -53,7 +58,7 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
         return new ViewHolder(view);
     }
     private void createTableOnFirstStart() {
-        favDB2.insertEmpty();
+        favDBDiscounted.insertEmpty();
         SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("firstStart", false);
@@ -70,12 +75,29 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
         holder.OldPrice.setText(discountedProducts.getOldPrice() + " $");
         Glide.with(context).load(discountedProducts.getProductImg()).into(holder.ProductImgDiscounted);
 
+
+        holder.itemView.setOnClickListener(view -> {
+
+            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("productDiscounted",discountedProductsList.get(holder.getAdapterPosition()));
+            ProductDetailsDiscounted productDetails = new ProductDetailsDiscounted();
+            productDetails.setArguments(bundle);
+            fragmentTransaction.replace(R.id.containerFrame, productDetails).addToBackStack(null).commit();
+            HomePage homePage = (HomePage) context;
+            DiscountedAdapter adapter = new DiscountedAdapter(discountedProductsList, homePage);
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+        });
+
     }
 
     private void readCursorData(DiscountedProducts discountedProducts, ViewHolder viewHolder) {
 
-        Cursor cursor = favDB2.read_all_data(discountedProducts.getId());
-        SQLiteDatabase db = favDB2.getReadableDatabase();
+        Cursor cursor = favDBDiscounted.read_all_data(discountedProducts.getId());
+        SQLiteDatabase db = favDBDiscounted.getReadableDatabase();
         try {
             while (cursor.moveToNext()){
                 @SuppressLint("Range") String item_fav_status = cursor.getString(cursor.getColumnIndex(FavDB.FAVORITE_STATUS));
@@ -124,7 +146,7 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
 
                 if (discountedProducts.getFavStatus() != null && discountedProducts.getFavStatus().equals("0")){
                     discountedProducts.setFavStatus("1");
-                    favDB2.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(), discountedProducts.getFavStatus(),String.valueOf(discountedProducts.getProductRate()),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()));
+                    favDBDiscounted.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(), discountedProducts.getFavStatus(),String.valueOf(discountedProducts.getProductRate()),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()));
                     favProductDiscounted.setBackgroundResource(R.drawable.ic_fav_red);
 
                     HomePage.favList2.add(discountedProducts);
@@ -132,7 +154,7 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
 
                 } else {
                     discountedProducts.setFavStatus("0");
-                    favDB2.remove_fav(discountedProducts.getId());
+                    favDBDiscounted.remove_fav(discountedProducts.getId());
                     favProductDiscounted.setBackgroundResource(R.drawable.baseline_fav);
                     for (int i = 0; i < HomePage.favList2.size(); i++) {
                         DiscountedProducts favProduct = HomePage.favList2.get(i);

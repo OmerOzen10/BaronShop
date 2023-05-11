@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.FavDB;
-import com.example.e_commercial_application.Databases.FavDB2;
+import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,7 +22,7 @@ public class HomePage extends AppCompatActivity {
     public static ArrayList <AllProducts> favList = new ArrayList<>();
     public static ArrayList<DiscountedProducts> favList2 = new ArrayList<>();
     private FavDB favDB;
-    private FavDB2 favDB2;
+    private FavDBDiscounted favDBDiscounted;
     private BasketDB basketDB;
 
 
@@ -37,10 +37,10 @@ public class HomePage extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(navListener);
 
         favDB = new FavDB(this);
-        favDB2 = new FavDB2(this);
+        favDBDiscounted = new FavDBDiscounted(this);
         basketDB = new BasketDB(this);
         HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
-        HomePage.favList2 = (ArrayList<DiscountedProducts>) favDB2.getAllFavProducts();
+        HomePage.favList2 = (ArrayList<DiscountedProducts>) favDBDiscounted.getAllFavProducts();
         HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
 
 

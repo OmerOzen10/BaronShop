@@ -13,7 +13,7 @@ import com.example.e_commercial_application.Model.DiscountedProducts;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavDB2 extends SQLiteOpenHelper {
+public class FavDBDiscounted extends SQLiteOpenHelper {
 
     private ArrayList<DiscountedProducts> discountedProducts;
     private static int DB_VERSION = 1;
@@ -32,7 +32,7 @@ public class FavDB2 extends SQLiteOpenHelper {
             ITEM_TITLE + " TEXT,"
             +ITEM_IMAGE + " TEXT," + FAVORITE_STATUS + " TEXT," + ITEM_RATE + " TEXT,"+ OLD_PRICE + " TEXT," + ITEM_PRICE + " TEXT)";
 
-    public FavDB2(Context context){super(context,DATABASE_NAME,null,DB_VERSION);}
+    public FavDBDiscounted(Context context){super(context,DATABASE_NAME,null,DB_VERSION);}
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE);
