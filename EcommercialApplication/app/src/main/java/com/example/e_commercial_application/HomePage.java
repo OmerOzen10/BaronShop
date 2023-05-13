@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
@@ -19,11 +20,13 @@ import java.util.ArrayList;
 public class HomePage extends AppCompatActivity {
 
     public static ArrayList <AllProducts> basketList = new ArrayList<>();
+    public static  ArrayList<DiscountedProducts> basketList2 = new ArrayList<>();
     public static ArrayList <AllProducts> favList = new ArrayList<>();
     public static ArrayList<DiscountedProducts> favList2 = new ArrayList<>();
     private FavDB favDB;
     private FavDBDiscounted favDBDiscounted;
     private BasketDB basketDB;
+    private BasketDBDiscounted basketDBDiscounted;
 
 
 
@@ -39,9 +42,11 @@ public class HomePage extends AppCompatActivity {
         favDB = new FavDB(this);
         favDBDiscounted = new FavDBDiscounted(this);
         basketDB = new BasketDB(this);
+        basketDBDiscounted = new BasketDBDiscounted(this);
         HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
         HomePage.favList2 = (ArrayList<DiscountedProducts>) favDBDiscounted.getAllFavProducts();
         HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
+        HomePage.basketList2 = (ArrayList<DiscountedProducts>) basketDBDiscounted.getAllBasketProducts();
 
 
 

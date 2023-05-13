@@ -22,7 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.e_commercial_application.Adapter.BasketAdapter;
+import com.example.e_commercial_application.Adapter.BasketDiscountedAdapter;
 import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,7 +37,9 @@ public class BasketFragment extends Fragment{
     AllProducts allProducts;
 
     public RecyclerView basketRecyclerView;
+    public RecyclerView basketRecyclerViewDisc;
     private BasketAdapter adapter;
+    private BasketDiscountedAdapter adapter2;
     private ConstraintLayout buyConstraint, emptyConstraint, rootView;
     TextView totalPrice,priceBasket;
     ImageView backBasket, backCard;
@@ -43,6 +47,7 @@ public class BasketFragment extends Fragment{
     View overlay;
 
     BasketDB basketDB;
+    BasketDBDiscounted basketDBDiscounted;
 
     CardView orderDetails;
     TextInputLayout layoutName, layoutEmail, layoutCity, layoutTown, layoutAddress, layoutMobile;
@@ -68,10 +73,19 @@ public class BasketFragment extends Fragment{
         emptyConstraint = view.findViewById(R.id.emptyConstraint);
         buyConstraint = view.findViewById(R.id.buyConstraint);
         btnContinue = view.findViewById(R.id.btnContinue);
+
+
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new BasketAdapter(HomePage.basketList, getContext(), totalPrice);
         basketRecyclerView.setAdapter(adapter);
+
+        basketRecyclerViewDisc = view.findViewById(R.id.SelectedProductsDisc);
+        basketRecyclerViewDisc.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter2 = new BasketDiscountedAdapter(HomePage.basketList2,getContext(),totalPrice);
+        basketRecyclerViewDisc.setAdapter(adapter2);
+
+
         priceBasket = view.findViewById(R.id.priceBasket);
         backBasket = view.findViewById(R.id.backBasket);
         btnConfirmBasket = view.findViewById(R.id.btnConfirmBasket);
@@ -81,6 +95,7 @@ public class BasketFragment extends Fragment{
         backCard = view.findViewById(R.id.backCard);
         btnConfirm = view.findViewById(R.id.btnConfirm);
         basketDB = new BasketDB(getContext());
+        basketDBDiscounted = new BasketDBDiscounted(getContext());
 
         layoutName = view.findViewById(R.id.layoutName);
         layoutEmail = view.findViewById(R.id.layoutEmail);
@@ -134,6 +149,8 @@ public class BasketFragment extends Fragment{
 
                         basketDB.deleteAllBasketItems();
                         HomePage.basketList.clear();
+                        basketDBDiscounted.deleteAllBasketItems();
+                        HomePage.basketList2.clear();
                         emptyConstraint.setVisibility(View.VISIBLE);
                         backBasket.setEnabled(true);
                         buyConstraint.setVisibility(View.GONE);
@@ -171,7 +188,7 @@ public class BasketFragment extends Fragment{
         });
 
 
-        if (adapter.getItemCount() == 0) {
+        if (adapter.getItemCount() == 0 && adapter2.getItemCount()==0) {
             buyConstraint.setVisibility(View.GONE);
             emptyConstraint.setVisibility(View.VISIBLE);
             basketRecyclerView.setVisibility(View.GONE);

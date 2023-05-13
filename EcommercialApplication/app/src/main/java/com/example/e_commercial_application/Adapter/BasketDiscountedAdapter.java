@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.example.e_commercial_application.ProductDetails;
+import com.example.e_commercial_application.ProductDetailsDiscounted;
 import com.example.e_commercial_application.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -34,58 +37,62 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
+public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscountedAdapter.ViewHolder> {
 
-    public ArrayList<AllProducts>basketArrayList;
-    private AllProducts allProducts;
+    public ArrayList<DiscountedProducts> basketArrayList;
+    private DiscountedProducts discountedProducts;
     Context context;
-    private static final String TAG = "BasketAdapter";
+    private static final String TAG = "BasketDiscountedAdapter";
     TextView totalPrice;
-    BasketDB basketDB;
+    BasketDBDiscounted basketDBDiscounted;
 
-
-    public BasketAdapter(ArrayList<AllProducts> basketArrayList, Context context, TextView totalPrice) {
+    public BasketDiscountedAdapter(ArrayList<DiscountedProducts> basketArrayList, Context context, TextView totalPrice){
         this.basketArrayList = basketArrayList;
         this.context = context;
         this.totalPrice = totalPrice;
     }
-    public BasketAdapter(){}
+    public BasketDiscountedAdapter(){}
+
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        basketDB = new BasketDB(context);
+        basketDBDiscounted = new BasketDBDiscounted(context);
         SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
         boolean firstStart = prefs.getBoolean("firstStart",true);
         if (firstStart){
             createTableOnFirstStart();
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout_discounted, parent, false);
         return new ViewHolder(view);
     }
     private void createTableOnFirstStart() {
-        basketDB.insertEmpty();
+        basketDBDiscounted.insertEmpty();
         SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("firstStart", false);
         editor.apply();
     }
-    @SuppressLint("SetTextI18n")
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        allProducts = new AllProducts();
-        AllProducts basketItem = basketArrayList.get(position);
-        readCursorData(allProducts,holder);
+        discountedProducts = new DiscountedProducts();
+        DiscountedProducts basketItem = basketArrayList.get(position);
+        readCursorData(discountedProducts,holder);
         holder.basketProductName.setText(basketItem.getProductName());
         holder.basketProductPrice.setText(basketItem.getProductPrice() + " $");
+
+//        holder.oldPrice.setText(basketItem.getOldPrice() + " $");
+        // TODO: 13.05.2023 Fix this error.. Maybe check the database class again if i add correctly the oldPrice Row..
+
+
         holder.itemPiece.setText(basketItem.getNumber() + "");
         Glide.with(context).load(basketItem.getProductImg()).into(holder.basketImg);
 
-        AllProducts allProducts = basketArrayList.get(holder.getAdapterPosition());
+        DiscountedProducts products = basketArrayList.get(holder.getAdapterPosition());
 
-        int quantity = allProducts.getNumber();
-        double amount = allProducts.getProductPrice();
+        int quantity = products.getNumber();
+        double amount = products.getProductPrice();
         DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.getDefault(Locale.Category.FORMAT)));
         DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
 
@@ -93,11 +100,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         holder.basketProductPrice.setText((total + " $"));
 
         holder.decreaseItem.setOnClickListener(view -> {
-            if (allProducts.getNumber() > 1) {
-                int quantity1 = allProducts.getNumber() - 1;
-                allProducts.setNumber(quantity1);
-                holder.itemPiece.setText(String.valueOf(allProducts.getNumber()));
-                double amount1 = allProducts.getProductPrice();
+            if (products.getNumber() > 1) {
+                int quantity1 = products.getNumber() - 1;
+                products.setNumber(quantity1);
+                holder.itemPiece.setText(String.valueOf(products.getNumber()));
+                double amount1 = products.getProductPrice();
                 double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
                 double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
                 holder.basketProductPrice.setText(String.format("%.2f $", total1));
@@ -108,15 +115,15 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 String formattedTotalPrice = dfTotal.format(getTotalPrice());
                 totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
 
-                basketDB.updateQuantity(allProducts.getId(), quantity1);
+                basketDBDiscounted.updateQuantity(products.getId(), quantity1);
             }
         });
 
         holder.increaseItem.setOnClickListener(view -> {
-            int quantity1 = allProducts.getNumber() + 1;
-            allProducts.setNumber(quantity1);
+            int quantity1 = products.getNumber() + 1;
+            products.setNumber(quantity1);
             holder.itemPiece.setText(String.valueOf(quantity1));
-            double amount12 = allProducts.getProductPrice();
+                double amount12 = products.getProductPrice();
             double total12 = Double.parseDouble(df1.format(quantity1 * amount12));
 
             holder.basketProductPrice.setText(String.format("%.2f $", total12));
@@ -126,13 +133,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             String formattedTotalPrice = dfTotal.format(getTotalPrice());
             totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
 
-            basketDB.updateQuantity(allProducts.getId(), quantity1);
+            basketDBDiscounted.updateQuantity(products.getId(), quantity1);
         });
 
         holder.itemView.setOnClickListener(view -> {
 
             HomePage homePage = (HomePage) context;
-            NewSeasonAdapter adapter = new NewSeasonAdapter(basketArrayList,homePage);
+            DiscountedAdapter adapter = new DiscountedAdapter(basketArrayList,homePage);
 
             BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
             bottomNavigationView.setVisibility(View.GONE);
@@ -140,8 +147,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("productName",basketArrayList.get(holder.getAdapterPosition()));
-            ProductDetails productDetails3 = new ProductDetails();
+            bundle.putSerializable("productDiscounted",basketArrayList.get(holder.getAdapterPosition()));
+            ProductDetailsDiscounted productDetails3 = new ProductDetailsDiscounted();
             productDetails3.setArguments(bundle);
             fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
 
@@ -149,31 +156,25 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
 
         });
-
-
-
-
-
     }
 
     @SuppressLint("SuspiciousIndentation")
-    private void readCursorData(AllProducts allProducts, BasketAdapter.ViewHolder viewHolder) {
+    private void readCursorData(DiscountedProducts products, BasketDiscountedAdapter.ViewHolder viewHolder) {
 
-        Cursor cursor = basketDB.read_all_data(allProducts.getId());
-        SQLiteDatabase db = basketDB.getReadableDatabase();
-            if (cursor!=null && cursor.isClosed())
-                cursor.close();
-            db.close();
+        Cursor cursor = basketDBDiscounted.read_all_data(products.getId());
+        SQLiteDatabase db = basketDBDiscounted.getReadableDatabase();
+        if (cursor!=null && cursor.isClosed())
+            cursor.close();
+        db.close();
 
     }
 
     public double getTotalPrice() {
         double totalPrice = 0;
-        for (AllProducts product : HomePage.basketList) {
-            for (DiscountedProducts discountedProducts : HomePage.basketList2){
-                totalPrice += (product.getNumber() * product.getProductPrice()) + (discountedProducts.getNumber() * discountedProducts.getProductPrice());
+        for (DiscountedProducts product : HomePage.basketList2) {
+            for (AllProducts allProducts : HomePage.basketList){
+                totalPrice += (product.getNumber() * product.getProductPrice()) + (allProducts.getNumber() * allProducts.getProductPrice());
             }
-
         }
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
         String formattedPrice = df.format(totalPrice);
@@ -190,16 +191,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView basketImg, increaseItem, decreaseItem;
         TextView basketProductName;
-        TextView basketProductPrice,totalPrice;
+        TextView basketProductPrice,totalPrice,oldPrice;
         ConstraintLayout buyConstraint, emptyConstraint, constraintLayout2;
         Button btnContinue;
         public TextView itemPiece;
         RecyclerView SelectedProducts;
-
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             basketImg = itemView.findViewById(R.id.basketImg);
             basketProductName = itemView.findViewById(R.id.basketProductName);
             basketProductPrice = itemView.findViewById(R.id.priceBasket);
@@ -212,9 +210,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             totalPrice = itemView.findViewById(R.id.totalPrice);
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
-
-
-
+            oldPrice = itemPiece.findViewById(R.id.OldPriceBasket);
         }
     }
 }

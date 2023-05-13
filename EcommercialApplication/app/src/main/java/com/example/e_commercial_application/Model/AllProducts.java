@@ -9,8 +9,6 @@ public class AllProducts implements Serializable {
     private float ProductRate;
     private int number = 1;
     private String id;
-
-//    private boolean isLiked = false;
     private String favStatus;
 
     public AllProducts(){

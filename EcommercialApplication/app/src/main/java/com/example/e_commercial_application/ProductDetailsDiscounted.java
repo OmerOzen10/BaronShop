@@ -13,12 +13,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -35,7 +38,7 @@ public class ProductDetailsDiscounted extends Fragment {
     private RatingBar ratingBar;
     private TextView rate,totalPrice,oldPrice;
     Button addToBasket;
-    BasketDB basketDB;
+    BasketDBDiscounted basketDBDiscounted;
     ImageView favIcon;
     CardView favProduct;
     FavDBDiscounted favDBDiscounted;
@@ -68,7 +71,7 @@ public class ProductDetailsDiscounted extends Fragment {
         rate = view.findViewById(R.id.detailedRating);
         totalPrice = view.findViewById(R.id.totalPrice);
         oldPrice = view.findViewById(R.id.OldPrice);
-        basketDB = new BasketDB(getContext());
+        basketDBDiscounted = new BasketDBDiscounted(getContext());
         favIcon = view.findViewById(R.id.favIcon);
         favProduct = view.findViewById(R.id.favProductDetail);
         favDBDiscounted = new FavDBDiscounted(getContext());
@@ -85,44 +88,46 @@ public class ProductDetailsDiscounted extends Fragment {
             Log.d(TAG, "onViewCreated: ratingbar" + ratingBar.getRating() + rate.getText().toString());
         }
 
-//        addToBasket = view.findViewById(R.id.btnBasket);
-//        addToBasket.setOnClickListener(view1 -> {
-//
-//
-//
-//            int match = 0;
-//
-//            for (AllProducts product : HomePage.basketList) {
-//                if (discountedProducts.getProductName().equals(product.getProductName())) {
-//                    int currentNumber = product.getNumber();
-//                    product.setNumber(++currentNumber);
-//
-//                    match++;
-//
-//                    basketDB.updateQuantity(discountedProducts.getId(),currentNumber);
-//
-//
-//                }
-//            }
-//
-//            if (match == 0) {
-//                HomePage.basketList.add(allProducts);
-//                Log.d(TAG, "onClick: basketItem" + HomePage.basketList.size());
-//                basketDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),String.valueOf(allProducts.getProductPrice()),String.valueOf(allProducts.getNumber()),String.valueOf(allProducts.getProductRate()),allProducts.getFavStatus());
-//            }
-//
-//
-//
-//
-//
-//
-//
-//            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.containerFrame, new BasketFragment()).addToBackStack(null).commit();
-//            Log.d(TAG, "onClick: basket" + " " + ((HomePage) requireActivity()).basketList.size());
-//
-//        });
+        addToBasket = view.findViewById(R.id.btnBasket);
+        addToBasket.setOnClickListener(view1 -> {
+
+
+
+            int match = 0;
+
+            for (DiscountedProducts product : HomePage.basketList2) {
+                if (discountedProducts.getProductName().equals(product.getProductName())) {
+                    int currentNumber = product.getNumber();
+                    product.setNumber(++currentNumber);
+
+                    match++;
+
+                    basketDBDiscounted.updateQuantity(discountedProducts.getId(),currentNumber);
+
+
+                }
+            }
+
+            if (match == 0) {
+                HomePage.basketList2.add(discountedProducts);
+
+                basketDBDiscounted.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()), String.valueOf(discountedProducts.getNumber()),String.valueOf(discountedProducts.getProductRate()),discountedProducts.getFavStatus());
+
+            }
+
+
+
+
+
+
+
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.containerFrame, new BasketFragment()).addToBackStack(null).commit();
+            Log.d(TAG, "onClick: basket" + " " + ((HomePage) requireActivity()).basketList.size());
+            Log.d(TAG, "onViewCreated: oldPrice" + discountedProducts.getOldPrice());
+
+        });
 
         MaterialToolbar toolbar =view.findViewById(R.id.toolbar2);
         toolbar.setNavigationOnClickListener(v -> {
