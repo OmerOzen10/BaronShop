@@ -82,10 +82,7 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
         holder.basketProductName.setText(basketItem.getProductName());
         holder.basketProductPrice.setText(basketItem.getProductPrice() + " $");
 
-//        holder.oldPrice.setText(basketItem.getOldPrice() + " $");
-        // TODO: 13.05.2023 Fix this error.. Maybe check the database class again if i add correctly the oldPrice Row..
-
-
+        holder.oldPrice.setText(basketItem.getOldPrice() + " $");
         holder.itemPiece.setText(basketItem.getNumber() + "");
         Glide.with(context).load(basketItem.getProductImg()).into(holder.basketImg);
 
@@ -210,7 +207,7 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
             totalPrice = itemView.findViewById(R.id.totalPrice);
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
-            oldPrice = itemPiece.findViewById(R.id.OldPriceBasket);
+            oldPrice = itemView.findViewById(R.id.OldPriceBasket);
         }
     }
 }
