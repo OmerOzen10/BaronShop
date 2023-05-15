@@ -18,9 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.BasketFragment;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
@@ -152,9 +154,57 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
 
 
+        holder.delete.setOnClickListener(view -> {
+
+            basketDB.deleteBasketItem(allProducts.getId());
+
+            for (int i = 0; i < HomePage.basketList.size(); i++) {
+                AllProducts favProduct = HomePage.basketList.get(i);
+                if (favProduct.getId().equals(allProducts.getId())) {
+                    HomePage.basketList.remove(i);
+                    break;
+                }
+            }
+
+
+            notifyDataSetChanged();
+            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+            String formattedTotalPrice = dfTotal.format(getPrice());
+            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
+            // TODO: 15.05.2023 this code is working fine. But after delete the item I tried to increase item and the totalPrice value returned 0.
+
+
+        });
+
+
+
 
 
     }
+
+//    public ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+//        @Override
+//        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//
+//            basketDB.deleteBasketItem(allProducts.getId());
+//            for (int i = 0; i < HomePage.basketList.size(); i++) {
+//                AllProducts favProduct = HomePage.basketList.get(i);
+//                if (favProduct.getId().equals(allProducts.getId())) {
+//                    HomePage.basketList.remove(i);
+//                    break;
+//                }
+//            }
+//
+//            notifyDataSetChanged();
+//
+//        }
+//    };
 
     @SuppressLint("SuspiciousIndentation")
     private void readCursorData(AllProducts allProducts, BasketAdapter.ViewHolder viewHolder) {
@@ -164,6 +214,19 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             if (cursor!=null && cursor.isClosed())
                 cursor.close();
             db.close();
+
+    }
+
+    public double getPrice(){
+        double totalPrice1 = 0;
+
+        for (AllProducts products: HomePage.basketList ){
+            totalPrice1 +=products.getNumber() * products.getProductPrice();
+        }
+        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+        String formattedPrice = df.format(totalPrice1);
+        notifyDataSetChanged();
+        return Double.parseDouble(formattedPrice);
 
     }
 
@@ -177,6 +240,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         }
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
         String formattedPrice = df.format(totalPrice);
+        notifyDataSetChanged();
         return Double.parseDouble(formattedPrice);
     }
 
@@ -188,7 +252,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView basketImg, increaseItem, decreaseItem;
+        ImageView basketImg, increaseItem, decreaseItem, delete;
         TextView basketProductName;
         TextView basketProductPrice,totalPrice;
         ConstraintLayout buyConstraint, emptyConstraint, constraintLayout2;
@@ -212,6 +276,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             totalPrice = itemView.findViewById(R.id.totalPrice);
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
+            delete = itemView.findViewById(R.id.delete);
 
 
 

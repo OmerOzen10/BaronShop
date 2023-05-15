@@ -108,13 +108,6 @@ public class BasketDBDiscounted  extends SQLiteOpenHelper {
         return db.rawQuery(sql,null,null);
     }
 
-    public void remove_fav(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "UPDATE " + TABLE_NAME + " SET "+ FAVORITE_STATUS+" ='0' WHERE "+KEY_ID+"="+id+"";
-        db.execSQL(sql);
-        Log.d("remove",id.toString());
-    }
-
     @SuppressLint("Range")
     public List<DiscountedProducts> getAllBasketProducts() {
         List<DiscountedProducts> discountedProductsList = new ArrayList<>();

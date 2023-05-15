@@ -9,9 +9,11 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.example.e_commercial_application.Adapter.BasketDiscountedAdapter;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
+import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,11 +38,12 @@ import jp.wasabeef.blurry.Blurry;
 public class BasketFragment extends Fragment{
 
     AllProducts allProducts;
+    DiscountedProducts discountedProducts;
 
     public RecyclerView basketRecyclerView;
     public RecyclerView basketRecyclerViewDisc;
-    private BasketAdapter adapter;
-    private BasketDiscountedAdapter adapter2;
+     BasketAdapter adapter;
+    public BasketDiscountedAdapter adapter2;
     private ConstraintLayout buyConstraint, emptyConstraint, rootView;
     TextView totalPrice,priceBasket;
     ImageView backBasket, backCard;
@@ -47,6 +51,7 @@ public class BasketFragment extends Fragment{
     View overlay;
 
     BasketDB basketDB;
+
     BasketDBDiscounted basketDBDiscounted;
 
     CardView orderDetails;
@@ -69,6 +74,7 @@ public class BasketFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         allProducts = new AllProducts();
+        discountedProducts = new DiscountedProducts();
         totalPrice = view.findViewById(R.id.totalPrice);
         emptyConstraint = view.findViewById(R.id.emptyConstraint);
         buyConstraint = view.findViewById(R.id.buyConstraint);
@@ -78,6 +84,7 @@ public class BasketFragment extends Fragment{
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new BasketAdapter(HomePage.basketList, getContext(), totalPrice);
+//        new ItemTouchHelper(adapter.simpleCallback).attachToRecyclerView(basketRecyclerView);
         basketRecyclerView.setAdapter(adapter);
 
         basketRecyclerViewDisc = view.findViewById(R.id.SelectedProductsDisc);
@@ -194,10 +201,20 @@ public class BasketFragment extends Fragment{
             basketRecyclerView.setVisibility(View.GONE);
         } else {
             buyConstraint.setVisibility(View.VISIBLE);
-            BasketAdapter adapter1 = new BasketAdapter();
-            double total = adapter1.getTotalPrice();
-            totalPrice.setText((total + " $"));
+            if (adapter.getItemCount() !=0 && adapter2.getItemCount() == 0 ){
+                double total = adapter.getPrice();
+                totalPrice.setText(total + " $");
+            } else if (adapter2.getItemCount() !=0 && adapter.getItemCount() == 0) {
+                double total = adapter2.getPrice();
+                totalPrice.setText(total + " $");
+            }else if (adapter.getItemCount() != 0 && adapter2.getItemCount() !=0){
+                double total = adapter.getTotalPrice();
+                totalPrice.setText(total + " $");
+            }
+
+
         }
+        Log.d(TAG, "onViewCreated: total "  +  totalPrice.getText().toString());
 
         btnContinue.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(),HomePage.class);
@@ -247,6 +264,8 @@ public class BasketFragment extends Fragment{
         return true;
 
     }
+
+
 
 
 
