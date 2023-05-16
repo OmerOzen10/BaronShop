@@ -149,5 +149,11 @@ public class BasketDBDiscounted  extends SQLiteOpenHelper {
         BasketAdapter adapter = new BasketAdapter();
         adapter.notifyDataSetChanged();
     }
+    public void deleteBasketItem(String itemId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, "id=?", new String[] { String.valueOf(itemId) });
+        db.close();
+    }
+
 
 }

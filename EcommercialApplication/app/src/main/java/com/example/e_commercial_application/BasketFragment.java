@@ -201,16 +201,23 @@ public class BasketFragment extends Fragment{
             basketRecyclerView.setVisibility(View.GONE);
         } else {
             buyConstraint.setVisibility(View.VISIBLE);
-            if (adapter.getItemCount() !=0 && adapter2.getItemCount() == 0 ){
-                double total = adapter.getPrice();
-                totalPrice.setText(total + " $");
-            } else if (adapter2.getItemCount() !=0 && adapter.getItemCount() == 0) {
-                double total = adapter2.getPrice();
-                totalPrice.setText(total + " $");
-            }else if (adapter.getItemCount() != 0 && adapter2.getItemCount() !=0){
-                double total = adapter.getTotalPrice();
-                totalPrice.setText(total + " $");
-            }
+
+            BasketAdapter adapter1 = new BasketAdapter();
+            double total = adapter1.getTotalPrice();
+            totalPrice.setText((total + " $"));
+//            if (adapter.getItemCount() !=0 && adapter2.getItemCount() == 0 ){
+//                double total = adapter.getPrice();
+//                totalPrice.setText(total + " $");
+//            }
+//            if (adapter2.getItemCount() !=0 && adapter.getItemCount() == 0) {
+//                double total = adapter2.getPrice();
+//                totalPrice.setText(total + " $");
+//            }
+//
+//            if (adapter.getItemCount() != 0 && adapter2.getItemCount() !=0){
+//                double total = adapter.getTotalPrice();
+//                totalPrice.setText(total + " $");
+//            }
 
 
         }

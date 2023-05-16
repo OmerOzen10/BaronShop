@@ -154,57 +154,34 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
 
 
-        holder.delete.setOnClickListener(view -> {
-
-            basketDB.deleteBasketItem(allProducts.getId());
-
-            for (int i = 0; i < HomePage.basketList.size(); i++) {
-                AllProducts favProduct = HomePage.basketList.get(i);
-                if (favProduct.getId().equals(allProducts.getId())) {
-                    HomePage.basketList.remove(i);
-                    break;
-                }
-            }
-
-
-            notifyDataSetChanged();
-            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-            String formattedTotalPrice = dfTotal.format(getPrice());
-            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
-
-            // TODO: 15.05.2023 this code is working fine. But after delete the item I tried to increase item and the totalPrice value returned 0.
-
-
-        });
+//        holder.delete.setOnClickListener(view -> {
+//
+//            basketDB.deleteBasketItem(allProducts.getId());
+//
+//            for (int i = 0; i < HomePage.basketList.size(); i++) {
+//                AllProducts basketProduct = HomePage.basketList.get(i);
+//                if (basketProduct.getId().equals(allProducts.getId())) {
+//                    HomePage.basketList.remove(i);
+//                    break;
+//                }
+//            }
+//
+//
+//            notifyDataSetChanged();
+//            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+//            String formattedTotalPrice = dfTotal.format(getPrice());
+//            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+//
+//            // TODO: 15.05.2023 this code is working fine. But after delete the item I tried to increase item and the totalPrice value returned 0.
+//
+//
+//        });
 
 
 
 
 
     }
-
-//    public ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-//        @Override
-//        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//            return false;
-//        }
-//
-//        @Override
-//        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//
-//            basketDB.deleteBasketItem(allProducts.getId());
-//            for (int i = 0; i < HomePage.basketList.size(); i++) {
-//                AllProducts favProduct = HomePage.basketList.get(i);
-//                if (favProduct.getId().equals(allProducts.getId())) {
-//                    HomePage.basketList.remove(i);
-//                    break;
-//                }
-//            }
-//
-//            notifyDataSetChanged();
-//
-//        }
-//    };
 
     @SuppressLint("SuspiciousIndentation")
     private void readCursorData(AllProducts allProducts, BasketAdapter.ViewHolder viewHolder) {
@@ -233,9 +210,10 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     public double getTotalPrice() {
         double totalPrice = 0;
         for (AllProducts product : HomePage.basketList) {
-            for (DiscountedProducts discountedProducts : HomePage.basketList2){
-                totalPrice += (product.getNumber() * product.getProductPrice()) + (discountedProducts.getNumber() * discountedProducts.getProductPrice());
-            }
+            totalPrice += product.getNumber() * product.getProductPrice();
+//            for (DiscountedProducts discountedProducts : HomePage.basketList2){
+//                totalPrice += (product.getNumber() * product.getProductPrice()) + (discountedProducts.getNumber() * discountedProducts.getProductPrice());
+//            }
 
         }
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));

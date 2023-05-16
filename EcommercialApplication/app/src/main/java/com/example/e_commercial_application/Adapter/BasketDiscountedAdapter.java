@@ -149,10 +149,29 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
             productDetails3.setArguments(bundle);
             fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
 
+            });
 
 
+        holder.delete.setOnClickListener(view -> {
 
+            basketDBDiscounted.deleteBasketItem(products.getId());
+
+            for (int i = 0; i < HomePage.basketList2.size(); i++) {
+                DiscountedProducts basketProduct = HomePage.basketList2.get(i);
+                if (basketProduct.getId().equals(products.getId())) {
+                    HomePage.basketList2.remove(i);
+                    break;
+                }
+            }
+
+
+            notifyDataSetChanged();
+            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+            String formattedTotalPrice = dfTotal.format(getPrice());
+            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
         });
+
+
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -197,7 +216,7 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView basketImg, increaseItem, decreaseItem;
+        ImageView basketImg, increaseItem, decreaseItem, delete;
         TextView basketProductName;
         TextView basketProductPrice,totalPrice,oldPrice;
         ConstraintLayout buyConstraint, emptyConstraint, constraintLayout2;
@@ -219,6 +238,7 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
             oldPrice = itemView.findViewById(R.id.OldPriceBasket);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
 }
