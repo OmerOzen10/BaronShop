@@ -154,32 +154,24 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
 
 
-//        holder.delete.setOnClickListener(view -> {
-//
-//            basketDB.deleteBasketItem(allProducts.getId());
-//
-//            for (int i = 0; i < HomePage.basketList.size(); i++) {
-//                AllProducts basketProduct = HomePage.basketList.get(i);
-//                if (basketProduct.getId().equals(allProducts.getId())) {
-//                    HomePage.basketList.remove(i);
-//                    break;
-//                }
-//            }
-//
-//
-//            notifyDataSetChanged();
-//            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-//            String formattedTotalPrice = dfTotal.format(getPrice());
-//            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
-//
-//            // TODO: 15.05.2023 this code is working fine. But after delete the item I tried to increase item and the totalPrice value returned 0.
-//
-//
-//        });
+        holder.delete.setOnClickListener(view -> {
 
+            basketDB.deleteBasketItem(allProducts.getId());
 
+            for (int i = 0; i < HomePage.basketList.size(); i++) {
+                AllProducts basketProduct = HomePage.basketList.get(i);
+                if (basketProduct.getId().equals(allProducts.getId())) {
+                    HomePage.basketList.remove(i);
+                    break;
+                }
+            }
 
+            notifyDataSetChanged();
+            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+            String formattedTotalPrice = dfTotal.format(getTotalPrice());
+            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
 
+        });
 
     }
 
@@ -194,30 +186,26 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
     }
 
-    public double getPrice(){
-        double totalPrice1 = 0;
-
-        for (AllProducts products: HomePage.basketList ){
-            totalPrice1 +=products.getNumber() * products.getProductPrice();
-        }
-        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-        String formattedPrice = df.format(totalPrice1);
-        notifyDataSetChanged();
-        return Double.parseDouble(formattedPrice);
-
-    }
-
     public double getTotalPrice() {
         double totalPrice = 0;
-        for (AllProducts product : HomePage.basketList) {
-            totalPrice += product.getNumber() * product.getProductPrice();
-//            for (DiscountedProducts discountedProducts : HomePage.basketList2){
-//                totalPrice += (product.getNumber() * product.getProductPrice()) + (discountedProducts.getNumber() * discountedProducts.getProductPrice());
-//            }
+        double totalPriceDiscounted = 0;
+        double total;
 
+       for (AllProducts products : HomePage.basketList){
+
+           totalPrice += products.getNumber() * products.getProductPrice();
+
+       }
+
+        for(DiscountedProducts discountedProducts : HomePage.basketList2){
+
+                    totalPriceDiscounted += discountedProducts.getNumber() * discountedProducts.getProductPrice();
         }
+
+         total = totalPriceDiscounted + totalPrice;
+
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-        String formattedPrice = df.format(totalPrice);
+        String formattedPrice = df.format(total);
         notifyDataSetChanged();
         return Double.parseDouble(formattedPrice);
     }

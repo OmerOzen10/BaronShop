@@ -167,7 +167,7 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
 
             notifyDataSetChanged();
             DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-            String formattedTotalPrice = dfTotal.format(getPrice());
+            String formattedTotalPrice = dfTotal.format(getTotalPrice());
             totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
         });
 
@@ -185,29 +185,29 @@ public class BasketDiscountedAdapter extends RecyclerView.Adapter<BasketDiscount
 
     }
 
-    public double getPrice(){
-        double totalPrice1 = 0;
-
-        for (DiscountedProducts products: HomePage.basketList2 ){
-            totalPrice1 +=products.getNumber() * products.getProductPrice();
-        }
-        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-        String formattedPrice = df.format(totalPrice1);
-        return Double.parseDouble(formattedPrice);
-    }
-
     public double getTotalPrice() {
         double totalPrice = 0;
-        for (DiscountedProducts product : HomePage.basketList2) {
-            for (AllProducts allProducts : HomePage.basketList){
-                totalPrice += (product.getNumber() * product.getProductPrice()) + (allProducts.getNumber() * allProducts.getProductPrice());
-            }
+        double totalPriceDiscounted = 0;
+        double total;
+
+        for (AllProducts products : HomePage.basketList){
+
+            totalPrice += products.getNumber() * products.getProductPrice();
+
         }
+
+        for(DiscountedProducts discountedProducts : HomePage.basketList2){
+
+            totalPriceDiscounted += discountedProducts.getNumber() * discountedProducts.getProductPrice();
+        }
+
+        total = totalPriceDiscounted + totalPrice;
+
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-        String formattedPrice = df.format(totalPrice);
+        String formattedPrice = df.format(total);
+        notifyDataSetChanged();
         return Double.parseDouble(formattedPrice);
     }
-
 
 
     @Override
