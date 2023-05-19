@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 //import com.example.e_commercial_application.SQL.MyDatabaseHelper;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProductDetails extends Fragment {
 
@@ -138,9 +140,27 @@ public class ProductDetails extends Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
-                fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
+//                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+//                fragmentTransaction.replace(R.id.containerFrame,new AllProductsFragment()).commit();
+
+                HomePage homePage = (HomePage) getActivity();
+                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                bottomNavigationView.setVisibility(View.VISIBLE);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack();
+                    Fragment lastFragment = fragmentManager.findFragmentById(R.id.containerFrame);
+
+                    if (lastFragment != null) {
+                        fragmentManager.beginTransaction().replace(R.id.containerFrame, lastFragment).addToBackStack(null).commit();
+                    }
+                } else {
+                    Intent intent = new Intent(getContext(), HomePage.class);
+                    startActivity(intent);
+                }
 
             }
         });
