@@ -93,16 +93,19 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
 
         holder.delete.setOnClickListener(view -> {
 
-            favDB.remove_fav(allProducts.getId());
+            int position1 = holder.getAdapterPosition();
+            AllProducts allProducts1 = favArrayList.get(position1);
+                allProducts1.setFavStatus("0");
+                favDB.remove_fav(allProducts1.getId());
 
-            for (int i = 0; i < HomePage.favList.size(); i++){
-                AllProducts allProducts1 = HomePage.favList.get(i);
-                if (allProducts1.getId().equals(allProducts1.getId())){
-                    HomePage.favList.remove(i);
-                    break;
+                for (int i = 0; i < HomePage.favList.size(); i++) {
+                    AllProducts favProduct = HomePage.favList.get(i);
+                    if (favProduct.getId().equals(allProducts1.getId())) {
+                        HomePage.favList.remove(i);
+                        break;
+                    }
                 }
-            }
-            notifyDataSetChanged();
+                notifyDataSetChanged();
 
 
         });

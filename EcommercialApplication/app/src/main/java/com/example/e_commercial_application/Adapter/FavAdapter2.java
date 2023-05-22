@@ -16,7 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.HomePage;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.ProductDetailsDiscounted;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
     private ArrayList<DiscountedProducts> favArrayList;
     Context context;
+    FavDBDiscounted favDBDiscounted;
 
     public FavAdapter2(ArrayList<DiscountedProducts> favArrayList, Context context){
         this.favArrayList = favArrayList;
@@ -46,6 +49,7 @@ public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
 
         DiscountedProducts discountedProducts = new DiscountedProducts();
         DiscountedProducts favItem = favArrayList.get(position);
+        favDBDiscounted = new FavDBDiscounted(context);
 
         holder.favProductName.setText(favItem.getProductName());
         holder.favProductPrice.setText(favItem.getProductPrice() + " $");
@@ -74,6 +78,25 @@ public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
 
 
         });
+
+        holder.deleteFav.setOnClickListener(view -> {
+
+            int position1 = holder.getAdapterPosition();
+            DiscountedProducts allProducts1 = favArrayList.get(position1);
+            allProducts1.setFavStatus("0");
+            favDBDiscounted.remove_fav(allProducts1.getId());
+
+            for (int i = 0; i < HomePage.favList2.size(); i++) {
+                DiscountedProducts favProduct = HomePage.favList2.get(i);
+                if (favProduct.getId().equals(allProducts1.getId())) {
+                    HomePage.favList2.remove(i);
+                    break;
+                }
+            }
+            notifyDataSetChanged();
+
+
+        });
     }
 
     @Override
@@ -83,7 +106,7 @@ public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView favProductImg;
+        ImageView favProductImg,deleteFav;
         TextView favProductName, favRate, favProductPrice, favOldProduct;
         RatingBar favRatingBar;
         public ViewHolder(@NonNull View itemView) {
@@ -94,6 +117,7 @@ public class FavAdapter2 extends RecyclerView.Adapter<FavAdapter2.ViewHolder> {
             favRate = itemView.findViewById(R.id.faveRating);
             favRatingBar = itemView.findViewById(R.id.favRatingBar);
             favOldProduct = itemView.findViewById(R.id.OldPrice);
+            deleteFav = itemView.findViewById(R.id.deleteFav);
         }
     }
 
