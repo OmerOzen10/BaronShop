@@ -1,4 +1,7 @@
 package com.example.e_commercial_application;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.auth.User;
 
 
 import jp.wasabeef.blurry.Blurry;
@@ -58,6 +62,8 @@ public class BasketFragment extends Fragment{
     TextInputLayout layoutName, layoutEmail, layoutCity, layoutTown, layoutAddress, layoutMobile;
     TextInputEditText edtName, edtEmail, edtCity, edtTown, edtAddress, edtMobile;
 
+    AlertDialog.Builder builder;
+
     private static final String TAG = "BasketFragment";
 
     public BasketFragment() {
@@ -79,7 +85,7 @@ public class BasketFragment extends Fragment{
         emptyConstraint = view.findViewById(R.id.emptyConstraint);
         buyConstraint = view.findViewById(R.id.buyConstraint);
         btnContinue = view.findViewById(R.id.btnContinue);
-
+        builder = new AlertDialog.Builder(getContext());
 
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -147,20 +153,31 @@ public class BasketFragment extends Fragment{
 
                     if (Correction()){
 
-                        orderDetails.setVisibility(View.GONE);
-                        overlay.setVisibility(View.GONE);
-                        basketRecyclerView.setVisibility(View.VISIBLE);
-                        basketRecyclerView.setEnabled(true);
-                        btnConfirmBasket.setEnabled(true);
-                        Blurry.delete((ViewGroup) rootView);
+                        builder.setTitle("Authentication").setMessage("Do you have an Account?").setCancelable(false).setPositiveButton("Yes", (dialogInterface, i) -> {
+                            Intent intent = new Intent(getContext(), UserFragment.class);
+                            startActivity(intent);
+                        }).setNegativeButton("No", (dialogInterface, i) -> {
 
-                        basketDB.deleteAllBasketItems();
-                        HomePage.basketList.clear();
-                        basketDBDiscounted.deleteAllBasketItems();
-                        HomePage.basketList2.clear();
-                        emptyConstraint.setVisibility(View.VISIBLE);
-                        backBasket.setEnabled(true);
-                        buyConstraint.setVisibility(View.GONE);
+                            orderDetails.setVisibility(View.GONE);
+                            overlay.setVisibility(View.GONE);
+                            basketRecyclerView.setVisibility(View.VISIBLE);
+                            basketRecyclerView.setEnabled(true);
+                            btnConfirmBasket.setEnabled(true);
+                            Blurry.delete((ViewGroup) rootView);
+
+                            basketDB.deleteAllBasketItems();
+                            HomePage.basketList.clear();
+                            basketDBDiscounted.deleteAllBasketItems();
+                            HomePage.basketList2.clear();
+                            emptyConstraint.setVisibility(View.VISIBLE);
+                            backBasket.setEnabled(true);
+                            buyConstraint.setVisibility(View.GONE);
+
+                        }).show();
+
+
+
+
                     }else {
                         Toast.makeText(getContext(), "Something Went Wrong!!", Toast.LENGTH_SHORT).show();
                     }
@@ -205,19 +222,6 @@ public class BasketFragment extends Fragment{
             BasketAdapter adapter1 = new BasketAdapter();
             double total = adapter1.getTotalPrice();
             totalPrice.setText((total + " $"));
-//            if (adapter.getItemCount() !=0 && adapter2.getItemCount() == 0 ){
-//                double total = adapter.getPrice();
-//                totalPrice.setText(total + " $");
-//            }
-//            if (adapter2.getItemCount() !=0 && adapter.getItemCount() == 0) {
-//                double total = adapter2.getPrice();
-//                totalPrice.setText(total + " $");
-//            }
-//
-//            if (adapter.getItemCount() != 0 && adapter2.getItemCount() !=0){
-//                double total = adapter.getTotalPrice();
-//                totalPrice.setText(total + " $");
-//            }
 
 
         }
@@ -228,6 +232,10 @@ public class BasketFragment extends Fragment{
             startActivity(intent);
         });
 
+
+    }
+
+    private void openDialog() {
 
     }
 
