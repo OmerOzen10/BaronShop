@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.HomePage;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.example.e_commercial_application.ProductDetailsDiscounted;
 import com.example.e_commercial_application.R;
@@ -75,6 +76,40 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
         holder.OldPrice.setText(discountedProducts.getOldPrice() + " $");
         Glide.with(context).load(discountedProducts.getProductImg()).into(holder.ProductImgDiscounted);
 
+
+
+        holder.favProductContainer.setOnClickListener(view -> {
+            DiscountedProducts discountedProducts1 = discountedProductsList.get(position);
+
+            if (discountedProducts1.getFavStatus() != null && discountedProducts1.getFavStatus().equals("0")){
+                discountedProducts1.setFavStatus("1");
+                favDBDiscounted.insertIntoTheDatabase(discountedProducts1.getProductName(),discountedProducts1.getProductImg(),discountedProducts1.getId(), discountedProducts1.getFavStatus(),String.valueOf(discountedProducts1.getProductRate()),String.valueOf(discountedProducts1.getProductPrice()),String.valueOf(discountedProducts1.getOldPrice()));
+                holder.favProductDiscounted.setBackgroundResource(R.drawable.ic_fav_red);
+
+                HomePage.favList.add(discountedProducts1);
+                Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+
+            } else {
+                discountedProducts1.setFavStatus("0");
+                favDBDiscounted.remove_fav(discountedProducts1.getId());
+                holder.favProductDiscounted.setBackgroundResource(R.drawable.baseline_fav);
+                for (int i = 0; i < HomePage.favList.size(); i++) {
+                    AllProducts favProduct = HomePage.favList.get(i);
+
+                    if (favProduct.getId().equals(discountedProductsList.get(position).getId())) {
+                        HomePage.favList.remove(i);
+                        break;
+                    }
+                }
+
+
+                Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+
+            }
+
+            Log.d(TAG, "ViewHolder: array" + HomePage.favList.size());
+
+        });
 
         holder.itemView.setOnClickListener(view -> {
 
@@ -139,35 +174,6 @@ public class DiscountedAdapter extends RecyclerView.Adapter<DiscountedAdapter.Vi
             OldPrice = itemView.findViewById(R.id.OldPrice);
             favProductDiscounted = itemView.findViewById(R.id.fav_Product);
             favProductContainer = itemView.findViewById(R.id.favProductContainer);
-
-            favProductContainer.setOnClickListener(view -> {
-                int position = getAdapterPosition();
-                DiscountedProducts discountedProducts = discountedProductsList.get(position);
-
-                if (discountedProducts.getFavStatus() != null && discountedProducts.getFavStatus().equals("0")){
-                    discountedProducts.setFavStatus("1");
-                    favDBDiscounted.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(), discountedProducts.getFavStatus(),String.valueOf(discountedProducts.getProductRate()),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()));
-                    favProductDiscounted.setBackgroundResource(R.drawable.ic_fav_red);
-
-                    HomePage.favList2.add(discountedProducts);
-                    Log.d(TAG, "onClick: favList" + HomePage.favList.size());
-
-                } else {
-                    discountedProducts.setFavStatus("0");
-                    favDBDiscounted.remove_fav(discountedProducts.getId());
-                    favProductDiscounted.setBackgroundResource(R.drawable.baseline_fav);
-                    for (int i = 0; i < HomePage.favList2.size(); i++) {
-                        DiscountedProducts favProduct = HomePage.favList2.get(i);
-                        if (favProduct.getId().equals(discountedProducts.getId())) {
-                            HomePage.favList2.remove(i);
-                            break;
-                        }
-                    }
-                    Log.d(TAG, "onClick: favList" + HomePage.favList2.size());
-
-                }
-
-            });
         }
 
         }

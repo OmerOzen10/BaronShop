@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.Model.DiscountedProducts;
@@ -164,14 +163,14 @@ public class ProductDetailsDiscounted extends Fragment {
                 discountedProducts.setFavStatus("1");
                 favDBDiscounted.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(),discountedProducts.getFavStatus(),String.valueOf(discountedProducts.getProductRate()),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()));
                 favIcon.setBackgroundResource(R.drawable.ic_fav_red);
-                HomePage.favList2.add(discountedProducts);
+                HomePage.favList.add(discountedProducts);
             } else if (discountedProducts.getFavStatus() !=null && discountedProducts.getFavStatus().equals("1")){
                 discountedProducts.setFavStatus("0");
                 favDBDiscounted.remove_fav(discountedProducts.getId());
-                for (int i = 0; i<HomePage.favList2.size(); i++){
-                    DiscountedProducts favProduct = HomePage.favList2.get(i);
+                for (int i = 0; i<HomePage.favList.size(); i++){
+                    DiscountedProducts favProduct = (DiscountedProducts) HomePage.favList.get(i);
                     if (favProduct.getId().equals(discountedProducts.getId())){
-                        HomePage.favList2.remove(i);
+                        HomePage.favList.remove(i);
                         break;
                     }
                 }

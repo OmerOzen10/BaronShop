@@ -108,7 +108,6 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
                 cursor.close();
             db.close();
         }
-
     }
 
 

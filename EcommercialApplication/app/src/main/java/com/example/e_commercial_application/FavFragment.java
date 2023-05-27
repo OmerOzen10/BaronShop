@@ -14,8 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.e_commercial_application.Adapter.FavAdapter;
-import com.example.e_commercial_application.Adapter.FavAdapter2;
+import com.example.e_commercial_application.Adapter.OmerOzenAdapter;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Model.AllProducts;
 
@@ -23,11 +22,8 @@ public class FavFragment extends Fragment {
 
     AllProducts allProducts;
     private RecyclerView favRecyclerView;
-    private RecyclerView favDiscRecyclerView;
-    private FavAdapter adapter;
-
-    private FavAdapter2 adapter2;
-    private ConstraintLayout emptyFavConstraint;
+    private static OmerOzenAdapter adapter;
+    private static ConstraintLayout emptyFavConstraint;
     private static final String TAG = "FavFragment";
     Button favAddBasket;
     BasketDB basketDB;
@@ -53,23 +49,37 @@ public class FavFragment extends Fragment {
         emptyFavConstraint = view.findViewById(R.id.emptyFav);
         basketDB = new BasketDB(getContext());
 
-        favRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new FavAdapter(HomePage.favList,getContext());
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        ((LinearLayoutManager) layoutManager).setOrientation(LinearLayoutManager.VERTICAL);
+        favRecyclerView.setLayoutManager(layoutManager);
+        adapter = new OmerOzenAdapter(HomePage.favList,getContext());
         favRecyclerView.setAdapter(adapter);
 
-        favDiscRecyclerView = view.findViewById(R.id.favDiscRecyclerView);
-        favDiscRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter2 = new FavAdapter2(HomePage.favList2,getContext());
-        favDiscRecyclerView.setAdapter(adapter2);
 
-
-        if (adapter.getItemCount() == 0 && adapter2.getItemCount() == 0){
+        if (adapter.getItemCount() == 0 ){
             emptyFavConstraint.setVisibility(View.VISIBLE);
         }else {
             emptyFavConstraint.setVisibility(View.GONE);
+//        }
         }
 
     }
+
+    public static void ifEmpty(){
+
+
+
+        if (adapter.getItemCount() == 0){
+            emptyFavConstraint.setVisibility(View.VISIBLE);
+        }else {
+            emptyFavConstraint.setVisibility(View.GONE);
+//        }
+        }
+    }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

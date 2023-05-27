@@ -22,9 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.HomePage;
-import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
-import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.ProductDetailsDiscounted;
 import com.example.e_commercial_application.R;
 
@@ -156,7 +154,7 @@ public class DiscountedAllAdapter extends RecyclerView.Adapter<DiscountedAllAdap
                     favDB.remove_fav(allProducts.getId());
                     favIcon.setBackgroundResource(R.drawable.baseline_fav);
                     for (int i = 0; i < HomePage.favList2.size(); i++) {
-                        DiscountedProducts favProduct = HomePage.favList2.get(i);
+                        DiscountedProducts favProduct = (DiscountedProducts) HomePage.favList2.get(i);
                         if (favProduct.getId().equals(allProducts.getId())) {
                             HomePage.favList2.remove(i);
                             break;

@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.HomePage;
-import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.ProductDetails;
 import com.example.e_commercial_application.R;
 //import com.example.e_commercial_application.SQL.MyDatabaseHelper;
@@ -77,6 +77,34 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
 
 
 
+        holder.favProductContainer.setOnClickListener(view -> {
+            AllProducts allProducts1 = allProductsList.get(position);
+
+            if (allProducts1.getFavStatus() != null && allProducts1.getFavStatus().equals("0")){
+                allProducts1.setFavStatus("1");
+                favDB.insertIntoTheDatabase(allProducts1.getProductName(),allProducts1.getProductImg(),allProducts1.getId(), allProducts1.getFavStatus(),String.valueOf(allProducts1.getProductRate()),String.valueOf(allProducts1.getProductPrice()));
+                holder.favProductNewSeason.setBackgroundResource(R.drawable.ic_fav_red);
+
+                HomePage.favList.add(allProducts1);
+                Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+
+            } else {
+                allProducts1.setFavStatus("0");
+                favDB.remove_fav(allProducts1.getId());
+                holder.favProductNewSeason.setBackgroundResource(R.drawable.baseline_fav);
+                for (int i = 0; i < HomePage.favList.size(); i++) {
+                    AllProducts favProduct = HomePage.favList.get(i);
+                    if (favProduct.getId().equals(allProducts1.getId())) {
+                        HomePage.favList.remove(i);
+                        break;
+                    }
+                }
+
+                Log.d(TAG, "onClick: favList" + HomePage.favList.size());
+
+            }
+
+        });
 
 
 
@@ -143,36 +171,6 @@ public NewSeasonAdapter(List<AllProducts> newSeasonList, Context context) {
             ProductPriceNewSeason = itemView.findViewById(R.id.ProductPrice);
             favProductNewSeason = itemView.findViewById(R.id.fav_Product);
             favProductContainer = itemView.findViewById(R.id.favProductContainer);
-
-            favProductContainer.setOnClickListener(view -> {
-                int position = getAdapterPosition();
-                AllProducts allProducts = allProductsList.get(position);
-
-                if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
-                    allProducts.setFavStatus("1");
-                    favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(), allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
-                    favProductNewSeason.setBackgroundResource(R.drawable.ic_fav_red);
-
-                    HomePage.favList.add(allProducts);
-                    Log.d(TAG, "onClick: favList" + HomePage.favList.size());
-
-                } else {
-                    allProducts.setFavStatus("0");
-                    favDB.remove_fav(allProducts.getId());
-                    favProductNewSeason.setBackgroundResource(R.drawable.baseline_fav);
-                    for (int i = 0; i < HomePage.favList.size(); i++) {
-                        AllProducts favProduct = HomePage.favList.get(i);
-                        if (favProduct.getId().equals(allProducts.getId())) {
-                            HomePage.favList.remove(i);
-                            break;
-                        }
-                    }
-
-                    Log.d(TAG, "onClick: favList" + HomePage.favList.size());
-
-                }
-
-            });
         }
 
 

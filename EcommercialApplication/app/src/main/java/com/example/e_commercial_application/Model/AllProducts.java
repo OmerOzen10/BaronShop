@@ -11,9 +11,7 @@ public class AllProducts implements Serializable {
     private String id;
     private String favStatus;
 
-    public AllProducts(){
-        // Empty no-arg constructor
-    }
+    public AllProducts(){}
 
     public void setProductName(String productName) {
         ProductName = productName;

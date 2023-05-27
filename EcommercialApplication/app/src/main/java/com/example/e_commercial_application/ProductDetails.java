@@ -23,9 +23,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.FavDB;
-import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
 //import com.example.e_commercial_application.SQL.MyDatabaseHelper;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -172,29 +172,26 @@ public class ProductDetails extends Fragment {
             favIcon.setBackgroundResource(R.drawable.ic_fav_red);
         }
 
-        favProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        favProduct.setOnClickListener(view1 -> {
 
-                if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
-                    allProducts.setFavStatus("1");
-                    favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
-                    favIcon.setBackgroundResource(R.drawable.ic_fav_red);
-                    HomePage.favList.add(allProducts);
-                } else if (allProducts.getFavStatus() !=null && allProducts.getFavStatus().equals("1")){
-                    allProducts.setFavStatus("0");
-                    favDB.remove_fav(allProducts.getId());
-                    for (int i = 0; i<HomePage.favList.size(); i++){
-                        AllProducts favProduct = HomePage.favList.get(i);
-                        if (favProduct.getId().equals(allProducts.getId())){
-                            HomePage.favList.remove(i);
-                            break;
-                        }
+            if (allProducts.getFavStatus() != null && allProducts.getFavStatus().equals("0")){
+                allProducts.setFavStatus("1");
+                favDB.insertIntoTheDatabase(allProducts.getProductName(),allProducts.getProductImg(),allProducts.getId(),allProducts.getFavStatus(),String.valueOf(allProducts.getProductRate()),String.valueOf(allProducts.getProductPrice()));
+                favIcon.setBackgroundResource(R.drawable.ic_fav_red);
+                HomePage.favList.add(allProducts);
+            } else if (allProducts.getFavStatus() !=null && allProducts.getFavStatus().equals("1")){
+                allProducts.setFavStatus("0");
+                favDB.remove_fav(allProducts.getId());
+                for (int i = 0; i<HomePage.favList.size(); i++){
+                    AllProducts favProduct = HomePage.favList.get(i);
+                    if (favProduct.getId().equals(allProducts.getId())){
+                        HomePage.favList.remove(i);
+                        break;
                     }
-                    favIcon.setBackgroundResource(R.drawable.baseline_fav);
                 }
-
+                favIcon.setBackgroundResource(R.drawable.baseline_fav);
             }
+
         });
 
     }

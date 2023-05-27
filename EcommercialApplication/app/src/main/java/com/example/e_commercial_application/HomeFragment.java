@@ -1,10 +1,5 @@
 package com.example.e_commercial_application;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,24 +18,18 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.example.e_commercial_application.Adapter.AllProductsAdapter;
 //import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
 import com.example.e_commercial_application.Adapter.DiscountedAdapter;
 import com.example.e_commercial_application.Adapter.NewSeasonAdapter;
-import com.example.e_commercial_application.Model.AllProducts;
 //import com.example.e_commercial_application.Model.NewSeason;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {

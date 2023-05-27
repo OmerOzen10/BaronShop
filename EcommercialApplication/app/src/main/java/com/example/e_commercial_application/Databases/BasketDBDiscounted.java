@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.e_commercial_application.Adapter.BasketAdapter;
-import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 
 import java.util.ArrayList;

@@ -16,9 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.e_commercial_application.Adapter.AllProductsAdapter;
 import com.example.e_commercial_application.Adapter.DiscountedAllAdapter;
-import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;

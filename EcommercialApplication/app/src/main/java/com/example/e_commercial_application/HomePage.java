@@ -23,6 +23,7 @@ public class HomePage extends AppCompatActivity {
     public static  ArrayList<DiscountedProducts> basketList2 = new ArrayList<>();
     public static ArrayList <AllProducts> favList = new ArrayList<>();
     public static ArrayList<DiscountedProducts> favList2 = new ArrayList<>();
+
     private FavDB favDB;
     private FavDBDiscounted favDBDiscounted;
     private BasketDB basketDB;
@@ -45,6 +46,9 @@ public class HomePage extends AppCompatActivity {
         basketDBDiscounted = new BasketDBDiscounted(this);
         HomePage.favList = (ArrayList<AllProducts>) favDB.getAllFavProducts();
         HomePage.favList2 = (ArrayList<DiscountedProducts>) favDBDiscounted.getAllFavProducts();
+
+        favList.addAll(favList2);
+
         HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
         HomePage.basketList2 = (ArrayList<DiscountedProducts>) basketDBDiscounted.getAllBasketProducts();
 
