@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.e_commercial_application.Adapter.OmerOzenAdapter;
+import com.example.e_commercial_application.Adapter.FavAdapter;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Model.AllProducts;
 
@@ -22,7 +22,7 @@ public class FavFragment extends Fragment {
 
     AllProducts allProducts;
     private RecyclerView favRecyclerView;
-    private static OmerOzenAdapter adapter;
+    private static FavAdapter adapter;
     private static ConstraintLayout emptyFavConstraint;
     private static final String TAG = "FavFragment";
     Button favAddBasket;
@@ -53,7 +53,7 @@ public class FavFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         ((LinearLayoutManager) layoutManager).setOrientation(LinearLayoutManager.VERTICAL);
         favRecyclerView.setLayoutManager(layoutManager);
-        adapter = new OmerOzenAdapter(HomePage.favList,getContext());
+        adapter = new FavAdapter(HomePage.favList,getContext());
         favRecyclerView.setAdapter(adapter);
 
 

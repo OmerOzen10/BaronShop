@@ -52,6 +52,8 @@ public class HomePage extends AppCompatActivity {
         HomePage.basketList = (ArrayList<AllProducts>) basketDB.getAllBasketProducts();
         HomePage.basketList2 = (ArrayList<DiscountedProducts>) basketDBDiscounted.getAllBasketProducts();
 
+        basketList.addAll(basketList2);
+
 
 
 

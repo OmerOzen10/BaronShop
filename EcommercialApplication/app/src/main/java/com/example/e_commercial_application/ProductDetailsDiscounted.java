@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
+import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -94,7 +95,7 @@ public class ProductDetailsDiscounted extends Fragment {
 
             int match = 0;
 
-            for (DiscountedProducts product : HomePage.basketList2) {
+            for (AllProducts product : HomePage.basketList) {
                 if (discountedProducts.getProductName().equals(product.getProductName())) {
                     int currentNumber = product.getNumber();
                     product.setNumber(++currentNumber);
@@ -108,7 +109,7 @@ public class ProductDetailsDiscounted extends Fragment {
             }
 
             if (match == 0) {
-                HomePage.basketList2.add(discountedProducts);
+                HomePage.basketList.add(discountedProducts);
 
                 basketDBDiscounted.insertIntoTheDatabase(discountedProducts.getProductName(),discountedProducts.getProductImg(),discountedProducts.getId(),String.valueOf(discountedProducts.getProductPrice()),String.valueOf(discountedProducts.getOldPrice()), String.valueOf(discountedProducts.getNumber()),String.valueOf(discountedProducts.getProductRate()),discountedProducts.getFavStatus());
 

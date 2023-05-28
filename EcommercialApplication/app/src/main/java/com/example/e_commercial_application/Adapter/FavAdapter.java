@@ -31,7 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OmerOzenAdapter  extends RecyclerView.Adapter{
+public class FavAdapter extends RecyclerView.Adapter{
 
     private static List<AllProducts> allProductsList = new ArrayList<>();
     Context context;
@@ -40,7 +40,7 @@ public class OmerOzenAdapter  extends RecyclerView.Adapter{
     BasketDB basketDB;
     FavDBDiscounted favDBDiscounted;
 
-    public OmerOzenAdapter(List<AllProducts> allProductsList, Context context) {
+    public FavAdapter(List<AllProducts> allProductsList, Context context) {
         this.allProductsList = allProductsList;
         this.context = context;
     }
