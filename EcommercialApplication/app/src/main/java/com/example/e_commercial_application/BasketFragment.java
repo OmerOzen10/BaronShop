@@ -23,9 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.e_commercial_application.Adapter.AHMAD;
 import com.example.e_commercial_application.Adapter.BasketAdapter;
-import com.example.e_commercial_application.Adapter.BasketDiscountedAdapter;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
@@ -41,13 +39,12 @@ public class BasketFragment extends Fragment{
     AllProducts allProducts;
     DiscountedProducts discountedProducts;
 
-    public RecyclerView basketRecyclerView;
-    public RecyclerView basketRecyclerViewDisc;
-//     BasketAdapter adapter;
-    AHMAD ahmad;
-    public BasketDiscountedAdapter adapter2;
-    private ConstraintLayout buyConstraint, emptyConstraint, rootView;
-    TextView totalPrice,priceBasket;
+    public static RecyclerView basketRecyclerView;
+
+    private static BasketAdapter adapter;
+
+    private static ConstraintLayout buyConstraint, emptyConstraint, rootView;
+    static TextView totalPrice,priceBasket;
     ImageView backBasket, backCard;
     Button btnContinue,btnConfirmBasket, btnConfirm;
     View overlay;
@@ -88,18 +85,8 @@ public class BasketFragment extends Fragment{
         basketRecyclerView = view.findViewById(R.id.SelectedProducts);
         basketRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        ahmad = new AHMAD(getContext(),HomePage.basketList,totalPrice);
-        basketRecyclerView.setAdapter(ahmad);
-
-//        adapter = new BasketAdapter(HomePage.basketList, getContext(), totalPrice);
-////        new ItemTouchHelper(adapter.simpleCallback).attachToRecyclerView(basketRecyclerView);
-//        basketRecyclerView.setAdapter(adapter);
-
-//        basketRecyclerViewDisc = view.findViewById(R.id.SelectedProductsDisc);
-//        basketRecyclerViewDisc.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        adapter2 = new BasketDiscountedAdapter(HomePage.basketList2,getContext(),totalPrice);
-//        basketRecyclerViewDisc.setAdapter(adapter2);
-
+        adapter = new BasketAdapter(getContext(),HomePage.basketList,totalPrice);
+        basketRecyclerView.setAdapter(adapter);
 
         priceBasket = view.findViewById(R.id.priceBasket);
         backBasket = view.findViewById(R.id.backBasket);
@@ -214,19 +201,19 @@ public class BasketFragment extends Fragment{
         });
 
 
-//        if (adapter2.getItemCount()==0) {
-//            buyConstraint.setVisibility(View.GONE);
-//            emptyConstraint.setVisibility(View.VISIBLE);
-//            basketRecyclerView.setVisibility(View.GONE);
-//        } else {
-//            buyConstraint.setVisibility(View.VISIBLE);
-//
-//            BasketAdapter adapter1 = new BasketAdapter();
-//            double total = adapter1.getTotalPrice();
-//            totalPrice.setText((total + " $"));
-//
-//
-//        }
+        if (adapter.getItemCount()==0) {
+            buyConstraint.setVisibility(View.GONE);
+            emptyConstraint.setVisibility(View.VISIBLE);
+            basketRecyclerView.setVisibility(View.GONE);
+        } else {
+            buyConstraint.setVisibility(View.VISIBLE);
+
+            BasketAdapter adapter = new BasketAdapter();
+            double total = adapter.getTotalPrice();
+            totalPrice.setText((total + " $"));
+
+
+        }
         Log.d(TAG, "onViewCreated: total "  +  totalPrice.getText().toString());
 
         btnContinue.setOnClickListener(view1 -> {
@@ -237,8 +224,20 @@ public class BasketFragment extends Fragment{
 
     }
 
-    private void openDialog() {
+    public static void ifEmpty(){
+        if (adapter.getItemCount()==0) {
+            buyConstraint.setVisibility(View.GONE);
+            emptyConstraint.setVisibility(View.VISIBLE);
+            basketRecyclerView.setVisibility(View.GONE);
+        } else {
+            buyConstraint.setVisibility(View.VISIBLE);
 
+            BasketAdapter adapter = new BasketAdapter();
+            double total = adapter.getTotalPrice();
+            totalPrice.setText((total + " $"));
+
+
+        }
     }
 
     private boolean Correction(){

@@ -1,8 +1,6 @@
 package com.example.e_commercial_application.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,86 +19,216 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.e_commercial_application.BasketFragment;
 import com.example.e_commercial_application.Databases.BasketDB;
+import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.HomePage;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
 import com.example.e_commercial_application.ProductDetails;
+import com.example.e_commercial_application.ProductDetailsDiscounted;
 import com.example.e_commercial_application.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
+public class BasketAdapter extends RecyclerView.Adapter {
 
-    public ArrayList<AllProducts>basketArrayList;
-    private AllProducts allProducts;
+    private static List<AllProducts> allProductsList = new ArrayList<>();
     Context context;
-    private static final String TAG = "BasketAdapter";
-    TextView totalPrice;
     BasketDB basketDB;
+    BasketDBDiscounted basketDBDiscounted;
 
+    DiscountedProducts discountedProducts;
+    AllProducts allProducts;
+    TextView totalPrice;
 
-    public BasketAdapter(ArrayList<AllProducts> basketArrayList, Context context, TextView totalPrice) {
-        this.basketArrayList = basketArrayList;
+    public BasketAdapter(Context context, ArrayList<AllProducts> allProductsList, TextView totalPrice) {
         this.context = context;
+        this.allProductsList = allProductsList;
         this.totalPrice = totalPrice;
     }
     public BasketAdapter(){}
 
+    @Override
+    public int getItemViewType(int position) {
+        return (allProductsList.get(position) instanceof DiscountedProducts) ? 1 : 2;
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        basketDB = new BasketDB(context);
-        SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
-        boolean firstStart = prefs.getBoolean("firstStart",true);
-        if (firstStart){
-            createTableOnFirstStart();
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType){
+            case 1:
+                View DiscountedLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout_discounted,parent,false);
+                return new DiscountedViewHolder(DiscountedLayout);
+            case 2:
+                View AllProductLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout,parent,false);
+                return new AllProductViewHolder(AllProductLayout);
+            default:return null;
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_basket_layout, parent, false);
-        return new ViewHolder(view);
     }
-    private void createTableOnFirstStart() {
-        basketDB.insertEmpty();
-        SharedPreferences prefs = context.getSharedPreferences("prefs",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("firstStart", false);
-        editor.apply();
-    }
-    @SuppressLint("SetTextI18n")
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        allProducts = new AllProducts();
-        AllProducts basketItem = basketArrayList.get(position);
-        readCursorData(allProducts,holder);
-        holder.basketProductName.setText(basketItem.getProductName());
-        holder.basketProductPrice.setText(basketItem.getProductPrice() + " $");
-        holder.itemPiece.setText(basketItem.getNumber() + "");
-        Glide.with(context).load(basketItem.getProductImg()).into(holder.basketImg);
+        basketDB = new BasketDB(context);
+        basketDBDiscounted = new BasketDBDiscounted(context);
 
-        AllProducts allProducts = basketArrayList.get(holder.getAdapterPosition());
 
-        int quantity = allProducts.getNumber();
-        double amount = allProducts.getProductPrice();
-        DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
+        if (allProductsList.get(position) instanceof DiscountedProducts){
 
-        double total = Double.parseDouble(df1.format(quantity*amount).replace(",", "."));
-        holder.basketProductPrice.setText((total + " $"));
 
-        holder.decreaseItem.setOnClickListener(view -> {
-            if (allProducts.getNumber() > 1) {
-                int quantity1 = allProducts.getNumber() - 1;
+            discountedProducts = new DiscountedProducts();
+            DiscountedProducts basketItem =(DiscountedProducts) allProductsList.get(position);
+            readCursorDataDiscounted(discountedProducts, (DiscountedViewHolder) holder);
+            ((DiscountedViewHolder)holder).basketProductName.setText(basketItem.getProductName());
+            ((DiscountedViewHolder)holder).basketProductPrice.setText(basketItem.getProductPrice() + " $");
+
+            ((DiscountedViewHolder)holder).oldPrice.setText(basketItem.getOldPrice() + " $");
+            ((DiscountedViewHolder)holder).itemPiece.setText(basketItem.getNumber() + "");
+            Glide.with(context).load(basketItem.getProductImg()).into(((DiscountedViewHolder)holder).basketImg);
+
+            AllProducts products = allProductsList.get(holder.getAdapterPosition());
+
+            int quantity = products.getNumber();
+            double amount = products.getProductPrice();
+            DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.getDefault(Locale.Category.FORMAT)));
+            DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
+
+            double total = Double.parseDouble(df1.format(quantity*amount).replace(",", "."));
+            ((DiscountedViewHolder)holder).basketProductPrice.setText((total + " $"));
+
+            ((DiscountedViewHolder)holder).decreaseItem.setOnClickListener(view -> {
+                if (products.getNumber() > 1) {
+                    int quantity1 = products.getNumber() - 1;
+                    products.setNumber(quantity1);
+                    ((DiscountedViewHolder)holder).itemPiece.setText(String.valueOf(products.getNumber()));
+                    double amount1 = products.getProductPrice();
+                    double totalAmount = Double.parseDouble(((DiscountedViewHolder)holder).basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
+                    double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
+                    ((DiscountedViewHolder)holder).basketProductPrice.setText(String.format("%.2f $", total1));
+
+
+                    DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+
+                    String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                    totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
+                    basketDBDiscounted.updateQuantity(products.getId(), quantity1);
+                }
+            });
+
+            ((DiscountedViewHolder)holder).increaseItem.setOnClickListener(view -> {
+                int quantity1 = products.getNumber() + 1;
+                products.setNumber(quantity1);
+                ((DiscountedViewHolder)holder).itemPiece.setText(String.valueOf(quantity1));
+                double amount12 = products.getProductPrice();
+                double total12 = Double.parseDouble(df1.format(quantity1 * amount12));
+
+                ((DiscountedViewHolder)holder).basketProductPrice.setText(String.format("%.2f $", total12));
+
+                DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+
+                String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
+                basketDBDiscounted.updateQuantity(products.getId(), quantity1);
+            });
+
+            ((DiscountedViewHolder)holder).itemView.setOnClickListener(view -> {
+
+                HomePage homePage = (HomePage) context;
+                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                bottomNavigationView.setVisibility(View.GONE);
+
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("productDiscounted",allProductsList.get(holder.getAdapterPosition()));
+                ProductDetailsDiscounted productDetails3 = new ProductDetailsDiscounted();
+                productDetails3.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
+
+            });
+
+
+            ((DiscountedViewHolder)holder).delete.setOnClickListener(view -> {
+
+                basketDBDiscounted.deleteBasketItem(products.getId());
+
+                for (int i = 0; i < HomePage.basketList.size(); i++) {
+                    AllProducts basketProduct = HomePage.basketList.get(i);
+                    if (basketProduct.getId().equals(products.getId())) {
+                        HomePage.basketList.remove(i);
+                        break;
+                    }
+                }
+
+                BasketFragment.ifEmpty();
+
+
+                notifyDataSetChanged();
+                DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+                String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+            });
+
+
+        }
+
+        else {
+
+
+            allProducts = new AllProducts();
+            AllProducts basketItem = allProductsList.get(position);
+            readCursorData(allProducts, (AllProductViewHolder) holder);
+            ((AllProductViewHolder)holder).basketProductName.setText(basketItem.getProductName());
+            ((AllProductViewHolder)holder).basketProductPrice.setText(basketItem.getProductPrice() + " $");
+            ((AllProductViewHolder)holder).itemPiece.setText(basketItem.getNumber() + "");
+            Glide.with(context).load(basketItem.getProductImg()).into(((AllProductViewHolder)holder).basketImg);
+
+            AllProducts allProducts = allProductsList.get(holder.getAdapterPosition());
+
+            int quantity = allProducts.getNumber();
+            double amount = allProducts.getProductPrice();
+            DecimalFormat df1 = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.ENGLISH));
+
+            double total = Double.parseDouble(df1.format(quantity*amount).replace(",", "."));
+            ((AllProductViewHolder)holder).basketProductPrice.setText((total + " $"));
+
+            ((AllProductViewHolder)holder).decreaseItem.setOnClickListener(view -> {
+                if (allProducts.getNumber() > 1) {
+                    int quantity1 = allProducts.getNumber() - 1;
+                    allProducts.setNumber(quantity1);
+                    ((AllProductViewHolder)holder).itemPiece.setText(String.valueOf(allProducts.getNumber()));
+                    double amount1 = allProducts.getProductPrice();
+                    double totalAmount = Double.parseDouble(((AllProductViewHolder)holder).basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
+                    double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
+                    ((AllProductViewHolder)holder).basketProductPrice.setText(String.format("%.2f $", total1));
+
+
+                    DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+
+                    String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                    totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+
+                    basketDB.updateQuantity(allProducts.getId(), quantity1);
+                }
+            });
+
+            ((AllProductViewHolder)holder).increaseItem.setOnClickListener(view -> {
+                int quantity1 = allProducts.getNumber() + 1;
                 allProducts.setNumber(quantity1);
-                holder.itemPiece.setText(String.valueOf(allProducts.getNumber()));
-                double amount1 = allProducts.getProductPrice();
-                double totalAmount = Double.parseDouble(holder.basketProductPrice.getText().toString().replace("$", "").replace(",", "."));
-                double total1 = Double.parseDouble(df1.format(totalAmount - amount1));
-                holder.basketProductPrice.setText(String.format("%.2f $", total1));
+                ((AllProductViewHolder)holder).itemPiece.setText(String.valueOf(quantity1));
+                double amount12 = allProducts.getProductPrice();
+                double total12 = Double.parseDouble(df1.format(quantity1 * amount12));
 
+                ((AllProductViewHolder)holder).basketProductPrice.setText(String.format("%.2f $", total12));
 
                 DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
 
@@ -108,98 +236,91 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
 
                 basketDB.updateQuantity(allProducts.getId(), quantity1);
-            }
-        });
+            });
 
-        holder.increaseItem.setOnClickListener(view -> {
-            int quantity1 = allProducts.getNumber() + 1;
-            allProducts.setNumber(quantity1);
-            holder.itemPiece.setText(String.valueOf(quantity1));
-            double amount12 = allProducts.getProductPrice();
-            double total12 = Double.parseDouble(df1.format(quantity1 * amount12));
+            ((AllProductViewHolder)holder).itemView.setOnClickListener(view -> {
 
-            holder.basketProductPrice.setText(String.format("%.2f $", total12));
+                HomePage homePage = (HomePage) context;
+                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                bottomNavigationView.setVisibility(View.GONE);
 
-            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-
-            String formattedTotalPrice = dfTotal.format(getTotalPrice());
-            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
-
-            basketDB.updateQuantity(allProducts.getId(), quantity1);
-        });
-
-        holder.itemView.setOnClickListener(view -> {
-
-            HomePage homePage = (HomePage) context;
-            NewSeasonAdapter adapter = new NewSeasonAdapter(basketArrayList,homePage);
-
-            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-            bottomNavigationView.setVisibility(View.GONE);
-
-            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("productName",basketArrayList.get(holder.getAdapterPosition()));
-            ProductDetails productDetails3 = new ProductDetails();
-            productDetails3.setArguments(bundle);
-            fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("productName",allProductsList.get(holder.getAdapterPosition()));
+                ProductDetails productDetails3 = new ProductDetails();
+                productDetails3.setArguments(bundle);
+                fragmentTransaction.replace(R.id.containerFrame,productDetails3).commit();
 
 
 
 
-        });
+            });
 
 
 
-        holder.delete.setOnClickListener(view -> {
+            ((AllProductViewHolder)holder).delete.setOnClickListener(view -> {
 
-            basketDB.deleteBasketItem(allProducts.getId());
+                basketDB.deleteBasketItem(allProducts.getId());
 
-            for (int i = 0; i < HomePage.basketList.size(); i++) {
-                AllProducts basketProduct = HomePage.basketList.get(i);
-                if (basketProduct.getId().equals(allProducts.getId())) {
-                    HomePage.basketList.remove(i);
-                    break;
+                for (int i = 0; i < HomePage.basketList.size(); i++) {
+                    AllProducts basketProduct = HomePage.basketList.get(i);
+                    if (basketProduct.getId().equals(allProducts.getId())) {
+                        HomePage.basketList.remove(i);
+                        break;
+                    }
                 }
-            }
+                BasketFragment.ifEmpty();
 
-            notifyDataSetChanged();
-            DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-            String formattedTotalPrice = dfTotal.format(getTotalPrice());
-            totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
+                notifyDataSetChanged();
+                DecimalFormat dfTotal = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+                String formattedTotalPrice = dfTotal.format(getTotalPrice());
+                totalPrice.setText(String.format(Locale.ENGLISH, "%s $", formattedTotalPrice));
 
-        });
+            });
+
+
+        }
 
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    private void readCursorData(AllProducts allProducts, BasketAdapter.ViewHolder viewHolder) {
+    private void readCursorData(AllProducts allProducts, BasketAdapter.AllProductViewHolder viewHolder) {
 
         Cursor cursor = basketDB.read_all_data(allProducts.getId());
         SQLiteDatabase db = basketDB.getReadableDatabase();
-            if (cursor!=null && cursor.isClosed())
-                cursor.close();
-            db.close();
+        if (cursor!=null && cursor.isClosed())
+            cursor.close();
+        db.close();
 
     }
 
+
+    private void readCursorDataDiscounted(DiscountedProducts products, BasketAdapter.DiscountedViewHolder viewHolder) {
+
+        Cursor cursor = basketDBDiscounted.read_all_data(products.getId());
+        SQLiteDatabase db = basketDBDiscounted.getReadableDatabase();
+        if (cursor!=null && cursor.isClosed())
+            cursor.close();
+        db.close();
+
+    }
     public double getTotalPrice() {
         double totalPrice = 0;
         double totalPriceDiscounted = 0;
         double total;
 
-       for (AllProducts products : HomePage.basketList){
+        for (AllProducts products : HomePage.basketList){
 
-           totalPrice += products.getNumber() * products.getProductPrice();
+            totalPrice += products.getNumber() * products.getProductPrice();
 
-       }
-
-        for(DiscountedProducts discountedProducts : HomePage.basketList2){
-
-                    totalPriceDiscounted += discountedProducts.getNumber() * discountedProducts.getProductPrice();
         }
 
-         total = totalPriceDiscounted + totalPrice;
+//        for(DiscountedProducts discountedProducts : HomePage.basketList2){
+//
+//            totalPriceDiscounted += discountedProducts.getNumber() * discountedProducts.getProductPrice();
+//        }
+
+        total = totalPrice;
 
         DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.ENGLISH));
         String formattedPrice = df.format(total);
@@ -208,13 +329,43 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     }
 
 
-
     @Override
     public int getItemCount() {
-        return basketArrayList.size();
+        return allProductsList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class DiscountedViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView basketImg, increaseItem, decreaseItem, delete;
+        TextView basketProductName;
+        TextView basketProductPrice,totalPrice,oldPrice;
+        ConstraintLayout buyConstraint, emptyConstraint, constraintLayout2;
+        Button btnContinue;
+        public TextView itemPiece;
+        RecyclerView SelectedProducts;
+
+        public DiscountedViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            basketImg = itemView.findViewById(R.id.basketImg);
+            basketProductName = itemView.findViewById(R.id.basketProductName);
+            basketProductPrice = itemView.findViewById(R.id.priceBasket);
+            itemPiece = itemView.findViewById(R.id.itemPiece);
+            increaseItem = itemView.findViewById(R.id.increaseItem);
+            decreaseItem = itemView.findViewById(R.id.decreaseItem);
+            buyConstraint = itemView.findViewById(R.id.buyConstraint);
+            emptyConstraint = itemView.findViewById(R.id.emptyConstraint);
+            btnContinue = itemView.findViewById(R.id.btnContinue);
+            totalPrice = itemView.findViewById(R.id.totalPrice);
+            constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
+            SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
+            oldPrice = itemView.findViewById(R.id.OldPriceBasket);
+            delete = itemView.findViewById(R.id.delete);
+        }
+    }
+
+    public static class AllProductViewHolder extends RecyclerView.ViewHolder{
+
         ImageView basketImg, increaseItem, decreaseItem, delete;
         TextView basketProductName;
         TextView basketProductPrice,totalPrice;
@@ -223,8 +374,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         public TextView itemPiece;
         RecyclerView SelectedProducts;
 
-
-        public ViewHolder(@NonNull View itemView) {
+        public AllProductViewHolder(@NonNull View itemView) {
             super(itemView);
 
             basketImg = itemView.findViewById(R.id.basketImg);
@@ -240,9 +390,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             constraintLayout2 = itemView.findViewById(R.id.constraintLayout2);
             SelectedProducts = itemView.findViewById(R.id.SelectedProducts);
             delete = itemView.findViewById(R.id.delete);
-
-
-
         }
     }
+
+
 }
