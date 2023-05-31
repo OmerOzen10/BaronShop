@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -143,8 +144,12 @@ public class BasketFragment extends Fragment{
                     if (Correction()){
 
                         builder.setTitle("Authentication").setMessage("Do you have an Account?").setCancelable(false).setPositiveButton("Yes", (dialogInterface, i) -> {
-                            Intent intent = new Intent(getContext(), UserFragment.class);
-                            startActivity(intent);
+                            UserFragment userFragment = new UserFragment();
+                            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.containerFrame, userFragment); // Replace "fragment_container" with the actual ID of your fragment container in the layout
+                            transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
+                            transaction.commit();
+
                         }).setNegativeButton("No", (dialogInterface, i) -> {
 
                             orderDetails.setVisibility(View.GONE);
