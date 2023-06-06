@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -81,6 +82,10 @@ public class UserFragment extends Fragment {
         });
 
         txtRegister.setOnClickListener(view1 -> {
+            HomePage homePage = (HomePage) getActivity();
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
             RegisterFragment registerFragment = new RegisterFragment();
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.containerFrame, registerFragment); // Replace "fragment_container" with the actual ID of your fragment container in the layout

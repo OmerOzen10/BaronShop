@@ -5,7 +5,16 @@
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/regular1</item>
+
+
     </style>
+
+    <!-- styles.xml -->
+    <style name="CustomProgressBarStyle" parent="@android:style/Widget.ProgressBar">
+        <!-- Add your custom modifications here -->
+    </style>
+
+
 
 </resources>
 

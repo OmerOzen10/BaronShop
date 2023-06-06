@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/white" /> <!-- Set your desired color -->
-    <corners android:radius="30dp" /> <!-- Set a large radius to create a circle -->
+    <corners android:radius="60dp" /> <!-- Set a large radius to create a circle -->
 </shape>

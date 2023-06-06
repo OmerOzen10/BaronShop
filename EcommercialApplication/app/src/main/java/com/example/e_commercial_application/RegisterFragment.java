@@ -1,64 +1,226 @@
 package com.example.e_commercial_application;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.e_commercial_application.Model.UserDetails;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegisterFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextInputLayout layoutFullName, layoutEmail,layoutDOB, layoutMobile,layoutPassword;
+    private TextInputEditText edtFullName, edtEmail, edtDOB, edtMobile, edtPassword;
+    private Button btnRegister;
+    private DatePickerDialog picker;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth auth;
+    private ProgressBar progressBar;
+    private static final String TAG = "RegisterFragment";
 
     public RegisterFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegisterFragment newInstance(String param1, String param2) {
-        RegisterFragment fragment = new RegisterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        layoutFullName = view.findViewById(R.id.layoutName);
+        layoutEmail = view.findViewById(R.id.layoutEmail);
+        layoutDOB = view.findViewById(R.id.layoutDob);
+        layoutMobile = view.findViewById(R.id.layoutMobile);
+        layoutPassword = view.findViewById(R.id.layoutPassword);
+
+        edtFullName = view.findViewById(R.id.edtName);
+        edtEmail = view.findViewById(R.id.edtEmail);
+        edtDOB = view.findViewById(R.id.edtDob);
+        edtMobile = view.findViewById(R.id.edtMobile);
+        edtPassword = view.findViewById(R.id.edtPassword);
+
+        btnRegister = view.findViewById(R.id.btnRegister);
+
+        progressBar = view.findViewById(R.id.progressBar);
+
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+
+
+        edtDOB.setOnClickListener(view1 -> {
+            final Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+
+            picker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int dayOdMonth) {
+                    edtDOB.setText(dayOdMonth + "/" + (month+1) + "/" + year);
+                }
+            },year,month,day);
+            picker.show();
+        });
+
+        btnRegister.setOnClickListener(view1 -> {
+            
+            String name = edtFullName.getText().toString();
+            String email = edtEmail.getText().toString();
+            String dob = edtDOB.getText().toString();
+            String mobile = edtMobile.getText().toString();
+            String password = edtPassword.getText().toString();
+
+            Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).+$");
+            Matcher matcher = pattern.matcher(password);
+            
+            if (name.isEmpty()){
+                Toast.makeText(getContext(), "Please enter your full name", Toast.LENGTH_SHORT).show();
+                layoutFullName.setError("Full Name is required");
+                edtFullName.requestFocus();
+            } else if (email.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter your e-mail", Toast.LENGTH_SHORT).show();
+                layoutEmail.setError("E-mail is required");
+                edtEmail.requestFocus();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(getContext(), "Please re-enter your e-mail", Toast.LENGTH_SHORT).show();
+                layoutEmail.setError("Invalid E-mail");
+                edtEmail.requestFocus();
+            } else if (dob.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter your Date of Birth", Toast.LENGTH_SHORT).show();
+                layoutDOB.setError("Date of Birth is required");
+                edtDOB.requestFocus();
+            } else if (mobile.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter your mobile number", Toast.LENGTH_SHORT).show();
+                layoutMobile.setError("Mobile number is required");
+                edtMobile.requestFocus();
+            } else if (mobile.length()!=9) {
+                Toast.makeText(getContext(), "Please re-enter your mobile number", Toast.LENGTH_SHORT).show();
+                layoutMobile.setError("Mobile number should be 9 digit");
+                edtMobile.requestFocus();
+            } else if (password.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
+                layoutPassword.setError("Password is required");
+                edtPassword.requestFocus();
+            } else if (password.length()<6) {
+                Toast.makeText(getContext(), "Please re-enter your password", Toast.LENGTH_SHORT).show();
+                layoutPassword.setError("Password is too weak(at least 7 character)");
+                edtPassword.requestFocus();
+            } else if (!matcher.matches()) {
+                Toast.makeText(getContext(), "Please re-enter your password", Toast.LENGTH_SHORT).show();
+                layoutPassword.setError("Password is too weak(at least 1 lower case, 1 upper case and 1 special character)");
+                edtPassword.requestFocus();
+            }else {
+                progressBar.setVisibility(View.VISIBLE);
+                registerUser(name,email,dob,mobile,password);
+            }
+
+
+        });
     }
+
+    private void registerUser(String name, String email, String dob, String mobile, String password) {
+
+        auth = FirebaseAuth.getInstance();
+
+        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    firebaseUser = auth.getCurrentUser();
+
+                    UserDetails userDetails = new UserDetails(name, dob, mobile);
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
+
+                    databaseReference.child(firebaseUser.getUid()).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+
+                                firebaseUser.sendEmailVerification();
+
+                                edtFullName.setText("");
+                                edtEmail.setText("");
+                                edtDOB.setText("");
+                                edtMobile.setText("");
+
+                                HomePage homePage = (HomePage) getActivity();
+                                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                                bottomNavigationView.setVisibility(View.GONE);
+
+                                UserProfile userProfile = new UserProfile();
+                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
+                                transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
+                                transaction.commit();
+                            } else {
+                                Toast.makeText(getContext(), "User registration failed", Toast.LENGTH_SHORT).show();
+                            }
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+                } else {
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthWeakPasswordException e) {
+                        layoutPassword.setError("At least 1 Uppercase, 1 Lowercase and 1 Special Character");
+                        edtPassword.requestFocus();
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        layoutEmail.setError("Invalid Email");
+                        edtEmail.requestFocus();
+                    } catch (FirebaseAuthUserCollisionException e) {
+                        layoutEmail.setError("User is already registered with this email");
+                        edtEmail.requestFocus();
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 }
