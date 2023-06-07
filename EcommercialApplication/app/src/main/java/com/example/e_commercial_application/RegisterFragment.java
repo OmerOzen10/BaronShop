@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
 
 public class RegisterFragment extends Fragment {
 
-    private TextInputLayout layoutFullName, layoutEmail,layoutDOB, layoutMobile,layoutPassword;
-    private TextInputEditText edtFullName, edtEmail, edtDOB, edtMobile, edtPassword;
+    private TextInputLayout layoutFullName, layoutEmail,layoutDOB, layoutMobile,layoutPassword,layoutAddress;
+    private TextInputEditText edtFullName, edtEmail, edtDOB, edtMobile, edtPassword,edtAddress;
     private Button btnRegister;
     private DatePickerDialog picker;
     private FirebaseUser firebaseUser;
@@ -61,12 +61,14 @@ public class RegisterFragment extends Fragment {
         layoutDOB = view.findViewById(R.id.layoutDob);
         layoutMobile = view.findViewById(R.id.layoutMobile);
         layoutPassword = view.findViewById(R.id.layoutPassword);
+        layoutAddress = view.findViewById(R.id.layoutAddress);
 
         edtFullName = view.findViewById(R.id.edtName);
         edtEmail = view.findViewById(R.id.edtEmail);
         edtDOB = view.findViewById(R.id.edtDob);
         edtMobile = view.findViewById(R.id.edtMobile);
         edtPassword = view.findViewById(R.id.edtPassword);
+        edtAddress = view.findViewById(R.id.edtAddress);
 
         btnRegister = view.findViewById(R.id.btnRegister);
 
@@ -82,12 +84,7 @@ public class RegisterFragment extends Fragment {
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
 
-            picker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int dayOdMonth) {
-                    edtDOB.setText(dayOdMonth + "/" + (month+1) + "/" + year);
-                }
-            },year,month,day);
+            picker = new DatePickerDialog(getContext(), (datePicker, year1, month1, dayOdMonth) -> edtDOB.setText(dayOdMonth + "/" + (month1 +1) + "/" + year1),year,month,day);
             picker.show();
         });
 
@@ -98,6 +95,7 @@ public class RegisterFragment extends Fragment {
             String dob = edtDOB.getText().toString();
             String mobile = edtMobile.getText().toString();
             String password = edtPassword.getText().toString();
+            String address = edtAddress.getText().toString();
 
             Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).+$");
             Matcher matcher = pattern.matcher(password);
@@ -138,16 +136,20 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(getContext(), "Please re-enter your password", Toast.LENGTH_SHORT).show();
                 layoutPassword.setError("Password is too weak(at least 1 lower case, 1 upper case and 1 special character)");
                 edtPassword.requestFocus();
+            }else if (address.isEmpty()){
+                Toast.makeText(getContext(), "Please enter your Address", Toast.LENGTH_SHORT).show();
+                layoutAddress.setError("Address is required");
+                edtAddress.requestFocus();
             }else {
                 progressBar.setVisibility(View.VISIBLE);
-                registerUser(name,email,dob,mobile,password);
+                registerUser(name,email,dob,mobile,password,address);
             }
 
 
         });
     }
 
-    private void registerUser(String name, String email, String dob, String mobile, String password) {
+    private void registerUser(String name, String email, String dob, String mobile, String password,String address) {
 
         auth = FirebaseAuth.getInstance();
 
@@ -157,7 +159,7 @@ public class RegisterFragment extends Fragment {
                 if (task.isSuccessful()) {
                     firebaseUser = auth.getCurrentUser();
 
-                    UserDetails userDetails = new UserDetails(name, dob, mobile);
+                    UserDetails userDetails = new UserDetails(name, dob, mobile,address);
 
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
 
@@ -173,6 +175,7 @@ public class RegisterFragment extends Fragment {
                                 edtEmail.setText("");
                                 edtDOB.setText("");
                                 edtMobile.setText("");
+                                edtAddress.setText("");
 
                                 HomePage homePage = (HomePage) getActivity();
                                 BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);

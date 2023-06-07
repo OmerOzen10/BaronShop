@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Objects;
 
@@ -106,7 +107,7 @@ public class UserFragment extends Fragment {
                     if (firebaseUser.isEmailVerified()){
                         Toast.makeText(getContext(), "You are logged in", Toast.LENGTH_SHORT).show();
 
-                        ProfileFragment profileFragment = new ProfileFragment();
+                        UserProfile profileFragment = new UserProfile();
 
                         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.containerFrame, profileFragment); // Replace "fragment_container" with the actual ID of your fragment container in the layout
@@ -172,9 +173,9 @@ public class UserFragment extends Fragment {
         super.onStart();
         if (auth.getCurrentUser() != null){
             Toast.makeText(getContext(), "Already Logged In", Toast.LENGTH_SHORT).show();
-            ProfileFragment profileFragment = new ProfileFragment();
+            UserProfile userProfile = new UserProfile();
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.containerFrame, profileFragment); // Replace "fragment_container" with the actual ID of your fragment container in the layout
+            transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
             transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
             transaction.commit();
         }else {
