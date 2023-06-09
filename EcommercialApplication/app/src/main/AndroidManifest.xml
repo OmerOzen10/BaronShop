@@ -26,8 +26,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.e_commercial_application.UserFragment" />
+        <activity android:name="com.example.e_commercial_application.UserFragment"
+            tools:ignore="Instantiatable" />
+
+
+
 
     </application>
+
 
 </manifest>
