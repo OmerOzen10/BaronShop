@@ -106,8 +106,7 @@ public class RegisterFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference("ProfilePictures");
 
         cardViewPP.setOnClickListener(view1 -> {
-//            openFileChooser();
-            showPictureDialog();
+            openFileChooser();
         });
 
 
@@ -184,13 +183,13 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(getContext(), "Please re-enter your password", Toast.LENGTH_SHORT).show();
                 layoutPassword.setError("Password is too weak(at least 1 lower case, 1 upper case and 1 special character)");
                 edtPassword.requestFocus();
-            }else if (address.isEmpty()){
+            }else if (address.isEmpty()) {
                 Toast.makeText(getContext(), "Please enter your Address", Toast.LENGTH_SHORT).show();
                 layoutAddress.setError("Address is required");
                 edtAddress.requestFocus();
-//            else if (uriImage==null){
-//                img.requestFocus();
-//                Toast.makeText(getContext(), "No File Selected", Toast.LENGTH_SHORT).show();
+            }else if (uriImage==null){
+                img.requestFocus();
+                Toast.makeText(getContext(), "No File Selected", Toast.LENGTH_SHORT).show();
             }else {
                 progressBar.setVisibility(View.VISIBLE);
                 registerUser(name,email,dob,mobile,password,address);
@@ -200,118 +199,18 @@ public class RegisterFragment extends Fragment {
         });
     }
 
-    private void showPictureDialog(){
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getContext());
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera" };
-        pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                choosePhotoFromGallary();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
-                        }
-                    }
-                });
-        pictureDialog.show();
-    }
-    public void choosePhotoFromGallary() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(galleryIntent, GALLERY);
-    }
-
-    private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA);
-    }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == getActivity().RESULT_CANCELED) {
-            return;
-        }
-        if (requestCode == GALLERY) {
-            if (data != null) {
-                Uri contentURI = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
-                    Toast.makeText(getContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
-
-                    // Set the ImageView dimensions
-                    ViewGroup.LayoutParams layoutParams = img.getLayoutParams();
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    img.setLayoutParams(layoutParams);
-
-                    img.setImageBitmap(bitmap);
-                    img.setImageTintList(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
-                }
-            }
-    } else if (requestCode == CAMERA) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-
-            ViewGroup.LayoutParams layoutParams = img.getLayoutParams();
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            img.setLayoutParams(layoutParams);
-            img.setImageTintList(null);
-            img.setImageBitmap(thumbnail);
-            saveImage(thumbnail);
-            Toast.makeText(getContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public String saveImage(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
-        }
-
-        try {
-            File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            MediaScannerConnection.scanFile(getContext(),
-                    new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
-            fo.close();
-
-            return f.getAbsolutePath();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return "";
-    }
-
-
-//    private void openFileChooser() {
 //
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent,PICK_IMAGE_REQUEST);
-//    }
+
+
+    private void openFileChooser() {
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,PICK_IMAGE_REQUEST);
+    }
 
     private void registerUser(String name, String email, String dob, String mobile, String password,String address) {
 
@@ -321,6 +220,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
                     firebaseUser = auth.getCurrentUser();
 
                     UserDetails userDetails = new UserDetails(name, dob, mobile,address);
@@ -340,10 +240,7 @@ public class RegisterFragment extends Fragment {
                                 edtDOB.setText("");
                                 edtMobile.setText("");
                                 edtAddress.setText("");
-
-//                                UploadPic();
-                                // TODO: 9.06.2023 Load the selected img to firebase database....!
-
+                                UploadPic();
                                 HomePage homePage = (HomePage) getActivity();
                                 BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
                                 bottomNavigationView.setVisibility(View.GONE);
@@ -383,54 +280,54 @@ public class RegisterFragment extends Fragment {
 
         }
 
-//    private void UploadPic() {
-//
-//        if (uriImage !=null){
-//            StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension((uriImage)));
-//
-//            fileReference.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                        @Override
-//                        public void onSuccess(Uri uri) {
-//                            Uri downloadUri = uri;
-//                            firebaseUser = auth.getCurrentUser();
-//                            if (firebaseUser !=null){
-//                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
-//                                firebaseUser.updateProfile(profileUpdates);
-//                            }
-//                        }
-//                    });
-//
-//
-//                    progressBar.setVisibility(View.GONE);
-//
-//                    Toast.makeText(getContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-//                    UserProfile userProfile = new UserProfile();
-//                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
-//                    transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
-//                    transaction.commit();
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-//        }else {
-//            progressBar.setVisibility(View.GONE);
-//            Toast.makeText(getContext(), "No File was Selected!", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    private void UploadPic() {
 
-//    private String getFileExtension(Uri uri){
-//        ContentResolver cR = requireActivity().getContentResolver();
-//        MimeTypeMap mime = MimeTypeMap.getSingleton();
-//        return mime.getExtensionFromMimeType(cR.getType(uri));
-//    }
+        if (uriImage !=null){
+            StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension((uriImage)));
+
+            fileReference.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Uri downloadUri = uri;
+                            firebaseUser = auth.getCurrentUser();
+                            if (firebaseUser !=null){
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
+                                firebaseUser.updateProfile(profileUpdates);
+                            }
+                        }
+                    });
+
+
+                    progressBar.setVisibility(View.GONE);
+
+                    Toast.makeText(getContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+                    UserProfile userProfile = new UserProfile();
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
+                    transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
+                    transaction.commit();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }else {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "No File was Selected!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = requireActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -443,18 +340,24 @@ public class RegisterFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null){
-//
-//            uriImage = data.getData();
-//            Log.d("Image URI", uriImage.toString()); // Log the URI to check its value
-//
-//            img.setImageURI(uriImage);
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null){
+
+            uriImage = data.getData();
+            Log.d("Image URI", uriImage.toString()); // Log the URI to check its value
+
+            img.setImageURI(uriImage);
+
+            img.setImageTintList(null);
+            ViewGroup.LayoutParams layoutParams = img.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            img.setLayoutParams(layoutParams);
+        }
+    }
 
 
 

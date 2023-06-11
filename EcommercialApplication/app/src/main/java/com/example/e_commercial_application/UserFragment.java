@@ -172,7 +172,6 @@ public class UserFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (auth.getCurrentUser() != null){
-            Toast.makeText(getContext(), "Already Logged In", Toast.LENGTH_SHORT).show();
             UserProfile userProfile = new UserProfile();
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout

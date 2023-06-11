@@ -4,6 +4,8 @@ public class UserDetails {
 
     public String name,dob,mobile,address;
 
+    UserDetails(){}
+
     public UserDetails(String name, String dob, String mobile, String address) {
         this.name = name;
         this.dob = dob;
