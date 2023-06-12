@@ -1,5 +1,6 @@
 package com.example.e_commercial_application;
 
+import android.animation.LayoutTransition;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,13 +9,27 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,13 +50,18 @@ import java.util.Objects;
 
 public class UserProfile extends Fragment {
 
-    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress;
+    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtOmer,txtUpdate,txtLogOut,txtChangePass;
     private ProgressBar progressBar3;
     private String name,email,dob,mobile,address;
-    private ImageView imagePP;
+    private ImageView imagePP,settings;
+    CardView cardViewSetting,cardViewElevation;
+    LinearLayout linear;
     private FirebaseAuth auth;
+
+    View omerDivider, updateDivider,logOutDivider;
     String TAG = "UserProfile";
     private AlertDialog verificationDialog;
+    int elevation;
 
 
     @Override
@@ -55,6 +75,17 @@ public class UserProfile extends Fragment {
         txtMobile = view.findViewById(R.id.txtMobile);
         txtAddress = view.findViewById(R.id.txtAddress);
         imagePP = view.findViewById(R.id.imageP);
+        settings = view.findViewById(R.id.settings);
+        cardViewSetting = view.findViewById(R.id.cardSettings);
+        linear = view.findViewById(R.id.linear);
+        txtOmer = view.findViewById(R.id.txtOmer);
+        txtUpdate = view.findViewById(R.id.txtUpdate);
+        txtLogOut = view.findViewById(R.id.txtLogOut);
+        txtChangePass = view.findViewById(R.id.txtChangePass);
+        omerDivider = view.findViewById(R.id.omerDivider);
+        updateDivider = view.findViewById(R.id.updateEDivider);
+        logOutDivider = view.findViewById(R.id.LogOutDivider);
+
 
 
         auth = FirebaseAuth.getInstance();
@@ -66,6 +97,49 @@ public class UserProfile extends Fragment {
             checkEmailVerified(user);
             showUserData(user);
         }
+
+        linear.setLayoutTransition(new LayoutTransition());
+        linear.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGE_APPEARING);
+        linear.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+
+        cardViewSetting.setOnClickListener(view1 -> {
+            int v = (txtOmer.getVisibility() == View.GONE && txtUpdate.getVisibility() == View.GONE
+                    && txtChangePass.getVisibility() == View.GONE &&
+                    txtLogOut.getVisibility() == View.GONE
+                    && omerDivider.getVisibility() == View.GONE
+                    && updateDivider.getVisibility() == View.GONE
+                    && logOutDivider.getVisibility() == View.GONE)? View.VISIBLE : View.GONE;
+
+            TransitionSet transitionSet = new TransitionSet();
+            transitionSet.addTransition(new ChangeBounds());
+            transitionSet.addTransition(new ChangeTransform());
+            transitionSet.setInterpolator(new DecelerateInterpolator());
+            transitionSet.setDuration(400); //
+            TransitionManager.beginDelayedTransition(linear, transitionSet);
+
+            if (txtOmer.getVisibility() != View.VISIBLE) {
+                new Handler().postDelayed(() -> {
+                    cardViewSetting.setCardElevation(60f);
+                    cardViewSetting.setRadius(20f);
+                }, 100);
+            } else {
+                cardViewSetting.setCardElevation(0f);
+                cardViewSetting.setRadius(0f);
+            }
+
+            txtOmer.setVisibility(v);
+            txtUpdate.setVisibility(v);
+            txtChangePass.setVisibility(v);
+            txtLogOut.setVisibility(v);
+            omerDivider.setVisibility(v);
+            updateDivider.setVisibility(v);
+            logOutDivider.setVisibility(v);
+        });
+
+
+
+
+
 
     }
 
