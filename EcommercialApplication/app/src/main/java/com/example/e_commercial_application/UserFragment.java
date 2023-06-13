@@ -104,22 +104,21 @@ public class UserFragment extends Fragment {
 
                     FirebaseUser firebaseUser = auth.getCurrentUser();
 
-                    if (firebaseUser.isEmailVerified()){
+
                         Toast.makeText(getContext(), "You are logged in", Toast.LENGTH_SHORT).show();
 
                         UserProfile profileFragment = new UserProfile();
 
                         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.containerFrame, profileFragment); // Replace "fragment_container" with the actual ID of your fragment container in the layout
-                        transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
+                        transaction.replace(R.id.containerFrame, profileFragment);
+                        transaction.addToBackStack(null);
                         transaction.commit();
-                    }else {
-                        firebaseUser.sendEmailVerification();
-                        auth.signOut();
-                        showAlertDialog();
-                    }
 
-                    Log.d(TAG, "onComplete: email " + firebaseUser.isEmailVerified());
+
+
+
+
+
 
                 }else {
                     try {
@@ -138,22 +137,6 @@ public class UserFragment extends Fragment {
                 }
         });
 
-    }
-
-    private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Email Not Verified");
-        builder.setMessage("Please verify your email now. You can not login without email verification");
-
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_APP_EMAIL);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

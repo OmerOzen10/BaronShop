@@ -81,8 +81,8 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:visibility="visible"
-                app:cardElevation="60dp"
-                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -109,14 +109,13 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/txtOmer"
+                            android:id="@+id/txtUpdateProfile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regular1"
                             android:text="Update Profile"
                             android:textColor="@color/black"
-
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/settings" />
@@ -129,36 +128,10 @@
                                     android:layout_marginTop="10dp"
                                     android:layout_marginEnd="10dp"
                                     android:background="#B3B3B3"
-                                    android:visibility="visible"
+                                    android:visibility="gone"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/txtOmer" />
-
-                                <TextView
-                                    android:id="@+id/txtUpdate"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:fontFamily="@font/regular1"
-                                    android:text="Update Email"
-                                    android:textColor="@color/black"
-                                    android:visibility="visible"
-                                    app:layout_constraintEnd_toEndOf="@+id/txtOmer"
-                                    app:layout_constraintStart_toStartOf="@+id/txtOmer"
-                                    app:layout_constraintTop_toBottomOf="@id/omerDivider" />
-
-                                <View
-                                    android:id="@+id/updateEDivider"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="10dp"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:background="#B3B3B3"
-                                    android:visibility="visible"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/txtUpdate" />
+                                    app:layout_constraintTop_toBottomOf="@+id/txtUpdateProfile" />
 
                                 <TextView
                                     android:id="@+id/txtLogOut"
@@ -168,10 +141,10 @@
                                     android:fontFamily="@font/regular1"
                                     android:text="Log Out"
                                     android:textColor="@color/black"
-                                    android:visibility="visible"
-                                    app:layout_constraintEnd_toEndOf="@+id/txtUpdate"
-                                    app:layout_constraintStart_toStartOf="@+id/txtUpdate"
-                                    app:layout_constraintTop_toBottomOf="@+id/updateEDivider" />
+                                    android:visibility="gone"
+                                    app:layout_constraintEnd_toEndOf="@+id/txtUpdateProfile"
+                                    app:layout_constraintStart_toStartOf="@+id/txtUpdateProfile"
+                                    app:layout_constraintTop_toBottomOf="@+id/omerDivider" />
 
                                 <View
                                     android:id="@+id/LogOutDivider"
@@ -181,7 +154,7 @@
                                     android:layout_marginTop="10dp"
                                     android:layout_marginEnd="10dp"
                                     android:background="#B3B3B3"
-                                    android:visibility="visible"
+                                    android:visibility="gone"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/txtLogOut" />
@@ -194,7 +167,7 @@
                                     android:fontFamily="@font/regular1"
                                     android:text="Change Password"
                                     android:textColor="@color/black"
-                                    android:visibility="visible"
+                                    android:visibility="gone"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -396,10 +369,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewPP"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:backgroundTint="@color/white"
-        app:cardCornerRadius="60dp"
+        app:cardCornerRadius="80dp"
         app:cardElevation="50dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView8"
 

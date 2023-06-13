@@ -1,19 +1,32 @@
 package com.example.e_commercial_application;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Databases.BasketDB;
 import com.example.e_commercial_application.Databases.BasketDBDiscounted;
 import com.example.e_commercial_application.Databases.FavDB;
 import com.example.e_commercial_application.Databases.FavDBDiscounted;
 import com.example.e_commercial_application.Model.AllProducts;
 import com.example.e_commercial_application.Model.DiscountedProducts;
+import com.example.e_commercial_application.Model.UserDetails;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,10 +37,13 @@ public class HomePage extends AppCompatActivity {
     public static ArrayList <AllProducts> favList = new ArrayList<>();
     public static ArrayList<DiscountedProducts> favList2 = new ArrayList<>();
 
+    public static UserDetails currentUser;
     private FavDB favDB;
     private FavDBDiscounted favDBDiscounted;
     private BasketDB basketDB;
     private BasketDBDiscounted basketDBDiscounted;
+    private FirebaseAuth auth;
+
 
 
 
@@ -36,6 +52,8 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, new HomeFragment()).commit();
+
+        loadUserData();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnItemSelectedListener(navListener);
@@ -73,12 +91,6 @@ public class HomePage extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-    public ArrayList<AllProducts> getBasketArrayList() {
-        return basketList;
-    }
-
-
     private final NavigationBarView.OnItemSelectedListener navListener =
             item -> {
                 Fragment selectedFragment = null;
@@ -104,20 +116,38 @@ public class HomePage extends AppCompatActivity {
                 return true;
             };
 
-    private int getSelectedItem(Fragment fragment) {
-        if (fragment instanceof HomeFragment) {
-            return R.id.nav_home;
-        } else if (fragment instanceof BasketFragment) {
-            return R.id.nav_basket;
-        } else if (fragment instanceof FavFragment) {
-            return R.id.nav_fav;
-        } else if (fragment instanceof UserFragment) {
-            return R.id.nav_user;
-        }
-        return 0;
+
+
+    private void loadUserData() {
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        String userID = user.getUid();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserDetails userDetails = snapshot.getValue(UserDetails.class);
+
+                if (userDetails !=null){
+                    String name = userDetails.name;
+                    String dob = userDetails.dob;
+                    String mobile = userDetails.mobile;
+                    String address = userDetails.address;
+
+                    currentUser = new UserDetails(name, dob, mobile, address);
+                }else {
+                    Toast.makeText(HomePage.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(HomePage.this, "Something went wrong!!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-
 
 
 }

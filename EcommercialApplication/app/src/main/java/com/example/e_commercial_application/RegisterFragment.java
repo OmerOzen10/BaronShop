@@ -80,9 +80,6 @@ public class RegisterFragment extends Fragment {
     private FirebaseAuth auth;
     private ProgressBar progressBar;
 
-    private static final String IMAGE_DIRECTORY = "/encoded_image";
-    private static final int GALLERY = 1, CAMERA = 2;
-
     private static final String TAG = "RegisterFragment";
 
     public RegisterFragment() {
@@ -200,10 +197,6 @@ public class RegisterFragment extends Fragment {
     }
 
 
-
-//
-
-
     private void openFileChooser() {
 
         Intent intent = new Intent();
@@ -216,65 +209,52 @@ public class RegisterFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
 
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    firebaseUser = auth.getCurrentUser();
+        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(requireActivity(), task -> {
+            if (task.isSuccessful()) {
 
-                    UserDetails userDetails = new UserDetails(name, dob, mobile,address);
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
+                progressBar.setVisibility(View.GONE);
+                firebaseUser = auth.getCurrentUser();
 
-                    databaseReference.child(firebaseUser.getUid()).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
+                UserDetails userDetails = new UserDetails(name, dob, mobile,address);
 
-                                firebaseUser.sendEmailVerification();
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
 
-                                edtFullName.setText("");
-                                edtEmail.setText("");
-                                edtDOB.setText("");
-                                edtMobile.setText("");
-                                edtAddress.setText("");
-                                UploadPic();
-                                HomePage homePage = (HomePage) getActivity();
-                                BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-                                bottomNavigationView.setVisibility(View.GONE);
+                databaseReference.child(firebaseUser.getUid()).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "User registered successfully", Toast.LENGTH_SHORT).show();
 
-                                UserProfile userProfile = new UserProfile();
-                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
-                                transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
-                                transaction.commit();
-                            } else {
-                                Toast.makeText(getContext(), "User registration failed", Toast.LENGTH_SHORT).show();
-                            }
-                            progressBar.setVisibility(View.GONE);
+
+
+                            UploadPic();
+
+
+                        } else {
+                            Toast.makeText(getContext(), "User registration failed", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                } else {
-                    try {
-                        throw task.getException();
-                    } catch (FirebaseAuthWeakPasswordException e) {
-                        layoutPassword.setError("At least 1 Uppercase, 1 Lowercase and 1 Special Character");
-                        edtPassword.requestFocus();
-                    } catch (FirebaseAuthInvalidCredentialsException e) {
-                        layoutEmail.setError("Invalid Email");
-                        edtEmail.requestFocus();
-                    } catch (FirebaseAuthUserCollisionException e) {
-                        layoutEmail.setError("User is already registered with this email");
-                        edtEmail.requestFocus();
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
 
-                    progressBar.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                try {
+                    throw task.getException();
+                } catch (FirebaseAuthWeakPasswordException e) {
+                    layoutPassword.setError("At least 1 Uppercase, 1 Lowercase and 1 Special Character");
+                    edtPassword.requestFocus();
+                } catch (FirebaseAuthInvalidCredentialsException e) {
+                    layoutEmail.setError("Invalid Email");
+                    edtEmail.requestFocus();
+                } catch (FirebaseAuthUserCollisionException e) {
+                    layoutEmail.setError("User is already registered with this email");
+                    edtEmail.requestFocus();
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -285,37 +265,23 @@ public class RegisterFragment extends Fragment {
         if (uriImage !=null){
             StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension((uriImage)));
 
-            fileReference.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Uri downloadUri = uri;
-                            firebaseUser = auth.getCurrentUser();
-                            if (firebaseUser !=null){
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
-                                firebaseUser.updateProfile(profileUpdates);
-                            }
-                        }
+            fileReference.putFile(uriImage).addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                Uri downloadUri = uri;
+                firebaseUser = auth.getCurrentUser();
+                if (firebaseUser !=null){
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
+                    firebaseUser.updateProfile(profileUpdates).addOnSuccessListener(unused -> {
+                        progressBar.setVisibility(View.GONE);
+                        HomePage homePage = (HomePage) getActivity();
+                        BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                        bottomNavigationView.setVisibility(View.VISIBLE);
+                        UserProfile userProfile = new UserProfile();
+                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.containerFrame, userProfile);
+                        transaction.commit();
                     });
-
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Toast.makeText(getContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-                    UserProfile userProfile = new UserProfile();
-                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.containerFrame, userProfile); // Replace "fragment_container" with the actual ID of your fragment container in the layout
-                    transaction.addToBackStack(null); // Optional, to add the transaction to the back stack
-                    transaction.commit();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            })).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
 
         }else {
             progressBar.setVisibility(View.GONE);
