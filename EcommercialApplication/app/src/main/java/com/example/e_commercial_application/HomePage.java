@@ -122,32 +122,36 @@ public class HomePage extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
 
-        String userID = user.getUid();
+        if (user != null) {
+            String userID = user.getUid();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserDetails userDetails = snapshot.getValue(UserDetails.class);
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
+            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                        if (userDetails != null) {
+                            String name = userDetails.getName();
+                            String dob = userDetails.getDob();
+                            String mobile = userDetails.getMobile();
+                            String address = userDetails.getAddress();
 
-                if (userDetails !=null){
-                    String name = userDetails.name;
-                    String dob = userDetails.dob;
-                    String mobile = userDetails.mobile;
-                    String address = userDetails.address;
-
-                    currentUser = new UserDetails(name, dob, mobile, address);
-                }else {
-                    Toast.makeText(HomePage.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                            currentUser = new UserDetails(name, dob, mobile, address);
+                        }
+                    } else {
+                        Toast.makeText(HomePage.this, "User data not found!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(HomePage.this, "Something went wrong!!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(HomePage.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(HomePage.this, "No user logged in!", Toast.LENGTH_SHORT).show();
+        }
     }
-
-
 }
+
