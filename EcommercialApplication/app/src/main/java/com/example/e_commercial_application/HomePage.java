@@ -118,15 +118,17 @@ public class HomePage extends AppCompatActivity {
 
 
 
-    private void loadUserData() {
+    public void loadUserData() {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
+
+        currentUser = null;
 
         if (user != null) {
             String userID = user.getUid();
 
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
-            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            reference.child(userID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {

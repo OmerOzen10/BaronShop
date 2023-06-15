@@ -1,7 +1,9 @@
 package com.example.e_commercial_application;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,10 +21,12 @@ import android.transition.ChangeBounds;
 import android.transition.ChangeTransform;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,28 +37,39 @@ import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Model.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class UserProfile extends Fragment {
 
-    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtOmer,txtLogOut,txtChangePass;
+    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtOmer,txtLogOut,txtChangePass,txtUpdateProfile;
     private ProgressBar progressBar3;
-    private String name,email,dob,mobile,address;
     private ImageView imagePP,settings;
-    CardView cardViewSetting,cardViewElevation;
+
+    private String name, email, dob, mobile,address;
+    CardView cardViewSetting;
     LinearLayout linear;
     private FirebaseAuth auth;
+    private StorageReference storageReference;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri uriImage;
 
-    View omerDivider, updateDivider,logOutDivider;
+    private FirebaseUser firebaseUser;
+
+
+    View omerDivider,logOutDivider;
     String TAG = "UserProfile";
-    private AlertDialog verificationDialog;
-    int elevation;
 
 
     @Override
@@ -80,12 +95,12 @@ public class UserProfile extends Fragment {
 
 
         auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
+        firebaseUser = auth.getCurrentUser();
 
-        if (user == null){
+        if (firebaseUser == null){
             Toast.makeText(getContext(), "Something went wrong! User's details are not available at the moment.", Toast.LENGTH_SHORT).show();
         }else {
-            showUserData(user);
+            showUserData(firebaseUser);
         }
 
         linear.setLayoutTransition(new LayoutTransition());
@@ -133,6 +148,22 @@ public class UserProfile extends Fragment {
             }
         });
 
+        storageReference = FirebaseStorage.getInstance().getReference("ProfilePictures");
+
+//        Uri uri  = firebaseUser.getPhotoUrl();
+//        Picasso.get().load(uri).into(imagePP);
+
+        imagePP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFileChooser();
+
+                UploadPic();
+            }
+        });
+
+
+
 
 
 
@@ -140,21 +171,137 @@ public class UserProfile extends Fragment {
 
     }
 
-    private void showUserData(FirebaseUser user) {
-                    txtWelcome.setText("Welcome, " + HomePage.currentUser.getName() + "!");
-                    txtEmail.setText(user.getEmail());
-                    txtDOB.setText(HomePage.currentUser.getDob());
-                    txtMobile.setText(HomePage.currentUser.getMobile());
-                    txtAddress.setText(HomePage.currentUser.getAddress());
-                    txtName.setText(HomePage.currentUser.getName());
+    private void openFileChooser() {
 
-                    Uri uri = user.getPhotoUrl();
-                    Glide.with(requireActivity()).load(uri).into(imagePP);
-                    imagePP.setImageTintList(null);
-                    ViewGroup.LayoutParams layoutParams = imagePP.getLayoutParams();
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    imagePP.setLayoutParams(layoutParams);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,PICK_IMAGE_REQUEST);
+    }
+    private void UploadPic() {
+
+        if (uriImage !=null){
+            StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension((uriImage)));
+
+            fileReference.putFile(uriImage).addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                Uri downloadUri = uri;
+                firebaseUser = auth.getCurrentUser();
+                if (firebaseUser !=null){
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
+                    firebaseUser.updateProfile(profileUpdates).addOnSuccessListener(unused -> {
+//                        progressBar.setVisibility(View.GONE);
+                        HomePage homePage = (HomePage) getActivity();
+                        BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+                        bottomNavigationView.setVisibility(View.VISIBLE);
+                        UserProfile userProfile = new UserProfile();
+                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.containerFrame, userProfile);
+                        transaction.commit();
+                    });
+                }
+            })).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        }else {
+//            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "No File was Selected!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = requireActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null){
+
+            uriImage = data.getData();
+            Log.d("Image URI", uriImage.toString()); // Log the URI to check its value
+
+            imagePP.setImageURI(uriImage);
+
+            imagePP.setImageTintList(null);
+            ViewGroup.LayoutParams layoutParams = imagePP.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            imagePP.setLayoutParams(layoutParams);
+        }
+    }
+
+
+
+    private void showUserData(FirebaseUser user) {
+
+        if (HomePage.currentUser != null){
+            String userID = firebaseUser.getUid();
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
+            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                    if (userDetails !=null){
+                        name = userDetails.getName();
+                        email = firebaseUser.getEmail();
+                        dob = userDetails.getDob();
+                        mobile = userDetails.getMobile();
+                        address = userDetails.getAddress();
+
+                        txtWelcome.setText("Welcome, " + name + "!");
+                        txtName.setText(name);
+                        txtEmail.setText(email);
+                        txtDOB.setText(dob);
+                        txtMobile.setText(mobile);
+                        txtAddress.setText(address);
+
+                        Uri uri = user.getPhotoUrl();
+                        Glide.with(requireActivity()).load(uri).into(imagePP);
+                        imagePP.setImageTintList(null);
+                        ViewGroup.LayoutParams layoutParams = imagePP.getLayoutParams();
+                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        imagePP.setLayoutParams(layoutParams);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }else {
+
+                txtWelcome.setText("Welcome, " + HomePage.currentUser.getName() + "!");
+                txtEmail.setText(user.getEmail());
+                txtDOB.setText(HomePage.currentUser.getDob());
+                txtMobile.setText(HomePage.currentUser.getMobile());
+                txtAddress.setText(HomePage.currentUser.getAddress());
+                txtName.setText(HomePage.currentUser.getName());
+
+                Log.d(TAG, "showUserData: buneaq" + HomePage.currentUser.getName());
+
+                Uri uri = user.getPhotoUrl();
+                Glide.with(requireActivity()).load(uri).into(imagePP);
+                imagePP.setImageTintList(null);
+                ViewGroup.LayoutParams layoutParams = imagePP.getLayoutParams();
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                imagePP.setLayoutParams(layoutParams);
+
+                UserFragment userFragment = new UserFragment();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.containerFrame, userFragment);
+                transaction.commit();
+
+        }
+
+
+
+
+
 
 
     }

@@ -190,6 +190,7 @@ public class RegisterFragment extends Fragment {
             }else {
                 progressBar.setVisibility(View.VISIBLE);
                 registerUser(name,email,dob,mobile,password,address);
+
             }
 
 
@@ -271,6 +272,7 @@ public class RegisterFragment extends Fragment {
                 if (firebaseUser !=null){
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
                     firebaseUser.updateProfile(profileUpdates).addOnSuccessListener(unused -> {
+                        Toast.makeText(getContext(), "Profile image Uploaded", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                         HomePage homePage = (HomePage) getActivity();
                         BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
@@ -279,6 +281,7 @@ public class RegisterFragment extends Fragment {
                         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.containerFrame, userProfile);
                         transaction.commit();
+
                     });
                 }
             })).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
