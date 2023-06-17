@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.e_commercial_application.Model.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,11 +51,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 public class UserProfile extends Fragment {
 
-    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtOmer,txtLogOut,txtChangePass,txtUpdateProfile;
+    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtLogOut,txtChangePass,txtUpdateProfile;
     private ProgressBar progressBar3;
     private ImageView imagePP,settings;
 
@@ -86,7 +89,7 @@ public class UserProfile extends Fragment {
         settings = view.findViewById(R.id.settings);
         cardViewSetting = view.findViewById(R.id.cardSettings);
         linear = view.findViewById(R.id.linear);
-        txtOmer = view.findViewById(R.id.txtUpdateProfile);
+        txtUpdateProfile = view.findViewById(R.id.txtUpdateProfile);
         txtLogOut = view.findViewById(R.id.txtLogOut);
         txtChangePass = view.findViewById(R.id.txtChangePass);
         omerDivider = view.findViewById(R.id.omerDivider);
@@ -108,7 +111,7 @@ public class UserProfile extends Fragment {
         linear.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
 
         cardViewSetting.setOnClickListener(view1 -> {
-            int v = (txtOmer.getVisibility() == View.GONE
+            int v = (txtUpdateProfile.getVisibility() == View.GONE
                     && txtChangePass.getVisibility() == View.GONE &&
                     txtLogOut.getVisibility() == View.GONE
                     && omerDivider.getVisibility() == View.GONE
@@ -121,7 +124,7 @@ public class UserProfile extends Fragment {
             transitionSet.setDuration(400); //
             TransitionManager.beginDelayedTransition(linear, transitionSet);
 
-            if (txtOmer.getVisibility() != View.VISIBLE) {
+            if (txtUpdateProfile.getVisibility() != View.VISIBLE) {
                 new Handler().postDelayed(() -> {
                     cardViewSetting.setCardElevation(60f);
                     cardViewSetting.setRadius(20f);
@@ -131,35 +134,33 @@ public class UserProfile extends Fragment {
                 cardViewSetting.setRadius(0f);
             }
 
-            txtOmer.setVisibility(v);
+            txtUpdateProfile.setVisibility(v);
             txtChangePass.setVisibility(v);
             txtLogOut.setVisibility(v);
             omerDivider.setVisibility(v);
             logOutDivider.setVisibility(v);
         });
 
-        txtLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                auth.signOut();
-                FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
-                fragmentTransaction.replace(R.id.containerFrame, new UserFragment()).addToBackStack(null).commit();
-            }
+        txtLogOut.setOnClickListener(view12 -> {
+            auth.signOut();
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            fragmentTransaction.replace(R.id.containerFrame, new UserFragment()).commit();
         });
 
         storageReference = FirebaseStorage.getInstance().getReference("ProfilePictures");
 
-//        Uri uri  = firebaseUser.getPhotoUrl();
-//        Picasso.get().load(uri).into(imagePP);
+        imagePP.setOnClickListener(view13 -> openFileChooser());
 
-        imagePP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFileChooser();
+        txtUpdateProfile.setOnClickListener(view1 -> {
 
-                UploadPic();
-            }
+            HomePage homePage = (HomePage) getActivity();
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            fragmentTransaction.replace(R.id.containerFrame, new UpdateProfileFragment()).addToBackStack(null).commit();
         });
 
 
@@ -177,34 +178,30 @@ public class UserProfile extends Fragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,PICK_IMAGE_REQUEST);
+
+
+
+
     }
     private void UploadPic() {
 
-        if (uriImage !=null){
-            StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension((uriImage)));
+       if (uriImage !=null){
+           StorageReference fileReference = storageReference.child(auth.getCurrentUser().getUid() + "/displaypic." + getFileExtension(uriImage));
 
-            fileReference.putFile(uriImage).addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                Uri downloadUri = uri;
-                firebaseUser = auth.getCurrentUser();
-                if (firebaseUser !=null){
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
-                    firebaseUser.updateProfile(profileUpdates).addOnSuccessListener(unused -> {
-//                        progressBar.setVisibility(View.GONE);
-                        HomePage homePage = (HomePage) getActivity();
-                        BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
-                        bottomNavigationView.setVisibility(View.VISIBLE);
-                        UserProfile userProfile = new UserProfile();
-                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.containerFrame, userProfile);
-                        transaction.commit();
-                    });
-                }
-            })).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+           fileReference.putFile(uriImage).addOnSuccessListener(taskSnapshot -> {
+               fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                   Uri downloadUri = uri;
+                   firebaseUser = auth.getCurrentUser();
 
-        }else {
-//            progressBar.setVisibility(View.GONE);
-            Toast.makeText(getContext(), "No File was Selected!", Toast.LENGTH_SHORT).show();
-        }
+                   UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setPhotoUri(downloadUri).build();
+                   firebaseUser.updateProfile(profileChangeRequest);
+               });
+
+               Toast.makeText(getContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+           }).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+       }else {
+           Toast.makeText(getContext(), "No file was selected", Toast.LENGTH_SHORT).show();
+       }
     }
 
     private String getFileExtension(Uri uri){
@@ -219,7 +216,8 @@ public class UserProfile extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null){
 
             uriImage = data.getData();
-            Log.d("Image URI", uriImage.toString()); // Log the URI to check its value
+            UploadPic();
+            Log.d("Image URI", uriImage.toString());
 
             imagePP.setImageURI(uriImage);
 
@@ -269,10 +267,12 @@ public class UserProfile extends Fragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    Toast.makeText(getContext(), "Something went wrong!!", Toast.LENGTH_SHORT).show();
                 }
             });
         }else {
+
+            //if the user didn't log out and want to see his/her data
 
                 txtWelcome.setText("Welcome, " + HomePage.currentUser.getName() + "!");
                 txtEmail.setText(user.getEmail());
@@ -281,7 +281,6 @@ public class UserProfile extends Fragment {
                 txtAddress.setText(HomePage.currentUser.getAddress());
                 txtName.setText(HomePage.currentUser.getName());
 
-                Log.d(TAG, "showUserData: buneaq" + HomePage.currentUser.getName());
 
                 Uri uri = user.getPhotoUrl();
                 Glide.with(requireActivity()).load(uri).into(imagePP);
@@ -297,12 +296,6 @@ public class UserProfile extends Fragment {
                 transaction.commit();
 
         }
-
-
-
-
-
-
 
     }
 
