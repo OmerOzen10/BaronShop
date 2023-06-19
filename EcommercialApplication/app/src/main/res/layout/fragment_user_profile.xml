@@ -187,7 +187,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="90dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/user"
                 app:layout_constraintStart_toStartOf="parent"

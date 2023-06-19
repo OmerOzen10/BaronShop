@@ -163,6 +163,18 @@ public class UserProfile extends Fragment {
             fragmentTransaction.replace(R.id.containerFrame, new UpdateProfileFragment()).addToBackStack(null).commit();
         });
 
+        txtChangePass.setOnClickListener(view1 -> {
+
+            HomePage homePage = (HomePage) getActivity();
+            BottomNavigationView bottomNavigationView = homePage.findViewById(R.id.bottom_nav);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
+            fragmentTransaction.replace(R.id.containerFrame, new ChangePassFragment()).addToBackStack(null).commit();
+
+        });
+
 
 
 
