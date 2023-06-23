@@ -27,9 +27,9 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/favProductAll"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                app:cardCornerRadius="22.5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="25dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -37,8 +37,8 @@
 
                 <ImageView
                     android:id="@+id/favIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="1dp"
@@ -58,6 +58,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_home"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

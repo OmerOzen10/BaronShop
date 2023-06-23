@@ -1,6 +1,7 @@
 package com.example.e_commercial_application;
 
 import android.animation.LayoutTransition;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -243,6 +244,7 @@ public class UserProfile extends Fragment {
 
 
 
+    @SuppressLint("SetTextI18n")
     private void showUserData(FirebaseUser user) {
 
         if (HomePage.currentUser != null){
