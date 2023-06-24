@@ -57,7 +57,7 @@ import com.squareup.picasso.Picasso;
 
 public class UserProfile extends Fragment {
 
-    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtLogOut,txtChangePass,txtUpdateProfile;
+    private TextView txtWelcome,txtName,txtEmail,txtDOB,txtMobile,txtAddress,txtLogOut,txtChangePass,txtUpdateProfile,txtChangeEmail;
     private ProgressBar progressBar3;
     private ImageView imagePP,settings;
 
@@ -72,7 +72,7 @@ public class UserProfile extends Fragment {
     private FirebaseUser firebaseUser;
 
 
-    View omerDivider,logOutDivider;
+    View omerDivider,logOutDivider,emailDivider;
     String TAG = "UserProfile";
 
 
@@ -95,6 +95,8 @@ public class UserProfile extends Fragment {
         txtChangePass = view.findViewById(R.id.txtChangePass);
         omerDivider = view.findViewById(R.id.omerDivider);
         logOutDivider = view.findViewById(R.id.LogOutDivider);
+        txtChangeEmail = view.findViewById(R.id.txtChangeEmail);
+        emailDivider = view.findViewById(R.id.ChangeEmailDivider);
 
 
 
@@ -116,7 +118,9 @@ public class UserProfile extends Fragment {
                     && txtChangePass.getVisibility() == View.GONE &&
                     txtLogOut.getVisibility() == View.GONE
                     && omerDivider.getVisibility() == View.GONE
-                    && logOutDivider.getVisibility() == View.GONE)? View.VISIBLE : View.GONE;
+                    && logOutDivider.getVisibility() == View.GONE
+            && txtChangeEmail.getVisibility() == View.GONE
+            && emailDivider.getVisibility() == View.GONE)? View.VISIBLE : View.GONE;
 
             TransitionSet transitionSet = new TransitionSet();
             transitionSet.addTransition(new ChangeBounds());
@@ -140,6 +144,8 @@ public class UserProfile extends Fragment {
             txtLogOut.setVisibility(v);
             omerDivider.setVisibility(v);
             logOutDivider.setVisibility(v);
+            txtChangeEmail.setVisibility(v);
+            emailDivider.setVisibility(v);
         });
 
         txtLogOut.setOnClickListener(view12 -> {
@@ -173,6 +179,10 @@ public class UserProfile extends Fragment {
             FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null);
             fragmentTransaction.replace(R.id.containerFrame, new ChangePassFragment()).addToBackStack(null).commit();
+
+        });
+
+        txtChangeEmail.setOnClickListener(view1 -> {
 
         });
 
@@ -247,8 +257,8 @@ public class UserProfile extends Fragment {
     @SuppressLint("SetTextI18n")
     private void showUserData(FirebaseUser user) {
 
-        if (HomePage.currentUser != null){
-            String userID = firebaseUser.getUid();
+        if (HomePage.currentUser == null){
+            String userID = user.getUid();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users");
             reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -309,7 +319,10 @@ public class UserProfile extends Fragment {
                 transaction.replace(R.id.containerFrame, userFragment);
                 transaction.commit();
 
+
+
         }
+
 
     }
 
